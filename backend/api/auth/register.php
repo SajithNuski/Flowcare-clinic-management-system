@@ -1,0 +1,47 @@
+<?php
+// This endpoint creates a new patient account for FlowCare.
+
+require_once __DIR__ . '/../../config/cors.php';
+require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../config/helpers.php';
+
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+	respond_json(["success" => false, "error" => "Method not allowed"], 405);
+}
+
+require_once __DIR__ . '/../../models/User.php';
+
+$data = get_request_body();
+
+$full_name = trim($data['full_name'] ?? '');
+$nic = trim($data['nic'] ?? '');
+$date_of_birth = trim($data['date_of_birth'] ?? '');
+$gender = trim($data['gender'] ?? '');
+$phone = trim($data['phone'] ?? '');
+$password = $data['password'] ?? '';
+
+if ($full_name === '' || $nic === '' || $date_of_birth === '' || $gender === '' || $phone === '' || $password === '') {
+	respond_json(["success" => false, "error" => "All required fields must be filled."], 400);
+}
+
+if (!preg_match('/^07\d{8}$/', $phone)) {
+	respond_json(["success" => false, "error" => "Phone number must start with 07 and contain 10 digits."], 400);
+}
+
+$nic_is_valid = preg_match('/^(?:\d{9}[VvXx]|\d{12})$/', $nic);
+
+if (!$nic_is_valid) {
+	respond_json(["success" => false, "error" => "Invalid Sri Lankan NIC format."], 400);
+}
+
+$user = new User($conn);
+$user_id = $user->register($full_name, $nic, $date_of_birth, $gender, $phone, null, $password, 'patient');
+
+if ($user_id === false) {
+	$response_error = $user->last_error === 'NIC already exists' ? 'NIC already registered' : 'Registration failed';
+	respond_json(["success" => false, "error" => $response_error], 400);
+}
+
+respond_json(["success" => true, "message" => "Account created. Please log in."]);

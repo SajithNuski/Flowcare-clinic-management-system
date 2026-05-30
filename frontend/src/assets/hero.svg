@@ -1,0 +1,22 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="titleDesc">
+  <title id="titleDesc">FlowCare hero illustration</title>
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0" stop-color="#1A73E8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#2ECC71" stop-opacity="0.75"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" rx="24" fill="url(#g1)" />
+  <g transform="translate(80,80)">
+    <circle cx="220" cy="120" r="70" fill="#FFFFFF" opacity="0.14" />
+    <rect x="40" y="220" width="420" height="18" rx="9" fill="#FFFFFF" opacity="0.12" />
+    <rect x="40" y="260" width="360" height="14" rx="7" fill="#FFFFFF" opacity="0.1" />
+    <circle cx="370" cy="60" r="40" fill="#FFFFFF" opacity="0.9" />
+    <g transform="translate(340,40)" fill="#1A73E8">
+      <rect x="-6" y="24" width="12" height="36" rx="6" fill="#FFFFFF" opacity="0.2" />
+    </g>
+    <g transform="translate(80,30)" fill="#fff">
+      <rect x="0" y="0" width="240" height="140" rx="10" fill="#FFFFFF" opacity="0.06" />
+    </g>
+  </g>
+</svg>

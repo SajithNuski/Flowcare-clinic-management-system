@@ -1,0 +1,1 @@
+// Receptionist dashboard for FlowCare.
