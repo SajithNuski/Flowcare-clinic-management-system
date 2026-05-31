@@ -8,6 +8,8 @@ import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function PageStub({ title }) {
   return (
@@ -34,8 +36,8 @@ function App() {
             path="/contact"
             element={<PageStub title="Contact FlowCare" />}
           />
-          <Route path="/register" element={<PageStub title="Register" />} />
-          <Route path="/login" element={<PageStub title="Login" />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
 
           {/* Patient routes */}
           <Route
