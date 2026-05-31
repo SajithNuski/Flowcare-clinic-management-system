@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AboutPage from "./pages/AboutPage";
 
 function PageStub({ title }) {
   return (
@@ -27,7 +28,7 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/about" element={<PageStub title="About FlowCare" />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route
             path="/how-it-works"
             element={<PageStub title="How FlowCare Works" />}
