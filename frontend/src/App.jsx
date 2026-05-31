@@ -11,6 +11,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AboutPage from "./pages/AboutPage";
+import HowItWorks from "./pages/HowItWorks";
 
 function PageStub({ title }) {
   return (
@@ -29,10 +30,7 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route
-            path="/how-it-works"
-            element={<PageStub title="How FlowCare Works" />}
-          />
+          <Route path="/how-it-works" element={<HowItWorks />} />
           <Route
             path="/contact"
             element={<PageStub title="Contact FlowCare" />}
