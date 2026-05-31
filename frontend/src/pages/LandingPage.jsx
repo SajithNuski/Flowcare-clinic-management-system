@@ -8,9 +8,12 @@ import { getInitials, formatTime } from "../utils/helpers";
 import { COLORS } from "../utils/constants";
 import heroImage from "../assets/images/hero-clinic.jpg";
 import { getDoctors } from "../api/doctors";
-
-const staticQueueMessage =
-  "Badulla Medical Centre — Open Mon to Sat · 8:00 AM – 5:00 PM · Call: 055 222 4567";
+import bookImg from "../assets/images/book.png";
+import walkingImg from "../assets/images/walking.png";
+import consultImg from "../assets/images/cunsult.png";
+import doctorOneImg from "../assets/images/doctor1.png";
+import doctorTwoImg from "../assets/images/doctor2.png";
+import doctorThreeImg from "../assets/images/doctor3.png";
 
 const featureItems = [
   {
@@ -71,84 +74,61 @@ const stepItems = [
     number: "1",
     title: "Register",
     text: "Create your free patient account in under 2 minutes",
+    image: bookImg,
+    alt: "Register",
   },
   {
     number: "2",
     title: "Book or Walk In",
     text: "Choose your doctor and time slot online, or just arrive",
+    image: walkingImg,
+    alt: "Book or Walk In",
   },
   {
     number: "3",
     title: "Track & Consult",
     text: "Track your queue live and see the doctor when called",
+    image: consultImg,
+    alt: "Track and Consult",
   },
 ];
 
-function formatQueueNumber(value) {
-  if (value === null || value === undefined || value === "") {
-    return "Q--";
-  }
-
-  const normalized = String(value).replace(/^Q/i, "").trim();
-  if (!normalized) {
-    return "Q--";
-  }
-
-  const numeric = Number(normalized);
-  return Number.isFinite(numeric)
-    ? `Q${String(numeric).padStart(2, "0")}`
-    : `Q${normalized}`;
-}
+const doctorShowcaseItems = [
+  {
+    specialty: "Cardiology",
+    badgeClass: "bg-[#1A73E8]",
+    image: doctorOneImg,
+    name: "Dr. Prasanna Perera",
+    title: "Senior Cardiologist",
+    credentials: "MD, FRCP Cardiology (Oxford)",
+    experience: "15+ Years Experience",
+  },
+  {
+    specialty: "Pediatrics",
+    badgeClass: "bg-[#16A34A]",
+    image: doctorTwoImg,
+    name: "Dr. Sarah Wijesinghe",
+    title: "Pediatric Specialist",
+    credentials: "MBBS, DCH, MD (Colombo)",
+    experience: "12+ Years Experience",
+  },
+  {
+    specialty: "Surgery",
+    badgeClass: "bg-[#DC2626]",
+    image: doctorThreeImg,
+    name: "Dr. Aruna Perera",
+    title: "General Surgeon",
+    credentials: "MS, FRCS (Edinburgh)",
+    experience: "20+ Years Experience",
+  },
+];
 
 function LandingPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [queueSummary, setQueueSummary] = useState(null);
-  const [queueLoading, setQueueLoading] = useState(true);
   const [doctors, setDoctors] = useState([]);
   const [doctorsLoading, setDoctorsLoading] = useState(true);
   const [doctorsError, setDoctorsError] = useState("");
-
-  useEffect(() => {
-    let active = true;
-
-    async function loadQueueStatus() {
-      setQueueLoading(true);
-      try {
-        const response = await fetch("/api/queue/status.php", {
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          if (active) {
-            setQueueSummary(null);
-          }
-          return;
-        }
-
-        const data = await response.json();
-        if (active) {
-          setQueueSummary(data);
-        }
-      } catch (error) {
-        if (active) {
-          setQueueSummary(null);
-        }
-      } finally {
-        if (active) {
-          setQueueLoading(false);
-        }
-      }
-    }
-
-    loadQueueStatus();
-    const intervalId = window.setInterval(loadQueueStatus, 30000);
-
-    return () => {
-      active = false;
-      window.clearInterval(intervalId);
-    };
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -190,24 +170,6 @@ function LandingPage() {
     };
   }, []);
 
-  const queueNumber = formatQueueNumber(queueSummary?.queue_number);
-  const waitingCount = Number(
-    queueSummary?.waiting ?? queueSummary?.total_waiting ?? 0,
-  );
-  const avgWait = Number(
-    queueSummary?.estimated_wait_minutes ?? queueSummary?.avg_wait_minutes ?? 0,
-  );
-  const consultationsDone = Number(
-    queueSummary?.completed ?? queueSummary?.total_completed ?? 0,
-  );
-  const isClinicOpen =
-    queueSummary?.open_now !== false &&
-    String(queueSummary?.status || "open").toLowerCase() !== "closed";
-  const queueAnnouncement = queueLoading
-    ? "Loading live clinic updates..."
-    : isClinicOpen
-      ? `Clinic Open · Now Serving ${queueNumber} · ${waitingCount} patients waiting · ~${avgWait} min avg wait`
-      : staticQueueMessage;
   const leadDoctorInitials = getInitials(doctors[0]?.full_name || "BM");
   const doctorTitle = doctors[0]?.full_name || "Our physicians";
 
@@ -220,10 +182,7 @@ function LandingPage() {
   }
 
   function scrollToOverview() {
-    document.getElementById("clinic-overview")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    navigate("/queue");
   }
 
   const quickAccessCards = [
@@ -254,27 +213,8 @@ function LandingPage() {
       <Navbar />
 
       <main className="flex-1">
-        <section className="w-full bg-[#1A73E8] px-4 py-2 text-center text-sm text-white sm:px-8">
-          {queueLoading ? (
-            <div className="mx-auto h-4 w-72 animate-pulse rounded-full bg-white/25" />
-          ) : (
-            <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
-              <span className="inline-flex items-center gap-2 font-medium">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#2ECC71]" />
-                {isClinicOpen ? "Clinic Open" : "Clinic Closed"}
-              </span>
-              <span>·</span>
-              <span>Now Serving {queueNumber}</span>
-              <span>·</span>
-              <span>{waitingCount} patients waiting</span>
-              <span>·</span>
-              <span>~{avgWait} min avg wait</span>
-            </p>
-          )}
-        </section>
-
         <section
-          className="relative h-[380px] overflow-hidden sm:h-[450px] lg:h-[500px]"
+          className="relative min-h-[100svh] overflow-hidden"
           style={{
             backgroundImage: `url(${heroImage})`,
             backgroundPosition: "center",
@@ -282,11 +222,8 @@ function LandingPage() {
           }}
         >
           <div className="absolute inset-0 bg-black/50" />
-          <div className="relative z-10 flex h-full items-center justify-center px-4 sm:px-8">
+          <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8">
             <div className="mx-auto flex max-w-3xl flex-col items-center text-center text-white">
-              <span className="mb-4 inline-flex items-center rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-medium uppercase tracking-wide text-white">
-                Uva Province · Badulla, Sri Lanka
-              </span>
               <h1 className="mb-4 text-4xl font-bold tracking-tight text-white drop-shadow-md sm:text-5xl lg:text-6xl">
                 Quality Healthcare, Now Easier to Access
               </h1>
@@ -340,116 +277,65 @@ function LandingPage() {
           </div>
         </section>
 
-        <section
-          id="clinic-overview"
-          className="border-b border-[#E5E7EB] bg-[#F9FAFB] px-4 py-8 sm:px-8"
-        >
-          <div className="mx-auto flex max-w-7xl flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h2 className="text-base font-semibold text-[#1F2937]">
-                Today at Badulla Medical Centre
+        <section className="bg-[#FFFFFF] px-4 py-16 sm:px-8">
+          <div className="mx-auto max-w-7xl rounded-[28px] bg-[#F7F8FC] px-4 py-12 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:px-6 lg:px-8 lg:py-14">
+            <div className="mx-auto max-w-3xl text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A73E8]">
+                <i className="ti ti-shield-check text-[12px]" />
+                Trusted Healthcare
+              </div>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-[#0F172A] sm:text-4xl lg:text-5xl">
+                Meet Our Qualified Doctors
               </h2>
-              <p className="mt-1 text-sm text-[#4B5563]">
-                Live clinic updates, queue movement, and service availability
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#4B5563] sm:text-base">
+                At Badulla Medical Centre, our specialists bring decades of
+                clinical precision and compassionate care. From complex surgical
+                interventions to routine family wellness, we are committed to
+                your health journey.
               </p>
             </div>
 
-            <div className="flex items-center gap-2 self-start rounded-full border border-[#E5E7EB] bg-white px-3 py-2 text-sm lg:self-auto">
-              <span
-                className={`h-2.5 w-2.5 rounded-full ${isClinicOpen ? "bg-[#2ECC71]" : "bg-[#9CA3AF]"}`}
-              />
-              <span
-                className={
-                  isClinicOpen
-                    ? "font-medium text-[#2ECC71]"
-                    : "font-medium text-[#4B5563]"
-                }
-              >
-                {isClinicOpen ? "Open Now" : "Closed"}
-              </span>
-            </div>
-          </div>
-
-          <div className="mx-auto mt-6 grid max-w-7xl gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {[
-              { value: queueNumber, label: "Current Queue" },
-              { value: waitingCount, label: "Patients Waiting" },
-              { value: `~${avgWait} min`, label: "Avg Wait Time" },
-              { value: consultationsDone, label: "Consultations Done" },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="rounded-2xl border border-[#E5E7EB] bg-white p-5 shadow-sm"
-              >
-                <div className="text-2xl font-bold text-[#1A73E8]">
-                  {stat.value}
-                </div>
-                <div className="mt-1 text-xs text-[#4B5563]">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mx-auto mt-4 max-w-7xl text-sm text-[#4B5563]">
-            {queueLoading ? (
-              <div className="h-4 w-80 animate-pulse rounded-full bg-[#E5E7EB]" />
-            ) : (
-              <p>{queueAnnouncement}</p>
-            )}
-          </div>
-        </section>
-
-        <section className="bg-[#FFFFFF] px-4 py-16 sm:px-8">
-          <div className="mx-auto max-w-7xl text-center">
-            <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A73E8]">
-              Specialists
-            </div>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-[#1F2937]">
-              Meet Our Doctors
-            </h2>
-            <p className="mx-auto mt-2 max-w-2xl text-sm text-[#4B5563]">
-              Our experienced team provides the best medical care in Badulla
-            </p>
-            <div className="mt-5 inline-flex items-center gap-3 rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-4 py-2 text-xs text-[#4B5563]">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E8F0FE] text-sm font-semibold text-[#1A73E8]">
-                {leadDoctorInitials}
-              </span>
-              <span>{doctorTitle}</span>
-            </div>
-          </div>
-
-          <div className="mx-auto mt-10 max-w-7xl">
-            {doctorsLoading ? (
-              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <div
-                    key={index}
-                    className="rounded-2xl border border-[#E5E7EB] bg-white p-6 shadow-sm"
-                  >
-                    <div className="h-16 w-16 animate-pulse rounded-full bg-[#E5E7EB]" />
-                    <div className="mt-4 h-5 w-40 animate-pulse rounded bg-[#E5E7EB]" />
-                    <div className="mt-2 h-4 w-20 animate-pulse rounded bg-[#E5E7EB]" />
-                    <div className="mt-4 h-8 w-28 animate-pulse rounded-full bg-[#E5E7EB]" />
-                    <div className="mt-5 h-px w-full bg-[#E5E7EB]" />
-                    <div className="mt-4 h-4 w-3/4 animate-pulse rounded bg-[#E5E7EB]" />
-                    <div className="mt-2 h-4 w-full animate-pulse rounded bg-[#E5E7EB]" />
-                    <div className="mt-6 h-5 w-32 animate-pulse rounded bg-[#E5E7EB]" />
+            <div className="mx-auto mt-10 grid max-w-7xl gap-6 md:grid-cols-3">
+              {doctorShowcaseItems.map((doctor) => (
+                <article
+                  key={doctor.name}
+                  className="overflow-hidden rounded-xl border border-[#D9E2EF] bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+                >
+                  <div className="relative">
+                    <img
+                      src={doctor.image}
+                      alt={doctor.name}
+                      className="h-72 w-full object-cover object-top sm:h-80"
+                    />
+                    <span
+                      className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow ${doctor.badgeClass}`}
+                    >
+                      {doctor.specialty}
+                    </span>
                   </div>
-                ))}
-              </div>
-            ) : doctors.length > 0 ? (
-              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {doctors.map((doctor) => (
-                  <DoctorCard
-                    key={doctor.user_id ?? doctor.id ?? doctor.full_name}
-                    doctor={doctor}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-[#E5E7EB] bg-[#F9FAFB] p-5 text-sm text-[#4B5563]">
-                {doctorsError || "Unable to load. Please refresh."}
-              </div>
-            )}
+
+                  <div className="p-5">
+                    <h3 className="text-base font-medium text-[#0F172A] sm:text-[17px]">
+                      {doctor.name}
+                    </h3>
+                    <p className="mt-1 text-sm font-medium text-[#1A73E8]">
+                      {doctor.title}
+                    </p>
+
+                    <div className="mt-4 space-y-3 text-sm text-[#4B5563]">
+                      <div className="flex items-start gap-2">
+                        <i className="ti ti-stethoscope mt-0.5 text-[#9CA3AF]" />
+                        <span>{doctor.credentials}</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <i className="ti ti-clock-cog mt-0.5 text-[#9CA3AF]" />
+                        <span>{doctor.experience}</span>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -562,25 +448,32 @@ function LandingPage() {
             </h2>
           </div>
 
-          <div className="mx-auto mt-10 grid max-w-7xl gap-5 md:grid-cols-3">
-            {stepItems.map((step, index) => (
-              <div
+          <div className="mx-auto mt-10 grid max-w-7xl gap-6 md:grid-cols-3">
+            {stepItems.map((step) => (
+              <article
                 key={step.title}
-                className="rounded-xl border border-[#E5E7EB] bg-white p-6 text-center shadow-sm"
+                className="bg-white rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md"
               >
-                <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-[#1A73E8] text-sm font-semibold text-white">
-                  {step.number}
+                <div className="overflow-hidden">
+                  <img
+                    src={step.image}
+                    alt={step.alt}
+                    className="h-44 w-full object-cover md:h-56"
+                  />
                 </div>
-                <h3 className="mt-3 text-sm font-semibold text-[#1F2937]">
-                  {step.title}
-                </h3>
-                <p className="mt-1 text-xs leading-relaxed text-[#4B5563]">
-                  {step.text}
-                </p>
-                {index < stepItems.length - 1 ? (
-                  <div className="mt-4 hidden text-[#9CA3AF] md:block">→</div>
-                ) : null}
-              </div>
+
+                <div className="p-5">
+                  <div className="text-xs font-medium text-[#9CA3AF]">
+                    Step {step.number}
+                  </div>
+                  <h3 className="mt-2 text-lg font-semibold text-[#1A237E]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[#4B5563]">
+                    {step.text}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
 
