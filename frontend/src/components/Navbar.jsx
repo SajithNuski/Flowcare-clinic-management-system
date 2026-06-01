@@ -3,10 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Badge from "./Badge";
 
-/**
- * Renders the top navigation bar for public pages and shows login state actions.
- * @param {{}} props
- */
 function Navbar() {
   const location = useLocation();
   const { user, logout } = useAuth();
@@ -21,143 +17,104 @@ function Navbar() {
 
   const isActive = (path) => location.pathname === path;
 
-  const closeMenu = () => setMenuOpen(false);
-
   return (
-    <header className="sticky top-0 z-50 border-b border-[#E5E7EB] bg-white shadow-sm">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-8">
-        <Link to="/" className="flex shrink-0 items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#1A73E8] text-sm font-semibold text-white">
+    <header className="sticky top-0 z-50 w-full bg-white/70 backdrop-blur-sm border-b border-transparent shadow-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-8">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#2B78E4] to-[#0B63D1] text-sm font-semibold text-white shadow-md">
             BM
           </div>
           <div className="leading-tight">
-            <span className="block text-sm font-medium text-[#1F2937]">
-              Badulla Medical Centre
-            </span>
-            <span className="block text-xs text-[#4B5563]">
-              Uva Province, Sri Lanka
-            </span>
+            <span className="block text-sm font-semibold text-[#0F172A]">Badulla Medical Centre</span>
+            <span className="block text-xs text-[#6B7280]">Uva Province, Sri Lanka</span>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => {
-            const active = isActive(link.to);
-            return (
-              <Link
-                key={link.to}
-                to={link.to}
+        <nav className="hidden items-center gap-6 md:flex">
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="relative px-3 py-2 text-sm text-[#374151] transition-colors duration-200 hover:text-[#1A73E8]"
+            >
+              <span className={isActive(link.to) ? "font-medium text-[#1A73E8]" : ""}>{link.label}</span>
+              <span
                 className={
-                  "border-b-2 px-4 py-2 text-sm transition-all duration-200 " +
-                  (active
-                    ? "border-[#1A73E8] font-medium text-[#1A73E8]"
-                    : "border-transparent text-[#4B5563] hover:text-[#1A73E8]")
+                  "absolute left-0 -bottom-0.5 h-0.5 w-full transform origin-left bg-[#1A73E8] transition-transform duration-300 " +
+                  (isActive(link.to) ? "scale-x-100" : "scale-x-0")
                 }
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+              />
+            </Link>
+          ))}
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
           {!user ? (
             <>
-              <Link
-                to="/login"
-                className="rounded-lg border border-[#1A73E8] px-4 py-1.5 text-sm text-[#1A73E8] transition-all duration-200 hover:bg-[#F9FAFB]"
-              >
+              <Link to="/login" className="rounded-md border border-[#1A73E8] px-4 py-1.5 text-sm text-[#1A73E8] transition hover:bg-[#F1F8FF]">
                 Login
               </Link>
-              <Link to="/register" className="btn-primary px-4 py-1.5">
+              <Link to="/register" className="rounded-md bg-[#1A73E8] px-4 py-1.5 text-sm font-medium text-white shadow-sm transition hover:opacity-95">
                 Register
               </Link>
             </>
           ) : (
             <>
-              <span className="hidden text-sm text-[#4B5563] sm:inline">
-                Hello, {user.full_name}
-              </span>
-              <Badge text={user.role} color="blue" />
-              <button
-                type="button"
-                onClick={logout}
-                className="btn-secondary px-4 py-1.5"
-              >
-                Logout
-              </button>
+              <div className="hidden items-center gap-3 sm:flex">
+                <span className="text-sm text-[#4B5563]">Hello, {user.full_name}</span>
+                <Badge text={user.role} color="blue" />
+                <button onClick={logout} className="rounded-md border border-[#E6EEF3] px-3 py-1 text-sm text-[#374151] hover:bg-[#F9FAFB]">Logout</button>
+              </div>
             </>
           )}
         </div>
 
+        {/* Mobile Hamburger */}
         <button
-          type="button"
           aria-label="Toggle navigation menu"
-          onClick={() => setMenuOpen((value) => !value)}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[#E5E7EB] text-[#1F2937] transition-all duration-200 hover:bg-[#F9FAFB] md:hidden"
+          onClick={() => setMenuOpen((s) => !s)}
+          className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-transparent bg-white/60 p-2 text-[#0F172A] transition-all duration-200 hover:bg-white md:hidden"
         >
-          <span className="text-lg leading-none">☰</span>
+          <span className={`block h-0.5 w-5 transform bg-[#0F172A] transition duration-300 ${menuOpen ? "-translate-y-0.5 rotate-45" : "-translate-y-1.5"}`} />
+          <span className={`block h-0.5 w-5 transform bg-[#0F172A] transition duration-300 ${menuOpen ? "opacity-0" : "opacity-100"}`} />
+          <span className={`block h-0.5 w-5 transform bg-[#0F172A] transition duration-300 ${menuOpen ? "translate-y-0.5 -rotate-45" : "translate-y-1.5"}`} />
         </button>
       </div>
 
-      {menuOpen ? (
-        <div className="border-t border-[#E5E7EB] bg-white px-4 py-4 shadow-sm md:hidden">
-          <nav className="flex flex-col gap-1">
+      {/* Mobile menu */}
+      <div className={`md:hidden bg-white/90 border-t border-transparent shadow-sm transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden ${menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-8">
+          <nav className="flex flex-col gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                onClick={closeMenu}
-                className={
-                  "rounded-lg px-4 py-3 text-sm transition-all duration-200 " +
-                  (isActive(link.to)
-                    ? "bg-[#E8F0FE] font-medium text-[#1A73E8]"
-                    : "text-[#4B5563] hover:bg-[#F9FAFB] hover:text-[#1A73E8]")
-                }
+                onClick={() => setMenuOpen(false)}
+                className={`rounded-md px-4 py-2 text-sm transition-colors duration-150 ${isActive(link.to) ? "bg-[#E8F0FE] text-[#1A73E8] font-medium" : "text-[#374151] hover:bg-[#F9FAFB] hover:text-[#1A73E8]"}`}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="mt-4 flex flex-col gap-3">
+          <div className="mt-3 flex flex-col gap-3">
             {!user ? (
               <>
-                <Link
-                  to="/login"
-                  onClick={closeMenu}
-                  className="rounded-lg border border-[#1A73E8] px-4 py-2 text-center text-sm font-medium text-[#1A73E8] transition-all duration-200 hover:bg-[#F9FAFB]"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={closeMenu}
-                  className="btn-primary px-4 py-2 text-center"
-                >
-                  Register
-                </Link>
+                <Link to="/login" onClick={() => setMenuOpen(false)} className="rounded-md border border-[#1A73E8] px-4 py-2 text-center text-sm font-medium text-[#1A73E8]">Login</Link>
+                <Link to="/register" onClick={() => setMenuOpen(false)} className="rounded-md bg-[#1A73E8] px-4 py-2 text-center text-sm font-medium text-white">Register</Link>
               </>
             ) : (
               <>
-                <div className="text-sm text-[#4B5563]">
-                  Hello, {user.full_name}
-                </div>
+                <div className="text-sm text-[#4B5563]">Hello, {user.full_name}</div>
                 <div>
                   <Badge text={user.role} color="blue" />
                 </div>
-                <button
-                  type="button"
-                  onClick={logout}
-                  className="btn-secondary px-4 py-2"
-                >
-                  Logout
-                </button>
+                <button type="button" onClick={logout} className="rounded-md border border-[#E6EEF3] px-4 py-2 text-sm text-[#374151]">Logout</button>
               </>
             )}
           </div>
         </div>
-      ) : null}
+      </div>
     </header>
   );
 }

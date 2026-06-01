@@ -5,8 +5,6 @@ require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/helpers.php';
 
-session_start();
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	respond_json(["success" => false, "error" => "Method not allowed"], 405);
 }
@@ -14,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 require_once __DIR__ . '/../../models/User.php';
 
 $data = get_request_body();
+$data = is_array($data) ? $data : [];
 $identifier = trim($data['identifier'] ?? '');
 $password = $data['password'] ?? '';
 

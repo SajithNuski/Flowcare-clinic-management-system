@@ -41,7 +41,7 @@ function RegisterPage() {
       const payload = {
         full_name: form.full_name,
         nic: form.nic,
-        dob: form.dob,
+        date_of_birth: form.dob,
         gender: form.gender,
         phone: form.phone,
         email: form.email,
@@ -54,7 +54,15 @@ function RegisterPage() {
         return;
       }
 
-      setError(res?.error || res?.message || "Registration failed");
+      // Show specific backend error messages with friendly suggestions
+      const serverError = res?.error || res?.message || "Registration failed";
+      if ((res?.detail || "").toLowerCase().includes("nic")) {
+        setError("NIC already registered. Try logging in instead.");
+      } else if ((res?.detail || "").toLowerCase().includes("email")) {
+        setError("Email already in use. Try logging in or use a different email.");
+      } else {
+        setError(serverError);
+      }
     } catch (err) {
       setError(err.message || "Registration failed");
     } finally {

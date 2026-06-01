@@ -11,12 +11,20 @@ import { API_BASE } from "../utils/constants";
 export async function loginUser(identifier, password) {
   try {
     // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/auth/login.php`, {
-      identifier,
-      password,
+    const body = new URLSearchParams();
+    body.append("identifier", identifier);
+    body.append("password", password);
+
+    const response = await axios.post(`${API_BASE}/auth/login.php`, body, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
     return response.data;
   } catch (error) {
+    // If the server returned a JSON error body, forward it so UI can show detailed messages
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+
     return { success: false, error: error.message };
   }
 }
@@ -28,10 +36,17 @@ export async function loginUser(identifier, password) {
 export async function registerUser(formData) {
   try {
     // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(
-      `${API_BASE}/auth/register.php`,
-      formData,
-    );
+    // Send as form-encoded so the PHP backend reliably receives values in $_POST
+    const body = new URLSearchParams();
+    Object.keys(formData || {}).forEach((k) => {
+      if (formData[k] !== undefined && formData[k] !== null) {
+        body.append(k, formData[k]);
+      }
+    });
+
+    const response = await axios.post(`${API_BASE}/auth/register.php`, body, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
     return response.data;
   } catch (error) {
     return { success: false, error: error.message };

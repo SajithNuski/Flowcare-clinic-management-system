@@ -12,6 +12,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import AboutPage from "./pages/AboutPage";
 import HowItWorks from "./pages/HowItWorks";
+import ContactPage from "./pages/ContactPage";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function PageStub({ title }) {
   return (
@@ -31,10 +33,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
-          <Route
-            path="/contact"
-            element={<PageStub title="Contact FlowCare" />}
-          />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage />} />
 
@@ -137,7 +136,7 @@ function App() {
             path="/admin/dashboard"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Admin Dashboard" />
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />
@@ -145,7 +144,23 @@ function App() {
             path="/admin/users"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Manage Users" />
+                <PageStub title="Staff" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/patients"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <PageStub title="Patients" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/appointments"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <PageStub title="Appointments" />
               </ProtectedRoute>
             }
           />
@@ -153,7 +168,7 @@ function App() {
             path="/admin/settings"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Clinic Settings" />
+                <PageStub title="Settings" />
               </ProtectedRoute>
             }
           />
@@ -161,7 +176,7 @@ function App() {
             path="/admin/reports"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Reports" />
+                <PageStub title="Report" />
               </ProtectedRoute>
             }
           />

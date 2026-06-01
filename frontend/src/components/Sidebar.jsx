@@ -1,10 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 /**
  * Renders the left dashboard sidebar for a logged-in user.
  * @param {{ role: string, activePage: string }} props
  */
 function Sidebar({ role, activePage }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
   const menuByRole = {
     patient: [
       {
@@ -77,23 +82,92 @@ function Sidebar({ role, activePage }) {
         to: "/admin/dashboard",
         icon: "ti ti-layout-dashboard",
       },
-      { label: "User Accounts", to: "/admin/users", icon: "ti ti-users" },
+      { label: "Staff", to: "/admin/users", icon: "ti ti-users" },
+      { label: "Patients", to: "/admin/patients", icon: "ti ti-user-heart" },
       {
-        label: "Clinic Settings",
-        to: "/admin/settings",
-        icon: "ti ti-settings",
+        label: "Appointments",
+        to: "/admin/appointments",
+        icon: "ti ti-calendar-event",
       },
-      { label: "Reports", to: "/admin/reports", icon: "ti ti-chart-bar" },
-      {
-        label: "Announcements",
-        to: "/admin/announcements",
-        icon: "ti ti-megaphone",
-      },
-      { label: "Activity Log", to: "/admin/reports", icon: "ti ti-logs" },
+      { label: "Report", to: "/admin/reports", icon: "ti ti-chart-bar" },
+      { label: "Settings", to: "/admin/settings", icon: "ti ti-settings" },
     ],
   };
 
   const items = menuByRole[role] || [];
+  const isActive = (item) =>
+    activePage === item.label || location.pathname === item.to;
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login");
+  }
+
+  if (role === "admin") {
+    return (
+      <aside className="flex min-h-screen w-48 shrink-0 flex-col border-r border-[#E5E7EB] bg-white">
+        <div className="border-b border-[#EEF2F7] px-4 py-4">
+          <Link to="/admin/dashboard" className="block">
+            <div className="text-lg font-semibold leading-tight text-[#1A73E8]">
+              FlowCare
+            </div>
+            <div className="text-[11px] text-[#6B7280]">Clinic Management</div>
+          </Link>
+        </div>
+
+        <nav className="flex-1 px-2 py-3">
+          <div className="space-y-1">
+            {items.map((item) => {
+              const active = isActive(item);
+
+              return (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  className={
+                    "flex items-center gap-3 rounded-r-md px-4 py-3 text-sm transition-colors duration-150 " +
+                    (active
+                      ? "border-l-4 border-[#1A73E8] bg-[#E8F0FE] font-medium text-[#1A73E8]"
+                      : "text-[#374151] hover:bg-[#F9FAFB] hover:text-[#1A73E8]")
+                  }
+                >
+                  <i className={`${item.icon} text-base`} />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+
+        <div className="mt-auto border-t border-[#EEF2F7] p-3">
+          <div className="flex items-center gap-3 rounded-xl px-2 py-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1A73E8] text-xs font-semibold text-white">
+              {user?.full_name
+                ? user.full_name.slice(0, 2).toUpperCase()
+                : "AD"}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-sm font-medium text-[#0F172A]">
+                {user?.full_name || "Admin User"}
+              </div>
+              <div className="text-[11px] text-[#6B7280]">
+                System Administrator
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="mt-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#374151] transition-colors duration-150 hover:bg-[#F9FAFB] hover:text-[#1A73E8]"
+          >
+            <i className="ti ti-logout text-base" />
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+    );
+  }
 
   return (
     <aside className="h-full w-48 border-r border-gray-200 bg-white py-4">

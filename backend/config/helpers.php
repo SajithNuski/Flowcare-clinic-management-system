@@ -25,8 +25,21 @@ function get_request_body() {
 	$raw = file_get_contents("php://input");
 	// json_decode converts JSON string to PHP array (true = associative array)
 	$data = json_decode($raw, true);
+	// Accept either JSON bodies or classic form submissions
+	if (is_array($data)) {
+		return $data;
+	}
+
+	if (!empty($_POST)) {
+		return $_POST;
+	}
+
 	// If decoding failed or body was empty, return empty array
-	return $data ?? [];
+	// Save debugging info for callers that want to inspect the raw body or JSON error
+	$GLOBALS['last_raw_request_body'] = $raw;
+	$GLOBALS['last_json_error'] = json_last_error_msg();
+
+	return [];
 }
 
 // ============================================================

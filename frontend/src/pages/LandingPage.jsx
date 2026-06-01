@@ -201,11 +201,6 @@ function LandingPage() {
       icon: "ti-calendar-plus",
       action: handleBookAppointment,
     },
-    {
-      label: "Queue Status",
-      icon: "ti-list-numbers",
-      action: scrollToOverview,
-    },
   ];
 
   return (
@@ -254,18 +249,16 @@ function LandingPage() {
         </section>
 
         <section className="border-b border-[#E5E7EB] bg-[#FFFFFF] py-10">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-4 sm:px-8 lg:grid-cols-4">
+          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-4 sm:px-8 lg:grid-cols-3 justify-items-center">
             {quickAccessCards.map((item) => (
               <button
                 key={item.label}
                 type="button"
                 onClick={item.action}
                 aria-label={item.label}
-                className="group cursor-pointer rounded-xl border border-[#E5E7EB] bg-white p-6 text-center transition-all duration-200 hover:border-[rgba(26,115,232,0.15)] hover:shadow-md"
+                className="group flex flex-col items-center justify-center w-80 cursor-pointer rounded-xl border border-[#E5E7EB] bg-white p-6 text-center transition-all duration-200 hover:border-[rgba(26,115,232,0.15)] hover:shadow-md"
               >
-                <i
-                  className={`ti ${item.icon} mb-3 block text-3xl text-[#1A73E8]`}
-                />
+                <i className={`ti ${item.icon} mb-3 text-3xl text-[#1A73E8]`} />
                 <div className="text-sm font-medium text-[#4B5563]">
                   {item.label}
                 </div>

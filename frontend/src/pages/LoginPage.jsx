@@ -24,7 +24,15 @@ function LoginPage() {
         // Backend may return user object at res.user or res.data
         const user = res.user ?? res.data ?? null;
         if (user) login(user);
-        navigate(user?.role === "doctor" ? "/doctor" : "/");
+        if (user?.role === "admin") {
+          navigate("/admin/dashboard");
+        } else if (user?.role === "doctor") {
+          navigate("/doctor/dashboard");
+        } else if (user?.role === "receptionist") {
+          navigate("/receptionist/dashboard");
+        } else {
+          navigate("/");
+        }
         return;
       }
 

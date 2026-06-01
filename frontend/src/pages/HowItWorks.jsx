@@ -70,12 +70,12 @@ function HowItWorks() {
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 bg-white/80" />
+          <div className="absolute inset-0 bg-[#000000]/70" />
           <div className="relative mx-auto max-w-4xl text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-[#1F2937] sm:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-[#ffffff] sm:text-4xl">
               Your Path to Better Health
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#4B5563] sm:text-base">
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#ffffff] sm:text-base">
               FlowCare Medical Centre simplifies your healthcare journey. From
               the first click to your first follow-up, we ensure a seamless and
               professional experience focused entirely on your recovery.
