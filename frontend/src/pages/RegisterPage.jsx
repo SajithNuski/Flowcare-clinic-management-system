@@ -46,9 +46,15 @@ function RegisterPage() {
     const hasDigit = /[0-9]/.test(pwd);
     const hasSpecial = /[!@#\$%\^&\*\(\)\-_=+\[\]{};:'"\\|,.<>\/?]/.test(pwd);
 
-    if (pwd.length < minLength || !hasUpper || !hasLower || !hasDigit || !hasSpecial) {
+    if (
+      pwd.length < minLength ||
+      !hasUpper ||
+      !hasLower ||
+      !hasDigit ||
+      !hasSpecial
+    ) {
       setError(
-        `Password must be at least ${minLength} characters and include uppercase, lowercase, a number, and a special character.`
+        `Password must be at least ${minLength} characters and include uppercase, lowercase, a number, and a special character.`,
       );
       return;
     }
@@ -265,10 +271,14 @@ function RegisterPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword((s) => !s)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                       className="absolute inset-y-0 right-2 flex items-center text-[#6B7280]"
                     >
-                      <i className={showPassword ? "ti ti-eye" : "ti ti-eye-off"} />
+                      <i
+                        className={showPassword ? "ti ti-eye" : "ti ti-eye-off"}
+                      />
                     </button>
                   </div>
                 </div>
@@ -286,10 +296,14 @@ function RegisterPage() {
                     <button
                       type="button"
                       onClick={() => setShowConfirm((s) => !s)}
-                      aria-label={showConfirm ? "Hide password" : "Show password"}
+                      aria-label={
+                        showConfirm ? "Hide password" : "Show password"
+                      }
                       className="absolute inset-y-0 right-2 flex items-center text-[#6B7280]"
                     >
-                      <i className={showConfirm ? "ti ti-eye" : "ti ti-eye-off"} />
+                      <i
+                        className={showConfirm ? "ti ti-eye" : "ti ti-eye-off"}
+                      />
                     </button>
                   </div>
                 </div>
