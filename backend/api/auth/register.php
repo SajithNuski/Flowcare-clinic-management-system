@@ -42,6 +42,12 @@ if ($full_name === '' || $nic === '' || $date_of_birth === '' || $gender === '' 
 	respond_json(["success" => false, "error" => "All required fields must be filled.", "debug" => ["raw_body" => $raw_body, "json_error" => $json_error, "_post" => $_POST]], 400);
 }
 
+// Enforce server-side password rules: min 8 chars, upper, lower, digit, special
+$pwd = $password;
+if (strlen($pwd) < 8 || !preg_match('/[A-Z]/', $pwd) || !preg_match('/[a-z]/', $pwd) || !preg_match('/[0-9]/', $pwd) || !preg_match('/[!@#\$%\^&\*\(\)\-_=+\[\]{};:\'"\\|,.<>\/?]/', $pwd)) {
+	respond_json(["success" => false, "error" => "Password does not meet complexity requirements. It must be at least 8 characters long and include uppercase, lowercase, numbers, and symbols."], 400);
+}
+
 if (!preg_match('/^07\d{8}$/', $phone)) {
 	respond_json(["success" => false, "error" => "Phone number must start with 07 and contain 10 digits."], 400);
 }
@@ -57,7 +63,15 @@ $user_id = $user->register($full_name, $nic, $date_of_birth, $gender, $phone, $e
 
 if ($user_id === false) {
 	// Return the model's last_error to help debugging client-side issues
-	$response_error = $user->last_error === 'NIC already exists' ? 'NIC already registered' : 'Registration failed';
+	if ($user->last_error === 'NIC already exists') {
+		$response_error = 'NIC already registered';
+	} elseif ($user->last_error === 'Email already exists') {
+		$response_error = 'Email already registered';
+	} elseif ($user->last_error === 'Password hashing failed') {
+		$response_error = 'Unable to create account';
+	} else {
+		$response_error = 'Registration failed';
+	}
 	respond_json(["success" => false, "error" => $response_error, "detail" => $user->last_error], 400);
 }
 

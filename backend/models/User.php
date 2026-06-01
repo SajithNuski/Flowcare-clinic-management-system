@@ -126,6 +126,19 @@ class User {
 			return false;
 		}
 
+		if (!empty($email)) {
+			$existing_email = $this->fetchOne(
+				"SELECT id FROM users WHERE email = ? LIMIT 1",
+				"s",
+				[$email]
+			);
+
+			if ($existing_email) {
+				$this->last_error = 'Email already exists';
+				return false;
+			}
+		}
+
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 		if (!$hashed_password) {
@@ -156,8 +169,26 @@ class User {
 			$role
 		);
 
-		if (!mysqli_stmt_execute($stmt)) {
-			$this->last_error = mysqli_stmt_error($stmt);
+		try {
+			if (!mysqli_stmt_execute($stmt)) {
+				$this->last_error = mysqli_stmt_error($stmt);
+				mysqli_stmt_close($stmt);
+				return false;
+			}
+		} catch (mysqli_sql_exception $exception) {
+			$errorMessage = $exception->getMessage();
+			$lowerMessage = strtolower($errorMessage);
+
+			if (str_contains($lowerMessage, "key 'email'") || str_contains($lowerMessage, 'users.email')) {
+				$this->last_error = 'Email already exists';
+			} elseif (str_contains($lowerMessage, "key 'nic'") || str_contains($lowerMessage, 'users.nic')) {
+				$this->last_error = 'NIC already exists';
+			} elseif ($exception->getCode() === 1062 && str_contains($lowerMessage, 'duplicate entry')) {
+				$this->last_error = 'Duplicate user record';
+			} else {
+				$this->last_error = $errorMessage;
+			}
+
 			mysqli_stmt_close($stmt);
 			return false;
 		}

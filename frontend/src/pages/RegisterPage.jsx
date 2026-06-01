@@ -17,6 +17,8 @@ function RegisterPage() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   function update(field, value) {
     setForm((s) => ({ ...s, [field]: value }));
@@ -36,6 +38,21 @@ function RegisterPage() {
       return;
     }
 
+    // Client-side password strength validation
+    const pwd = form.password;
+    const minLength = 8;
+    const hasUpper = /[A-Z]/.test(pwd);
+    const hasLower = /[a-z]/.test(pwd);
+    const hasDigit = /[0-9]/.test(pwd);
+    const hasSpecial = /[!@#\$%\^&\*\(\)\-_=+\[\]{};:'"\\|,.<>\/?]/.test(pwd);
+
+    if (pwd.length < minLength || !hasUpper || !hasLower || !hasDigit || !hasSpecial) {
+      setError(
+        `Password must be at least ${minLength} characters and include uppercase, lowercase, a number, and a special character.`
+      );
+      return;
+    }
+
     setLoading(true);
     try {
       const payload = {
@@ -49,20 +66,56 @@ function RegisterPage() {
       };
 
       const res = await registerUser(payload);
+      // Debug: log full response for troubleshooting
+      // eslint-disable-next-line no-console
+      console.log("registerUser response:", res);
+
       if (res?.success) {
         navigate("/login");
         return;
       }
 
-      // Show specific backend error messages with friendly suggestions
-      const serverError = res?.error || res?.message || "Registration failed";
-      if ((res?.detail || "").toLowerCase().includes("nic")) {
-        setError("NIC already registered. Try logging in instead.");
-      } else if ((res?.detail || "").toLowerCase().includes("email")) {
-        setError("Email already in use. Try logging in or use a different email.");
-      } else {
-        setError(serverError);
+      // Prefer server-provided detail or error, otherwise stringify the whole response
+      const rawServer =
+        res && typeof res === "object"
+          ? res.detail || res.error || res.message
+          : res;
+      const serverError = (rawServer || "Registration failed").toString();
+
+      function friendlyMessage(raw) {
+        const s = raw.toLowerCase();
+        if (
+          s.includes("nic") &&
+          (s.includes("exist") || s.includes("already"))
+        ) {
+          return "Your NIC is already registered — please try a different NIC or log in.";
+        }
+        if (
+          s.includes("email") &&
+          (s.includes("exist") || s.includes("already") || s.includes("in use"))
+        ) {
+          return "The email address is already in use — try logging in or use a different email.";
+        }
+        if (s.includes("phone") && s.includes("07")) {
+          return "Phone number must start with 07 and contain 10 digits (e.g. 0771234567).";
+        }
+        if (s.includes("required") || s.includes("all required")) {
+          return "Please fill all required fields before continuing.";
+        }
+        if (s.includes("invalid") && s.includes("nic")) {
+          return "Invalid NIC format — please enter a valid Sri Lankan NIC (9 digits + V/X or 12 digits).";
+        }
+        // Fallback: show server message or full response JSON
+        if (serverError && serverError !== "Registration failed")
+          return serverError;
+        try {
+          return JSON.stringify(res);
+        } catch (e) {
+          return "Registration failed";
+        }
       }
+
+      setError(friendlyMessage(serverError));
     } catch (err) {
       setError(err.message || "Registration failed");
     } finally {
@@ -202,23 +255,43 @@ function RegisterPage() {
                   <label className="mb-1 block text-xs font-medium text-[#374151]">
                     Password
                   </label>
-                  <input
-                    type="password"
-                    value={form.password}
-                    onChange={(e) => update("password", e.target.value)}
-                    className="mt-1 w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={form.password}
+                      onChange={(e) => update("password", e.target.value)}
+                      className="mt-1 w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((s) => !s)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      className="absolute inset-y-0 right-2 flex items-center text-[#6B7280]"
+                    >
+                      <i className={showPassword ? "ti ti-eye" : "ti ti-eye-off"} />
+                    </button>
+                  </div>
                 </div>
                 <div>
                   <label className="mb-1 block text-xs font-medium text-[#374151]">
                     Confirm Password
                   </label>
-                  <input
-                    type="password"
-                    value={form.confirm}
-                    onChange={(e) => update("confirm", e.target.value)}
-                    className="mt-1 w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showConfirm ? "text" : "password"}
+                      value={form.confirm}
+                      onChange={(e) => update("confirm", e.target.value)}
+                      className="mt-1 w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirm((s) => !s)}
+                      aria-label={showConfirm ? "Hide password" : "Show password"}
+                      className="absolute inset-y-0 right-2 flex items-center text-[#6B7280]"
+                    >
+                      <i className={showConfirm ? "ti ti-eye" : "ti ti-eye-off"} />
+                    </button>
+                  </div>
                 </div>
               </div>
 

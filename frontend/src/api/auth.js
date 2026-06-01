@@ -49,6 +49,11 @@ export async function registerUser(formData) {
     });
     return response.data;
   } catch (error) {
+    // Forward server JSON error responses when available so the UI shows the exact message
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+
     return { success: false, error: error.message };
   }
 }
