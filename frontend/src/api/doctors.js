@@ -15,3 +15,16 @@ export async function getDoctors() {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Gets the dashboard details for the logged-in doctor.
+ */
+export async function getDoctorDashboardData() {
+  try {
+    const response = await axios.get(`${API_BASE}/doctors/dashboard.php`);
+    return response.data;
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+

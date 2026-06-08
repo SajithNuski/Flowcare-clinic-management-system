@@ -20,7 +20,9 @@ export function formatDate(dateString) {
  */
 export function formatTime(timeString) {
   if (!timeString) return "—";
-  const [hours, minutes] = timeString.split(":");
+  // If it's a full timestamp "YYYY-MM-DD HH:MM:SS", get the time portion
+  const timePart = timeString.includes(" ") ? timeString.split(" ")[1] : timeString;
+  const [hours, minutes] = timePart.split(":");
   const h = parseInt(hours);
   const ampm = h >= 12 ? "PM" : "AM";
   const displayHour = h % 12 || 12;

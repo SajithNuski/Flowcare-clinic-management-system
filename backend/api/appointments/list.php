@@ -28,7 +28,16 @@ if ($role === 'patient') {
 }
 
 if ($role === 'receptionist' || $role === 'admin') {
-	$appointments = $appointment->get_today_all();
+	$date = isset($_GET['date']) ? trim($_GET['date']) : '';
+	if ($date !== '') {
+		$date_object = DateTime::createFromFormat('Y-m-d', $date);
+		if (!$date_object || $date_object->format('Y-m-d') !== $date) {
+			respond_json(["success" => false, "error" => "Invalid date format"], 400);
+		}
+		$appointments = $appointment->get_today_all($date);
+	} else {
+		$appointments = $appointment->get_today_all();
+	}
 	respond_json(["success" => true, "appointments" => $appointments ?: []]);
 }
 

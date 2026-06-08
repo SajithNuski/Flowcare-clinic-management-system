@@ -44,7 +44,7 @@ if (!$doctor_row) {
 
 $consultation = new Consultation($conn);
 $queue = new Queue($conn);
-$consultation_id = $consultation->save($queue_id, $patient_id, (int) $doctor_row['id'], $notes, $diagnosis, $referral !== '' ? $referral : null);
+$consultation_id = $consultation->save($queue_id, $patient_id, (int) $_SESSION['user_id'], $notes, $diagnosis, $referral !== '' ? $referral : null);
 
 if ($consultation_id === false) {
 	respond_json(["success" => false, "error" => "Could not save consultation"], 400);

@@ -82,7 +82,7 @@ function LoginPage() {
         <div className="w-full sm:w-1/2 p-8 sm:p-12">
           <div className="mx-auto max-w-md">
             <h3 className="text-xl font-semibold text-[#0F172A]">
-              Patient Login
+              Login
             </h3>
             <div className="mt-2 text-sm text-[#6B7280]">
               New here?{" "}

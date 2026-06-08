@@ -117,22 +117,22 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Insert admin user first
 INSERT INTO users (full_name, nic, date_of_birth, gender, phone, email, password, role)
 VALUES ('Admin', '000000000V', '1990-01-01', 'male', '0771234567', 'admin@flowcare.lk',
-'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uAannK/iG', 'admin');
+'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'admin');
 -- Note: above password hash is for "password" -- tell developer to change this
 
 -- Insert two sample doctors into users first
 INSERT INTO users (full_name, nic, date_of_birth, gender, phone, email, password, role)
 VALUES ('Dr. K. Ranasinghe', '123456789V', '1980-03-15', 'male', '0712345678', 'ranasinghe@flowcare.lk',
-'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uAannK/iG', 'doctor');
+'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'doctor');
 
 INSERT INTO users (full_name, nic, date_of_birth, gender, phone, email, password, role)
 VALUES ('Dr. S. Perera', '987654321V', '1985-07-22', 'female', '0723456789', 'perera@flowcare.lk',
-'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uAannK/iG', 'doctor');
+'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'doctor');
 
 -- Insert receptionist
 INSERT INTO users (full_name, nic, date_of_birth, gender, phone, email, password, role)
 VALUES ('Nishani Fernando', '456789123V', '1995-11-10', 'female', '0734567890', 'nishani@flowcare.lk',
-'$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uAannK/iG', 'receptionist');
+'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'receptionist');
 
 -- THEN insert into doctors table using the user IDs just created
 INSERT INTO doctors (user_id, specialisation, working_days, bio)

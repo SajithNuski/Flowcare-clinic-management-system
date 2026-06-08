@@ -36,10 +36,11 @@ export async function getMyAppointments() {
 /**
  * Returns today's appointments for receptionist or admin views.
  */
-export async function getTodayAppointments() {
+export async function getTodayAppointments(date = "") {
   try {
     // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/appointments/list.php`);
+    const url = date ? `${API_BASE}/appointments/list.php?date=${date}` : `${API_BASE}/appointments/list.php`;
+    const response = await axios.get(url);
     return response.data;
   } catch (error) {
     return { success: false, error: error.message };

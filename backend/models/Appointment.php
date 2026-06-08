@@ -158,15 +158,15 @@ class Appointment {
 		);
 	}
 
-	// This method gets all appointments for today across all doctors
+	// This method gets all appointments for a specific date (or today if null) across all doctors
 	// It is useful for the receptionist dashboard
-	public function get_today_all() {
-		$today = date('Y-m-d');
+	public function get_today_all($date = null) {
+		$target_date = $date ?: date('Y-m-d');
 
 		return $this->fetchAll(
 			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.time_slot, a.visit_reason, a.notes, a.status, a.created_at, p.full_name AS patient_name, p.phone AS patient_phone, du.full_name AS doctor_name, d.specialisation FROM appointments a INNER JOIN users p ON a.patient_id = p.id INNER JOIN doctors d ON a.doctor_id = d.id INNER JOIN users du ON d.user_id = du.id WHERE a.appointment_date = ? ORDER BY a.time_slot ASC, a.id ASC",
 			"s",
-			[$today]
+			[$target_date]
 		);
 	}
 

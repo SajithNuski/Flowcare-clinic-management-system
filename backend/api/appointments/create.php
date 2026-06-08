@@ -45,7 +45,63 @@ if ($date_object < $today) {
 }
 
 $appointment = new Appointment($conn);
-$patient_id = (int) $_SESSION['user_id'];
+
+$patient_id = 0;
+if ($_SESSION['role'] === 'receptionist') {
+	$patient_email = isset($data['email']) ? trim($data['email']) : '';
+	$patient_phone = isset($data['phone']) ? trim($data['phone']) : '';
+	$patient_name = isset($data['patient_name']) ? trim($data['patient_name']) : '';
+
+	// 1. Search by email
+	if ($patient_email !== '') {
+		$stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ? LIMIT 1");
+		mysqli_stmt_bind_param($stmt, "s", $patient_email);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		if ($row = mysqli_fetch_assoc($result)) {
+			$patient_id = (int)$row['id'];
+		}
+		mysqli_stmt_close($stmt);
+	}
+
+	// 2. Search by phone if not found by email
+	if ($patient_id === 0 && $patient_phone !== '') {
+		$stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE phone = ? LIMIT 1");
+		mysqli_stmt_bind_param($stmt, "s", $patient_phone);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		if ($row = mysqli_fetch_assoc($result)) {
+			$patient_id = (int)$row['id'];
+		}
+		mysqli_stmt_close($stmt);
+	}
+
+	// 3. Create a new patient user if not found
+	if ($patient_id === 0) {
+		if ($patient_name === '') {
+			$patient_name = 'Walk-in Patient';
+		}
+		// Generate valid dummy NIC: 9 digits + 'V'
+		$nic = substr(strval(time() . rand(100, 999)), -9) . 'V';
+		$dob = '1990-01-01';
+		$gender = 'other';
+		$password_hash = password_hash('Password@123', PASSWORD_DEFAULT);
+
+		$stmt = mysqli_prepare($conn, "INSERT INTO users (full_name, nic, date_of_birth, gender, phone, email, password, role, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'patient', 'active')");
+		$email_val = $patient_email !== '' ? $patient_email : null;
+		mysqli_stmt_bind_param($stmt, "sssssss", $patient_name, $nic, $dob, $gender, $patient_phone, $email_val, $password_hash);
+		
+		if (mysqli_stmt_execute($stmt)) {
+			$patient_id = mysqli_insert_id($conn);
+		} else {
+			respond_json(["success" => false, "error" => "Could not automatically register patient for appointment: " . mysqli_error($conn)], 500);
+		}
+		mysqli_stmt_close($stmt);
+	}
+} else {
+	$patient_id = (int)$_SESSION['user_id'];
+}
+
 $appointment_id = $appointment->create($patient_id, $doctor_id, $appointment_date, $time_slot, $visit_reason, $notes);
 
 if ($appointment_id === false) {

@@ -714,3 +714,53 @@ RAW_BODY:'full_name=nuski+2&nic=200333013267&date_of_birth=2000-05-22&gender=mal
 JSON_ERROR:'Syntax error'
 DECODED:NULL
 
+2026-06-06T07:58:20+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '143',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=6u64shqh1r0i77c8kvjni0oah5',
+)
+CONTENT_LENGTH:143
+RAW_BODY:'full_name=John+Doe&nic=999999999V&date_of_birth=1995-05-15&gender=male&phone=0771234567&email=patienttest%40flowcare.lk&password=Password123%21'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-08T21:21:53+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '150',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=lsmffi816uah897gqgnkn3bl9u',
+)
+CONTENT_LENGTH:150
+RAW_BODY:'full_name=Dr.+Ranasinghe&nic=199012345678&date_of_birth=1990-01-01&gender=male&phone=0712345678&email=ranasinghe%40flowcare.lk&password=Password123%21'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
