@@ -22,12 +22,14 @@ function ReceptionistDashboard() {
   });
   const [liveQueue, setLiveQueue] = useState([]);
   const [todayAppointments, setTodayAppointments] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(() => {
+  const todayStr = (() => {
     const today = new Date();
     const offset = today.getTimezoneOffset();
     const localDate = new Date(today.getTime() - (offset * 60 * 1000));
-    return localDate.toISOString().split('T')[0];
-  });
+    return localDate.toISOString().split("T")[0];
+  })();
+
+  const [selectedDate, setSelectedDate] = useState(todayStr);
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -294,6 +296,11 @@ function ReceptionistDashboard() {
       !registerForm.email
     ) {
       showToast("Please fill all required fields.", "error");
+      return;
+    }
+
+    if (registerForm.dob && registerForm.dob > todayStr) {
+      showToast("Date of Birth cannot be in the future.", "error");
       return;
     }
 
@@ -808,6 +815,7 @@ function ReceptionistDashboard() {
                 type="date"
                 required
                 value={registerForm.dob}
+                max={todayStr}
                 onChange={(e) => setRegisterForm(prev => ({ ...prev, dob: e.target.value }))}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
               />

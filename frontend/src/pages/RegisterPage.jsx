@@ -4,6 +4,12 @@ import { registerUser } from "../api/auth";
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const todayStr = (() => {
+    const today = new Date();
+    const offset = today.getTimezoneOffset();
+    const localDate = new Date(today.getTime() - (offset * 60 * 1000));
+    return localDate.toISOString().split("T")[0];
+  })();
 
   const [form, setForm] = useState({
     full_name: "",
@@ -30,6 +36,11 @@ function RegisterPage() {
 
     if (!form.full_name || !form.email || !form.password) {
       setError("Please fill all required fields.");
+      return;
+    }
+
+    if (form.dob && form.dob > todayStr) {
+      setError("Date of Birth cannot be in the future.");
       return;
     }
 
@@ -77,7 +88,9 @@ function RegisterPage() {
       console.log("registerUser response:", res);
 
       if (res?.success) {
-        navigate("/login");
+        navigate("/login", {
+          state: { successMessage: "Account created successfully! Please log in below." },
+        });
         return;
       }
 
@@ -208,6 +221,7 @@ function RegisterPage() {
                   <input
                     type="date"
                     value={form.dob}
+                    max={todayStr}
                     onChange={(e) => update("dob", e.target.value)}
                     className="mt-1 w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm"
                   />
