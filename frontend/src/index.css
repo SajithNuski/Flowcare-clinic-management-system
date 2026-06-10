@@ -32,6 +32,12 @@
   * {
     box-sizing: border-box;
   }
+
+  /* Hide native browser password reveal and clear buttons */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
 }
 
 @layer components {

@@ -261,7 +261,7 @@ function RegisterPage() {
                   <label className="mb-1 block text-xs font-medium text-[#374151]">
                     Password
                   </label>
-                  <div className="relative">
+                  <div className="relative group">
                     <input
                       type={showPassword ? "text" : "password"}
                       value={form.password}
@@ -274,7 +274,7 @@ function RegisterPage() {
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
                       }
-                      className="absolute inset-y-0 right-2 flex items-center text-[#6B7280]"
+                      className="absolute inset-y-0 right-2 flex items-center text-[#6B7280] opacity-0 group-focus-within:opacity-100 pointer-events-none group-focus-within:pointer-events-auto transition-opacity duration-200"
                     >
                       <i
                         className={showPassword ? "ti ti-eye" : "ti ti-eye-off"}
@@ -286,7 +286,7 @@ function RegisterPage() {
                   <label className="mb-1 block text-xs font-medium text-[#374151]">
                     Confirm Password
                   </label>
-                  <div className="relative">
+                  <div className="relative group">
                     <input
                       type={showConfirm ? "text" : "password"}
                       value={form.confirm}
@@ -299,7 +299,7 @@ function RegisterPage() {
                       aria-label={
                         showConfirm ? "Hide password" : "Show password"
                       }
-                      className="absolute inset-y-0 right-2 flex items-center text-[#6B7280]"
+                      className="absolute inset-y-0 right-2 flex items-center text-[#6B7280] opacity-0 group-focus-within:opacity-100 pointer-events-none group-focus-within:pointer-events-auto transition-opacity duration-200"
                     >
                       <i
                         className={showConfirm ? "ti ti-eye" : "ti ti-eye-off"}
