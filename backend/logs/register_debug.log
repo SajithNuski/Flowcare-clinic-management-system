@@ -764,3 +764,103 @@ RAW_BODY:'full_name=Dr.+Ranasinghe&nic=199012345678&date_of_birth=1990-01-01&gen
 JSON_ERROR:'Syntax error'
 DECODED:NULL
 
+2026-06-10T13:24:17+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '133',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=45fvmjm3f9cd8g4e5qtarusm2i',
+)
+CONTENT_LENGTH:133
+RAW_BODY:'full_name=doncy&nic=200333013260&date_of_birth=2020-06-10&gender=female&phone=&email=sajithnuski1234%40gmail.com&password=Doncy123%23'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-10T13:24:26+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '143',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=45fvmjm3f9cd8g4e5qtarusm2i',
+)
+CONTENT_LENGTH:143
+RAW_BODY:'full_name=doncy&nic=200333013260&date_of_birth=2020-06-10&gender=female&phone=0777777777&email=sajithnuski1234%40gmail.com&password=Doncy123%23'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-10T13:24:34+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '143',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=45fvmjm3f9cd8g4e5qtarusm2i',
+)
+CONTENT_LENGTH:143
+RAW_BODY:'full_name=doncy&nic=200333013296&date_of_birth=2020-06-10&gender=female&phone=0777777777&email=sajithnuski1234%40gmail.com&password=Doncy123%23'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-10T13:24:46+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '142',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=45fvmjm3f9cd8g4e5qtarusm2i',
+)
+CONTENT_LENGTH:142
+RAW_BODY:'full_name=doncy&nic=200333013296&date_of_birth=2020-06-10&gender=female&phone=0777777777&email=sajithnuski556%40gmail.com&password=Doncy123%23'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
