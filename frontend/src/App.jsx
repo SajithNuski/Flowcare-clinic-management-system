@@ -17,6 +17,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import BookAppointment from "./pages/BookAppointment";
 import ReceptionistDashboard from "./pages/ReceptionistDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
+import ManageAppointments from "./pages/ManageAppointments";
 
 function PageStub({ title }) {
   return (
@@ -87,7 +88,7 @@ function App() {
             path="/receptionist/appointments"
             element={
               <ProtectedRoute allowedRole="receptionist">
-                <PageStub title="Manage Appointments" />
+                <ManageAppointments />
               </ProtectedRoute>
             }
           />
