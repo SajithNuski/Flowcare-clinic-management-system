@@ -30,7 +30,6 @@ const steps = [
 
 function HowItWorks() {
   const navigate = useNavigate();
-
   const refs = useRef([]);
   const [visible, setVisible] = useState([]);
 
@@ -58,24 +57,28 @@ function HowItWorks() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAFAFC] text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-[#FFFFFF] text-[#1F2937]">
       <Navbar />
 
       <main className="flex-1">
+        {/* Hero Section */}
         <section
-          className="relative overflow-hidden px-4 py-24 sm:px-8 md:py-28"
+          className="relative overflow-hidden px-4 py-24 sm:px-8 md:py-28 flex items-center justify-center"
           style={{
             backgroundImage: `url(${clinicHero})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 bg-[#000000]/70" />
-          <div className="relative mx-auto max-w-4xl text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-[#ffffff] sm:text-4xl">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/70" />
+          <div className="relative mx-auto max-w-4xl text-center z-10">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8F0FE] mb-6 backdrop-blur-sm border border-white/10">
+              Patient Care Pathway
+            </div>
+            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl leading-[1.2]">
               Your Path to Better Health
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#ffffff] sm:text-base">
+            <p className="mx-auto mt-6 max-w-2xl text-base text-[#E2E8F0] sm:text-lg leading-relaxed">
               FlowCare Medical Centre simplifies your healthcare journey. From
               the first click to your first follow-up, we ensure a seamless and
               professional experience focused entirely on your recovery.
@@ -83,46 +86,50 @@ function HowItWorks() {
           </div>
         </section>
 
-        <section className="px-4 py-14 sm:px-8">
+        {/* 4-Step Care Process Section */}
+        <section className="px-4 py-20 sm:px-8 bg-white">
           <div className="mx-auto max-w-4xl text-center">
-            <h2 className="text-4xl font-bold text-[#1565D8]">
+            <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
+              Step-by-Step Guide
+            </div>
+            <h2 className="mt-3 text-3xl font-extrabold text-[#0F172A] sm:text-4xl">
               Our 4-Step Care Process
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-[#4B5563]">
+            <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-[#4B5563]">
               Guided medical support at every stage of your journey.
             </p>
 
-            <div className="mt-8 space-y-8">
+            <div className="mt-16 space-y-12 relative">
               {steps.map((s, idx) => (
                 <div key={s.number} className="relative flex items-start gap-6">
-                  {/* timeline bullet */}
+                  {/* Timeline Bullet (hidden on mobile, styled nicely on tablet/desktop) */}
                   <div className="absolute left-0 top-2 hidden h-full w-12 md:block">
                     <div className="flex h-full flex-col items-center">
-                      <div className="mb-4 h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-full bg-green-500 text-white font-semibold shadow-md">
+                      <div className="mb-4 h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-full bg-[#E8F0FE] border-2 border-[#1A73E8]/30 text-[#1A73E8] font-bold shadow-sm font-sans text-sm">
                         {s.number}
                       </div>
-                      <div className="flex-1 w-px bg-[#E6EEF3]" />
+                      <div className="flex-1 w-[2px] bg-slate-100" />
                     </div>
                   </div>
 
                   <div
                     data-idx={idx}
                     ref={(el) => (refs.current[idx] = el)}
-                    className={`ml-0 md:ml-14 flex-1 transform rounded-lg border border-[#E6EEF3] bg-white p-6 shadow-sm transition-all duration-700 ease-out ${
+                    className={`ml-0 md:ml-16 flex-1 transform rounded-2xl border border-slate-200/50 bg-white p-8 shadow-sm transition-all duration-700 ease-out ${
                       visible[idx]
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-6"
-                    } hover:shadow-md hover:-translate-y-1`}
+                    } hover:shadow-md hover:-translate-y-0.5 text-left`}
                   >
                     <div className="flex items-center justify-between">
-                      <h3 className="text-base font-semibold text-[#0F172A]">
+                      <h3 className="text-lg font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-200">
                         {s.title}
                       </h3>
-                      <div className="text-xs text-[#9CA3AF]">
-                        STEP {s.number}
+                      <div className="rounded-full bg-[#F1F5F9] px-2.5 py-1 text-[10px] font-bold text-[#64748B] uppercase tracking-wider font-sans">
+                        Step {s.number}
                       </div>
                     </div>
-                    <p className="mt-3 text-sm text-[#4B5563]">{s.text}</p>
+                    <p className="mt-4 text-xs sm:text-sm leading-relaxed text-[#4B5563]">{s.text}</p>
                   </div>
                 </div>
               ))}
@@ -130,41 +137,42 @@ function HowItWorks() {
           </div>
         </section>
 
-        <section className="px-4 pb-16 sm:px-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="mx-auto rounded-2xl overflow-hidden shadow-lg md:max-w-4xl">
+        {/* CTA Banner Section */}
+        <section className="px-4 pb-20 sm:px-8 bg-white">
+          <div className="mx-auto max-w-5xl">
+            <div className="mx-auto rounded-[24px] overflow-hidden shadow-xl border border-slate-100 md:max-w-4xl bg-white">
               <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="bg-gradient-to-r from-[#1565D8] to-[#0B63D1] p-6 sm:p-8 text-white">
-                  <h3 className="text-xl font-semibold">
+                <div className="bg-gradient-to-br from-[#1A73E8] to-[#1557B0] p-8 sm:p-10 text-white flex flex-col justify-center">
+                  <h3 className="text-2xl font-extrabold tracking-tight text-white">
                     Ready to start your journey?
                   </h3>
-                  <p className="mt-2 max-w-lg text-sm text-white/90">
+                  <p className="mt-4 text-sm text-white/90 leading-relaxed">
                     Book your first consultation today at FlowCare Medical
                     Center. Our specialists are ready to provide the clinical
                     precision you deserve.
                   </p>
 
-                  <div className="mt-4 flex gap-3">
+                  <div className="mt-8 flex flex-wrap gap-4">
                     <button
                       onClick={() => navigate("/patient/book")}
-                      className="rounded-md bg-white px-4 py-2 text-sm font-semibold text-[#0B63D1] hover:opacity-95"
+                      className="cursor-pointer rounded-xl bg-white px-6 py-3.5 text-xs font-bold text-[#1A73E8] shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5 active:translate-y-0"
                     >
                       Book Online Now
                     </button>
                     <button
                       onClick={() => navigate("/about")}
-                      className="rounded-md border border-white/30 px-4 py-2 text-sm font-medium text-white hover:bg-white/5"
+                      className="cursor-pointer rounded-xl border border-white/20 bg-white/10 px-6 py-3.5 text-xs font-bold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:-translate-y-0.5"
                     >
                       View Specialists
                     </button>
                   </div>
                 </div>
 
-                <div className="relative bg-white">
+                <div className="relative min-h-[220px] bg-slate-50 md:min-h-0">
                   <img
                     src={bookImg}
                     alt="Clinic CTA"
-                    className="h-40 w-full object-cover sm:h-56"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
                 </div>
               </div>
