@@ -55,67 +55,81 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F3F4F6]">
-      <div className="mx-auto flex min-h-screen max-w-6xl overflow-hidden rounded-lg bg-white shadow-lg">
-        {/* Left hero panel */}
-        <div className="hidden w-1/2 flex-col gap-6 bg-gradient-to-b from-[#1372E6] to-[#0B63D1] p-10 text-white sm:flex">
-          <div>
-            <h2 className="text-3xl font-bold">Welcome Back</h2>
-            <p className="mt-4 max-w-md text-sm text-white/90">
+    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto flex w-full max-w-5xl overflow-hidden rounded-[24px] bg-white border border-slate-200/60 shadow-[0_20px_50px_rgba(15,23,42,0.06)] min-h-[600px]">
+        
+        {/* Left Hero Panel */}
+        <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-[#1A73E8] to-[#1557B0] p-12 text-white sm:flex overflow-hidden">
+          {/* Subtle grid backdrop pattern */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/10 to-transparent pointer-events-none" />
+          
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white border border-white/10 mb-8 backdrop-blur-sm">
+              <i className="ti ti-lock" /> FlowCare Portal
+            </div>
+            <h2 className="text-3xl font-extrabold tracking-tight text-white leading-tight font-sans">
+              Welcome Back
+            </h2>
+            <p className="mt-4 max-w-sm text-sm text-[#E8F0FE] leading-relaxed">
               Access your medical dashboard and queue status in just a few
               clicks.
             </p>
           </div>
 
-          <div className="mt-auto space-y-4">
-            <div className="flex items-start gap-3">
-              <div className="rounded-md bg-white/10 p-2 text-white" />
-              <div className="text-sm">View records securely</div>
+          <div className="relative z-10 space-y-4 my-auto pt-8">
+            <div className="flex items-center gap-3.5 bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+                <i className="ti ti-eye-check text-base" />
+              </div>
+              <div className="text-xs font-semibold text-white/95">View records securely</div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="rounded-md bg-white/10 p-2 text-white" />
-              <div className="text-sm">Manage appointments</div>
+            <div className="flex items-center gap-3.5 bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+                <i className="ti ti-calendar text-base" />
+              </div>
+              <div className="text-xs font-semibold text-white/95">Manage appointments</div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="rounded-md bg-white/10 p-2 text-white" />
-              <div className="text-sm">Quick check-in</div>
+            <div className="flex items-center gap-3.5 bg-white/5 border border-white/10 rounded-2xl p-3.5 backdrop-blur-sm">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white">
+                <i className="ti ti-device-mobile-check text-base" />
+              </div>
+              <div className="text-xs font-semibold text-white/95">Quick check-in</div>
             </div>
+          </div>
 
-            <div className="pt-6 text-xs text-white/70">
-              © 2024 Badulla Medical Centre. Leading digital healthcare
-              solutions.
-            </div>
+          <div className="relative z-10 text-xs text-white/60 pt-6">
+            &copy; {new Date().getFullYear()} Badulla Medical Centre. All rights reserved.
           </div>
         </div>
 
-        {/* Right form panel */}
-        <div className="w-full sm:w-1/2 p-8 sm:p-12">
-          <div className="mx-auto max-w-md">
-            <h3 className="text-xl font-semibold text-[#0F172A]">
+        {/* Right Form Panel */}
+        <div className="w-full sm:w-1/2 p-8 sm:p-12 lg:p-16 flex items-center bg-white">
+          <div className="w-full max-w-md mx-auto">
+            <h3 className="text-3xl font-extrabold text-[#0F172A] tracking-tight">
               Login
             </h3>
-            <div className="mt-2 text-sm text-[#6B7280]">
+            <div className="mt-2.5 text-sm text-[#6B7280]">
               New here?{" "}
-              <Link to="/register" className="text-[#1A73E8]">
+              <Link to="/register" className="font-bold text-[#1A73E8] hover:text-[#1557B0] transition-colors">
                 Create an account
               </Link>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+            <form onSubmit={handleSubmit} className="mt-8 space-y-5">
               {success && (
-                <div className="rounded-md bg-emerald-50 border border-emerald-200 px-3 py-2 text-sm text-emerald-800">
+                <div className="rounded-xl bg-[#EAFAF1] border border-[#2ECC71]/25 px-4 py-3 text-xs font-semibold text-[#16A34A]">
                   {success}
                 </div>
               )}
 
               {error && (
-                <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+                <div className="rounded-xl bg-[#FEE2E2] border border-[#DC2626]/20 px-4 py-3 text-xs font-semibold text-[#DC2626]">
                   {error}
                 </div>
               )}
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-[#374151]">
+                <label className="mb-1.5 block text-xs font-bold text-[#4B5563] uppercase tracking-wider">
                   Email Address
                 </label>
                 <input
@@ -124,16 +138,16 @@ function LoginPage() {
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder="name@example.com"
-                  className="mt-1 w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm focus:border-[#1A73E8] focus:outline-none"
+                  className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10"
                 />
               </div>
 
               <div>
-                <div className="flex items-center justify-between">
-                  <label className="mb-1 block text-xs font-medium text-[#374151]">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-[#4B5563] uppercase tracking-wider">
                     Password
                   </label>
-                  <a className="text-xs text-[#6B7280] hover:underline">
+                  <a className="text-xs font-semibold text-[#1A73E8] hover:text-[#1557B0] cursor-pointer hover:underline">
                     Forgot Password?
                   </a>
                 </div>
@@ -143,38 +157,40 @@ function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="********"
-                  className="mt-1 w-full rounded-md border border-[#E5E7EB] px-3 py-2 text-sm focus:border-[#1A73E8] focus:outline-none"
+                  className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10"
                 />
               </div>
 
               <div className="flex items-center gap-3">
-                <label className="inline-flex items-center gap-2 text-sm text-[#374151]">
+                <label className="inline-flex items-center gap-2.5 text-xs font-semibold text-[#4B5563] cursor-pointer select-none">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-[#E5E7EB]"
-                  />{" "}
+                    className="h-4.5 w-4.5 rounded border-slate-300 text-[#1A73E8] focus:ring-[#1A73E8]/20 transition-all cursor-pointer"
+                  />
                   Remember me
                 </label>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="mt-2 w-full rounded-md bg-[#0B63D1] px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
-              >
-                {loading ? "Signing in…" : "Login to Account"}
-              </button>
+              <div className="space-y-3 pt-2">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="cursor-pointer w-full rounded-xl bg-[#1A73E8] px-4 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.5)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:pointer-events-none"
+                >
+                  {loading ? "Signing in…" : "Login to Account"}
+                </button>
 
-              <button
-                type="button"
-                onClick={() => navigate("/")}
-                className="mt-2 w-full rounded-md border border-[#E5E7EB] bg-white px-4 py-2 text-sm font-medium text-[#374151] hover:bg-[#F9FAFB]"
-              >
-                Cancel
-              </button>
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="cursor-pointer w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm font-bold text-[#4B5563] transition-all hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
 
-            <p className="mt-6 text-xs text-[#9CA3AF]">
+            <p className="mt-8 text-[11px] leading-relaxed text-[#9CA3AF] text-center border-t border-slate-100 pt-5">
               Secure connection via 256-bit encryption. Your data privacy is our
               priority.
             </p>
