@@ -18,42 +18,42 @@ import doctorThreeImg from "../assets/images/doctor3.png";
 const featureItems = [
   {
     icon: "ti-device-mobile",
-    accent: "rgba(26,115,232,0.10)",
+    accent: "rgba(26,115,232,0.06)",
     color: COLORS.PRIMARY,
     title: "Book From Your Phone",
     text: "Register once and book from mobile browser, no calls needed",
   },
   {
     icon: "ti-list-numbers",
-    accent: "rgba(46,204,113,0.10)",
+    accent: "rgba(46,204,113,0.06)",
     color: COLORS.SUCCESS,
     title: "Live Queue Tracking",
     text: "Watch your queue position update in real time from anywhere",
   },
   {
     icon: "ti-notes",
-    accent: "rgba(26,115,232,0.08)",
+    accent: "rgba(26,115,232,0.05)",
     color: COLORS.PRIMARY,
     title: "Digital Consultation Records",
     text: "Every diagnosis and doctor note saved and accessible forever",
   },
   {
     icon: "ti-user-check",
-    accent: "rgba(229,57,53,0.10)",
+    accent: "rgba(229,57,53,0.06)",
     color: COLORS.DANGER,
     title: "Walk-ins Always Welcome",
     text: "No appointment needed — just arrive and we add you to queue",
   },
   {
     icon: "ti-heart-rate-monitor",
-    accent: "rgba(26,115,232,0.08)",
+    accent: "rgba(26,115,232,0.05)",
     color: COLORS.PRIMARY,
     title: "Experienced Specialists",
     text: "Qualified MBBS doctors with years of Uva Province experience",
   },
   {
     icon: "ti-clock",
-    accent: "rgba(46,204,113,0.10)",
+    accent: "rgba(46,204,113,0.06)",
     color: COLORS.SUCCESS,
     title: "Minimal Waiting Time",
     text: "Smart queue system keeps average wait under 25 minutes",
@@ -96,7 +96,7 @@ const stepItems = [
 const doctorShowcaseItems = [
   {
     specialty: "Cardiology",
-    badgeClass: "bg-[#1A73E8]",
+    badgeClass: "bg-[#E8F0FE] text-[#1A73E8] border border-[#1A73E8]/10",
     image: doctorOneImg,
     name: "Dr. Prasanna Perera",
     title: "Senior Cardiologist",
@@ -105,7 +105,7 @@ const doctorShowcaseItems = [
   },
   {
     specialty: "Pediatrics",
-    badgeClass: "bg-[#16A34A]",
+    badgeClass: "bg-[#EBF7ED] text-[#16A34A] border border-[#16A34A]/10",
     image: doctorTwoImg,
     name: "Dr. Sarah Wijesinghe",
     title: "Pediatric Specialist",
@@ -114,7 +114,7 @@ const doctorShowcaseItems = [
   },
   {
     specialty: "Surgery",
-    badgeClass: "bg-[#DC2626]",
+    badgeClass: "bg-[#FEE2E2] text-[#DC2626] border border-[#DC2626]/10",
     image: doctorThreeImg,
     name: "Dr. Aruna Perera",
     title: "General Surgeon",
@@ -181,23 +181,22 @@ function LandingPage() {
     navigate("/how-it-works");
   }
 
-  function scrollToOverview() {
-    navigate("/queue");
-  }
-
   const quickAccessCards = [
     {
       label: "Our Doctors",
+      sublabel: "Meet our specialist team",
       icon: "ti-stethoscope",
       action: () => navigate("/about"),
     },
     {
       label: "Location",
+      sublabel: "Find us in Badulla town",
       icon: "ti-map-pin",
       action: () => navigate("/contact"),
     },
     {
       label: "Appointments",
+      sublabel: "Book your consultation",
       icon: "ti-calendar-plus",
       action: handleBookAppointment,
     },
@@ -208,30 +207,36 @@ function LandingPage() {
       <Navbar />
 
       <main className="flex-1">
+        {/* Original Hero Section - Retained background image & content with enhanced button styling */}
         <section
-          className="relative min-h-[100svh] overflow-hidden"
+          className="relative min-h-[90svh] overflow-hidden flex items-center justify-center py-24"
           style={{
             backgroundImage: `url(${heroImage})`,
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
         >
-          <div className="absolute inset-0 bg-black/50" />
+          {/* Subtle gradient overlay for better contrast & premium feel */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/70" />
+          
           <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8">
-            <div className="mx-auto flex max-w-3xl flex-col items-center text-center text-white">
-              <h1 className="mb-4 text-4xl font-bold tracking-tight text-white drop-shadow-md sm:text-5xl lg:text-6xl">
-                Quality Healthcare, Now Easier to Access
+            <div className="mx-auto flex max-w-4xl flex-col items-center text-center text-white">
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8F0FE] mb-6 backdrop-blur-sm border border-white/10">
+                Badulla Medical Centre
+              </div>
+              <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-white drop-shadow-md sm:text-5xl lg:text-6xl leading-[1.15]">
+                Quality Healthcare,<br className="hidden sm:inline" /> Now Easier to Access
               </h1>
-              <p className="mb-8 max-w-[540px] text-lg font-normal text-white/90 sm:text-xl">
+              <p className="mb-10 max-w-[620px] text-base font-normal text-[#E2E8F0] sm:text-lg lg:text-xl leading-relaxed">
                 Book appointments online, track your queue from your phone, and
                 view your consultation history — all in one place.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-4 w-full sm:w-auto px-4">
                 <button
                   type="button"
                   aria-label="Book an appointment"
                   onClick={handleBookAppointment}
-                  className="cursor-pointer rounded-lg bg-[#1A73E8] px-6 py-3 text-sm font-medium text-white shadow-lg transition-all duration-200 hover:opacity-90"
+                  className="w-full sm:w-auto cursor-pointer rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.5)] hover:-translate-y-0.5 active:translate-y-0"
                 >
                   Book an Appointment
                 </button>
@@ -239,7 +244,7 @@ function LandingPage() {
                   type="button"
                   aria-label="Learn how it works"
                   onClick={handleHowItWorks}
-                  className="cursor-pointer rounded-lg border border-white bg-white px-6 py-3 text-sm font-medium text-[#1A73E8] shadow-lg transition-all duration-200 hover:bg-[#F9FAFB]"
+                  className="w-full sm:w-auto cursor-pointer rounded-xl border border-white/20 bg-white/10 px-8 py-4 text-sm font-bold text-white backdrop-blur-md shadow-sm transition-all duration-300 hover:bg-white/20 hover:border-white/40 hover:-translate-y-0.5"
                 >
                   How It Works
                 </button>
@@ -248,81 +253,88 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="border-b border-[#E5E7EB] bg-[#FFFFFF] py-10">
-          <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 px-4 sm:px-8 lg:grid-cols-3 justify-items-center">
+        {/* Floating Quick Action cards */}
+        <section className="relative -mt-10 z-20 px-4 sm:px-8">
+          <div className="mx-auto max-w-5xl bg-white rounded-2xl border border-slate-200/80 shadow-[0_15px_35px_rgba(15,23,42,0.06)] p-3 grid gap-3 sm:grid-cols-3">
             {quickAccessCards.map((item) => (
               <button
                 key={item.label}
                 type="button"
                 onClick={item.action}
                 aria-label={item.label}
-                className="group flex flex-col items-center justify-center w-80 cursor-pointer rounded-xl border border-[#E5E7EB] bg-white p-6 text-center transition-all duration-200 hover:border-[rgba(26,115,232,0.15)] hover:shadow-md"
+                className="group flex items-center gap-4 text-left cursor-pointer rounded-xl border border-transparent p-4 transition-all duration-300 hover:bg-[#E8F0FE]/40 hover:border-[#1A73E8]/10"
               >
-                <i className={`ti ${item.icon} mb-3 text-3xl text-[#1A73E8]`} />
-                <div className="text-sm font-medium text-[#4B5563]">
-                  {item.label}
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+                  <i className={`ti ${item.icon} text-lg`} />
                 </div>
-                <div className="mt-1 text-xs text-[#9CA3AF] transition-all duration-200 group-hover:text-[#1A73E8]">
-                  →
+                <div>
+                  <div className="text-sm font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-200">
+                    {item.label}
+                  </div>
+                  <div className="mt-0.5 text-xs text-[#6B7280]">
+                    {item.sublabel}
+                  </div>
+                </div>
+                <div className="ml-auto text-[#9CA3AF] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
+                  <i className="ti ti-chevron-right text-xs font-bold" />
                 </div>
               </button>
             ))}
           </div>
         </section>
 
-        <section className="bg-[#FFFFFF] px-4 py-16 sm:px-8">
-          <div className="mx-auto max-w-7xl rounded-[28px] bg-[#F7F8FC] px-4 py-12 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:px-6 lg:px-8 lg:py-14">
+        {/* Doctor Showcase Section */}
+        <section className="bg-[#FFFFFF] px-4 py-20 sm:px-8">
+          <div className="mx-auto max-w-7xl rounded-[24px] bg-[#F8FAFC] px-6 py-14 shadow-[0_20px_50px_rgba(15,23,42,0.02)] border border-slate-100/80 sm:px-8 lg:px-12 lg:py-16">
             <div className="mx-auto max-w-3xl text-center">
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#1A73E8]">
-                <i className="ti ti-shield-check text-[12px]" />
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A73E8]">
+                <i className="ti ti-shield-check" />
                 Trusted Healthcare
               </div>
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-[#0F172A] sm:text-4xl lg:text-5xl">
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0F172A] sm:text-4xl">
                 Meet Our Qualified Doctors
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-[#4B5563] sm:text-base">
-                At Badulla Medical Centre, our specialists bring decades of
-                clinical precision and compassionate care. From complex surgical
-                interventions to routine family wellness, we are committed to
-                your health journey.
+              <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-[#4B5563]">
+                At Badulla Medical Centre, our specialists bring decades of clinical precision and compassionate care. 
+                From complex surgical interventions to routine family wellness, we are committed to your health journey.
               </p>
             </div>
 
-            <div className="mx-auto mt-10 grid max-w-7xl gap-6 md:grid-cols-3">
+            <div className="mx-auto mt-12 grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3 justify-center">
               {doctorShowcaseItems.map((doctor) => (
                 <article
                   key={doctor.name}
-                  className="overflow-hidden rounded-xl border border-[#D9E2EF] bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+                  className="group overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
                 >
-                  <div className="relative">
+                  <div className="relative overflow-hidden bg-slate-100">
                     <img
                       src={doctor.image}
                       alt={doctor.name}
-                      className="h-72 w-full object-cover object-top sm:h-80"
+                      className="h-72 w-full object-cover object-top sm:h-80 transition-transform duration-500 group-hover:scale-105"
                     />
                     <span
-                      className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white shadow ${doctor.badgeClass}`}
+                      className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider shadow-sm backdrop-blur-md ${doctor.badgeClass}`}
                     >
                       {doctor.specialty}
                     </span>
                   </div>
 
-                  <div className="p-5">
-                    <h3 className="text-base font-medium text-[#0F172A] sm:text-[17px]">
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-200">
                       {doctor.name}
                     </h3>
-                    <p className="mt-1 text-sm font-medium text-[#1A73E8]">
+                    <p className="mt-0.5 text-xs font-semibold text-[#1A73E8] uppercase tracking-wider">
                       {doctor.title}
                     </p>
 
-                    <div className="mt-4 space-y-3 text-sm text-[#4B5563]">
-                      <div className="flex items-start gap-2">
-                        <i className="ti ti-stethoscope mt-0.5 text-[#9CA3AF]" />
-                        <span>{doctor.credentials}</span>
+                    <div className="mt-5 space-y-2.5 text-sm text-[#4B5563] border-t border-slate-100 pt-4">
+                      <div className="flex items-start gap-2.5">
+                        <i className="ti ti-school text-[#9CA3AF] text-lg mt-0.5" />
+                        <span className="text-xs leading-relaxed">{doctor.credentials}</span>
                       </div>
-                      <div className="flex items-start gap-2">
-                        <i className="ti ti-clock-cog mt-0.5 text-[#9CA3AF]" />
-                        <span>{doctor.experience}</span>
+                      <div className="flex items-start gap-2.5">
+                        <i className="ti ti-briefcase text-[#9CA3AF] text-lg mt-0.5" />
+                        <span className="text-xs font-medium">{doctor.experience}</span>
                       </div>
                     </div>
                   </div>
@@ -332,35 +344,36 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bg-[#F9FAFB] px-4 py-16 sm:px-8">
+        {/* Why Choose Us Section */}
+        <section className="bg-[#F8FAFC] px-4 py-20 sm:px-8 border-y border-slate-100">
           <div className="mx-auto max-w-7xl text-center">
-            <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A73E8]">
+            <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Why Choose Us
             </div>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-[#1F2937]">
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#0F172A] sm:text-4xl">
               What Makes Us Different
             </h2>
-            <p className="mx-auto mt-2 max-w-2xl text-sm text-[#4B5563]">
+            <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-[#4B5563]">
               We combine experienced medical care with a modern digital system
             </p>
           </div>
 
-          <div className="mx-auto mt-10 grid max-w-7xl gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mx-auto mt-12 grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featureItems.map((item) => (
               <div
                 key={item.title}
-                className="rounded-xl border border-[#E5E7EB] bg-white p-5 transition-all duration-200 hover:border-[rgba(26,115,232,0.15)] hover:shadow-md"
+                className="group rounded-2xl border border-slate-200/50 bg-white p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/20"
               >
                 <div
-                  className="flex h-11 w-11 items-center justify-center rounded-xl text-xl"
+                  className="flex h-11 w-11 items-center justify-center rounded-xl text-xl transition-transform duration-300 group-hover:scale-110"
                   style={{ backgroundColor: item.accent, color: item.color }}
                 >
                   <i className={`ti ${item.icon}`} />
                 </div>
-                <h3 className="mt-4 text-sm font-semibold text-[#1F2937]">
+                <h3 className="mt-5 text-base font-bold text-[#0F172A]">
                   {item.title}
                 </h3>
-                <p className="mt-1 text-xs leading-relaxed text-[#4B5563]">
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
                   {item.text}
                 </p>
               </div>
@@ -368,101 +381,117 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bg-[#FFFFFF] px-4 py-16 sm:px-8">
-          <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2 lg:items-start">
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A73E8]">
+        {/* Our Services Section */}
+        <section className="bg-white px-4 py-20 sm:px-8">
+          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
+            
+            {/* Left Column: Services */}
+            <div className="lg:col-span-7">
+              <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
                 Our Services
               </div>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#1F2937]">
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[#0F172A] sm:text-4xl">
                 Comprehensive Outpatient Care
               </h2>
-              <p className="mt-3 max-w-xl text-sm text-[#4B5563]">
-                Our clinic provides reliable primary care, family support, and
-                referral pathways for the Badulla community.
+              <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#4B5563] max-w-xl">
+                Our clinic provides reliable primary care, family support, and referral pathways for the Badulla community.
               </p>
 
-              <div className="mt-6 space-y-0">
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 {serviceItems.map((service) => (
                   <div
                     key={service}
-                    className="flex items-center gap-2 border-b border-[#F9FAFB] py-2 text-sm text-[#4B5563]"
+                    className="flex items-center gap-3 rounded-xl border border-slate-100 p-3 transition-colors duration-200 hover:bg-[#F8FAFC]"
                   >
-                    <i className="ti ti-circle-check text-[#2ECC71]" />
-                    <span>{service}</span>
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#EAFAF1] text-[#2ECC71]">
+                      <i className="ti ti-check text-xs font-bold" />
+                    </div>
+                    <span className="text-xs sm:text-sm font-medium text-[#4B5563]">{service}</span>
                   </div>
                 ))}
               </div>
 
-              <Link
-                to="/about"
-                className="mt-5 inline-flex items-center text-sm font-medium text-[#1A73E8] transition-all duration-200 hover:underline"
-              >
-                About Our Clinic →
-              </Link>
+              <div className="mt-8">
+                <Link
+                  to="/about"
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1A73E8] hover:text-[#1557B0] transition-colors duration-200"
+                >
+                  About Our Clinic
+                  <i className="ti ti-arrow-right text-base" />
+                </Link>
+              </div>
             </div>
 
-            <div className="rounded-2xl bg-[#1A73E8] p-8 text-white shadow-lg">
-              <h3 className="text-xl font-bold tracking-tight text-white">
-                Trusted by the Badulla Community
-              </h3>
-              <div className="mt-6 space-y-4">
-                {[
-                  ["15+", "Years serving Badulla"],
-                  ["3", "Specialist Doctors"],
-                  ["50+", "Patients per day"],
-                ].map(([value, label]) => (
-                  <div key={label} className="border-b border-white/20 pb-4">
-                    <div className="text-4xl font-bold text-white">{value}</div>
-                    <div className="mt-1 text-sm text-white/80">{label}</div>
-                  </div>
-                ))}
-              </div>
+            {/* Right Column: Stats Card */}
+            <div className="lg:col-span-5">
+              <div className="relative rounded-2xl bg-gradient-to-br from-[#1A73E8] to-[#1557B0] p-8 text-white shadow-xl overflow-hidden">
+                {/* Visual backdrop grid pattern */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/15 to-transparent pointer-events-none" />
+                
+                <h3 className="text-xl font-bold tracking-tight text-white mb-6">
+                  Trusted by the Badulla Community
+                </h3>
+                <div className="space-y-6">
+                  {[
+                    ["15+", "Years serving Badulla"],
+                    ["3", "Specialist Doctors"],
+                    ["50+", "Patients per day"],
+                  ].map(([value, label]) => (
+                    <div key={label} className="border-b border-white/15 pb-4 last:border-0 last:pb-0">
+                      <div className="text-4xl font-extrabold text-white font-sans">{value}</div>
+                      <div className="mt-1 text-xs sm:text-sm text-white/80 font-medium">{label}</div>
+                    </div>
+                  ))}
+                </div>
 
-              <button
-                type="button"
-                aria-label="Register as a patient"
-                onClick={() => navigate("/register")}
-                className="mt-4 w-full rounded-lg bg-white px-5 py-2.5 text-center text-sm font-medium text-[#1A73E8] transition-all duration-200 hover:bg-[#F9FAFB]"
-              >
-                Register as a Patient
-              </button>
+                <button
+                  type="button"
+                  onClick={() => navigate("/register")}
+                  className="mt-8 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-[#1A73E8] shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  Register as a Patient
+                </button>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="bg-[#F9FAFB] px-4 py-16 sm:px-8">
+        {/* How It Works Section */}
+        <section className="bg-[#F8FAFC] px-4 py-20 sm:px-8 border-t border-slate-100">
           <div className="mx-auto max-w-7xl text-center">
-            <div className="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A73E8]">
+            <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Simple Process
             </div>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-[#1F2937]">
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#0F172A] sm:text-4xl">
               How It Works
             </h2>
           </div>
 
-          <div className="mx-auto mt-10 grid max-w-7xl gap-6 md:grid-cols-3">
+          <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3 relative">
+            {/* Process connector line for large screens */}
+            <div className="absolute top-1/3 left-1/6 right-1/6 h-[2px] bg-slate-200/50 hidden md:block -z-10" />
+
             {stepItems.map((step) => (
               <article
                 key={step.title}
-                className="bg-white rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md"
+                className="group relative bg-white rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-lg hover:border-[#1A73E8]/10 flex flex-col items-center text-center"
               >
-                <div className="overflow-hidden">
+                <div className="relative mb-6 overflow-hidden rounded-xl bg-slate-50 w-full">
                   <img
                     src={step.image}
                     alt={step.alt}
-                    className="h-44 w-full object-cover md:h-56"
+                    className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
+                  <div className="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#E8F0FE] border border-[#1A73E8]/20 text-[#1A73E8] text-xs font-bold shadow-md font-sans">
+                    {step.number}
+                  </div>
                 </div>
 
-                <div className="p-5">
-                  <div className="text-xs font-medium text-[#9CA3AF]">
-                    Step {step.number}
-                  </div>
-                  <h3 className="mt-2 text-lg font-semibold text-[#1A237E]">
+                <div className="flex-1">
+                  <h3 className="text-base font-bold text-[#0F172A]">
                     {step.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[#4B5563]">
+                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
                     {step.text}
                   </p>
                 </div>
@@ -470,74 +499,80 @@ function LandingPage() {
             ))}
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-12 text-center">
             <button
               type="button"
-              aria-label="Get started free"
               onClick={handleBookAppointment}
-              className="cursor-pointer rounded-lg bg-[#1A73E8] px-6 py-3 text-sm font-medium text-white transition-all duration-200 hover:opacity-90"
+              className="cursor-pointer rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.5)] hover:-translate-y-0.5 active:translate-y-0"
             >
               Get Started Free →
             </button>
           </div>
         </section>
 
-        <section className="border-t border-b border-[#E5E7EB] bg-[#FFFFFF] px-4 py-12 sm:px-8">
-          <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8]">
-                <i className="ti ti-clock" />
+        {/* Contact Info Grid */}
+        <section className="bg-white border-t border-slate-100 px-4 py-16 sm:px-8">
+          <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Opening Hours */}
+            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/10">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+                <i className="ti ti-clock text-lg" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#1F2937]">
+                <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Operational Hours</span>
+                <h3 className="text-base font-bold text-[#0F172A] mt-0.5">
                   Opening Hours
                 </h3>
-                <p className="mt-1 text-xs leading-relaxed text-[#4B5563]">
-                  Mon – Fri: {formatTime("08:00")} – {formatTime("17:00")}
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
+                  <strong>Mon – Fri:</strong> {formatTime("08:00")} – {formatTime("17:00")}
                   <br />
-                  Sat: {formatTime("08:00")} – {formatTime("13:00")}
+                  <strong>Sat:</strong> {formatTime("08:00")} – {formatTime("13:00")}
                   <br />
-                  Sun &amp; Public Holidays: Closed
+                  <strong>Sun &amp; Public Holidays:</strong> Closed
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8]">
-                <i className="ti ti-phone" />
+            {/* Contact Us */}
+            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/10">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+                <i className="ti ti-phone text-lg" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#1F2937]">
+                <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Get in Touch</span>
+                <h3 className="text-base font-bold text-[#0F172A] mt-0.5">
                   Contact Us
                 </h3>
-                <p className="mt-1 text-xs leading-relaxed text-[#4B5563]">
-                  Tel: 055 222 4567
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
+                  <strong>Tel:</strong> 055 222 4567
                   <br />
-                  Mobile: 077 123 4567
+                  <strong>Mobile:</strong> 077 123 4567
                   <br />
-                  Email: badullamedical@gmail.com
+                  <strong>Email:</strong> badullamedical@gmail.com
                   <br />
-                  WhatsApp: 077 123 4567
+                  <strong>WhatsApp:</strong> 077 123 4567
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8]">
-                <i className="ti ti-map-pin" />
+            {/* Find Us */}
+            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/10 col-span-1 sm:col-span-2 lg:col-span-1">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+                <i className="ti ti-map-pin text-lg" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-[#1F2937]">
+                <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Clinic Location</span>
+                <h3 className="text-base font-bold text-[#0F172A] mt-0.5">
                   Find Us
                 </h3>
-                <p className="mt-1 text-xs leading-relaxed text-[#4B5563]">
+                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
                   No. 14, Bandarawela Road
                   <br />
                   Badulla, Uva Province
                   <br />
                   Sri Lanka — 90000
                   <br />
-                  Near Badulla Bus Stand
+                  <span className="text-xs text-[#9CA3AF]">(Near Badulla Bus Stand)</span>
                 </p>
               </div>
             </div>
