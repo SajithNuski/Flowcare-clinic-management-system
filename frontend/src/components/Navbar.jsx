@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Badge from "./Badge";
 
 function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -17,100 +18,188 @@ function Navbar() {
 
   const isActive = (path) => location.pathname === path;
 
+  const getUserInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return parts[0].substring(0, 2).toUpperCase();
+  };
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/70 backdrop-blur-sm border-b border-transparent shadow-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-8">
-        <Link to="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#2B78E4] to-[#0B63D1] text-sm font-semibold text-white shadow-md">
-            BM
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-100/80 shadow-[0_2px_15px_rgba(15,23,42,0.02)]">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-3.5 sm:px-8">
+        
+        {/* Logo and Branding */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#1A73E8] to-[#115EC3] text-white shadow-[0_4px_10px_rgba(26,115,232,0.25)] transition-transform duration-300 group-hover:scale-105">
+            <i className="ti ti-activity-heartbeat text-lg" />
           </div>
           <div className="leading-tight">
-            <span className="block text-sm font-semibold text-[#0F172A]">Badulla Medical Centre</span>
-            <span className="block text-xs text-[#6B7280]">Uva Province, Sri Lanka</span>
+            <span className="block text-sm font-bold text-[#0F172A] tracking-tight group-hover:text-[#1A73E8] transition-colors duration-200">
+              Badulla Medical Centre
+            </span>
+            <span className="block text-[9px] uppercase tracking-widest font-bold text-[#64748B]">
+              FlowCare Platform
+            </span>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        {/* Desktop Links */}
+        <nav className="hidden items-center gap-2 md:flex">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className="relative px-3 py-2 text-sm text-[#374151] transition-colors duration-200 hover:text-[#1A73E8]"
+              className="relative px-4 py-2 text-sm font-semibold transition-all duration-200 text-[#4B5563] hover:text-[#1A73E8]"
             >
-              <span className={isActive(link.to) ? "font-medium text-[#1A73E8]" : ""}>{link.label}</span>
+              <span className={isActive(link.to) ? "text-[#1A73E8]" : ""}>
+                {link.label}
+              </span>
               <span
-                className={
-                  "absolute left-0 -bottom-0.5 h-0.5 w-full transform origin-left bg-[#1A73E8] transition-transform duration-300 " +
-                  (isActive(link.to) ? "scale-x-100" : "scale-x-0")
-                }
+                className={`absolute left-4 right-4 bottom-1 h-[2px] rounded-full bg-[#1A73E8] transition-transform duration-300 origin-left ${
+                  isActive(link.to) ? "scale-x-100" : "scale-x-0"
+                }`}
               />
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        {/* Desktop Auth Controls */}
+        <div className="hidden items-center gap-4 md:flex">
           {!user ? (
             <>
-              <Link to="/login" className="rounded-md border border-[#1A73E8] px-4 py-1.5 text-sm text-[#1A73E8] transition hover:bg-[#F1F8FF]">
+              <Link
+                to="/login"
+                className="px-4 py-2 text-sm font-bold text-[#4B5563] hover:text-[#1A73E8] transition-colors duration-200"
+              >
                 Login
               </Link>
-              <Link to="/register" className="rounded-md bg-[#1A73E8] px-4 py-1.5 text-sm font-medium text-white shadow-sm transition hover:opacity-95">
+              <Link
+                to="/register"
+                className="cursor-pointer rounded-xl bg-[#1A73E8] px-5 py-2 text-sm font-bold text-white shadow-[0_4px_12px_rgba(26,115,232,0.2)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_6px_18px_rgba(26,115,232,0.35)] hover:-translate-y-0.5 active:translate-y-0"
+              >
                 Register
               </Link>
             </>
           ) : (
-            <>
-              <div className="hidden items-center gap-3 sm:flex">
-                <span className="text-sm text-[#4B5563]">Hello, {user.full_name}</span>
-                <Badge text={user.role} color="blue" />
-                <button onClick={logout} className="rounded-md border border-[#E6EEF3] px-3 py-1 text-sm text-[#374151] hover:bg-[#F9FAFB]">Logout</button>
+            <div className="flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-2xl p-1.5 pr-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] border border-[#1A73E8]/10 font-bold text-xs">
+                {getUserInitials(user.full_name)}
               </div>
-            </>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-[#374151]">
+                  {user.full_name.split(" ")[0]}
+                </span>
+                <Badge text={user.role} color="blue" />
+              </div>
+              <button
+                type="button"
+                onClick={logout}
+                className="cursor-pointer flex items-center justify-center p-1.5 text-[#6B7280] hover:text-[#DC2626] transition-colors duration-200"
+                title="Logout"
+              >
+                <i className="ti ti-logout text-base" />
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Mobile Hamburger */}
+        {/* Mobile Hamburger Button */}
         <button
           aria-label="Toggle navigation menu"
           onClick={() => setMenuOpen((s) => !s)}
-          className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-transparent bg-white/60 p-2 text-[#0F172A] transition-all duration-200 hover:bg-white md:hidden"
+          className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-100 bg-slate-50/50 p-2 text-[#0F172A] transition-all duration-200 hover:bg-slate-50 md:hidden"
         >
-          <span className={`block h-0.5 w-5 transform bg-[#0F172A] transition duration-300 ${menuOpen ? "-translate-y-0.5 rotate-45" : "-translate-y-1.5"}`} />
-          <span className={`block h-0.5 w-5 transform bg-[#0F172A] transition duration-300 ${menuOpen ? "opacity-0" : "opacity-100"}`} />
-          <span className={`block h-0.5 w-5 transform bg-[#0F172A] transition duration-300 ${menuOpen ? "translate-y-0.5 -rotate-45" : "translate-y-1.5"}`} />
+          <div className="flex flex-col gap-1.5 justify-center items-center w-5">
+            <span
+              className={`block h-0.5 w-5 bg-[#0F172A] transition duration-300 ${
+                menuOpen ? "rotate-45 translate-y-2" : ""
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-5 bg-[#0F172A] transition duration-300 ${
+                menuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`block h-0.5 w-5 bg-[#0F172A] transition duration-300 ${
+                menuOpen ? "-rotate-45 -translate-y-2" : ""
+              }`}
+            />
+          </div>
         </button>
       </div>
 
-      {/* Mobile menu */}
-      <div className={`md:hidden bg-white/90 border-t border-transparent shadow-sm transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden ${menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-8">
-          <nav className="flex flex-col gap-2">
+      {/* Mobile Menu Panel */}
+      <div
+        className={`md:hidden bg-white/95 border-t border-slate-100/80 shadow-md transition-all duration-300 ease-in-out overflow-hidden ${
+          menuOpen ? "max-h-[380px] opacity-100 py-5" : "max-h-0 opacity-0 py-0"
+        }`}
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-4">
+          <nav className="flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 onClick={() => setMenuOpen(false)}
-                className={`rounded-md px-4 py-2 text-sm transition-colors duration-150 ${isActive(link.to) ? "bg-[#E8F0FE] text-[#1A73E8] font-medium" : "text-[#374151] hover:bg-[#F9FAFB] hover:text-[#1A73E8]"}`}
+                className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors duration-150 ${
+                  isActive(link.to)
+                    ? "bg-[#E8F0FE] text-[#1A73E8]"
+                    : "text-[#4B5563] hover:bg-slate-50 hover:text-[#1A73E8]"
+                }`}
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="mt-3 flex flex-col gap-3">
+          <div className="border-t border-slate-100 pt-4">
             {!user ? (
-              <>
-                <Link to="/login" onClick={() => setMenuOpen(false)} className="rounded-md border border-[#1A73E8] px-4 py-2 text-center text-sm font-medium text-[#1A73E8]">Login</Link>
-                <Link to="/register" onClick={() => setMenuOpen(false)} className="rounded-md bg-[#1A73E8] px-4 py-2 text-center text-sm font-medium text-white">Register</Link>
-              </>
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-bold text-[#4B5563]"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="rounded-xl bg-[#1A73E8] px-4 py-3 text-center text-sm font-bold text-white shadow-sm"
+                >
+                  Register
+                </Link>
+              </div>
             ) : (
-              <>
-                <div className="text-sm text-[#4B5563]">Hello, {user.full_name}</div>
-                <div>
-                  <Badge text={user.role} color="blue" />
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-2xl p-2.5">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] font-bold text-xs">
+                    {getUserInitials(user.full_name)}
+                  </div>
+                  <div>
+                    <span className="block text-xs font-bold text-[#374151]">
+                      {user.full_name}
+                    </span>
+                    <span className="block mt-0.5">
+                      <Badge text={user.role} color="blue" />
+                    </span>
+                  </div>
                 </div>
-                <button type="button" onClick={logout} className="rounded-md border border-[#E6EEF3] px-4 py-2 text-sm text-[#374151]">Logout</button>
-              </>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    logout();
+                  }}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-[#DC2626] hover:bg-red-50 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
             )}
           </div>
         </div>
