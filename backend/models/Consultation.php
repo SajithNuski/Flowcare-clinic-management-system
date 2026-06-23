@@ -125,10 +125,10 @@ class Consultation {
 	}
 
 	// This method gets all consultations for one patient, newest first
-	// It joins the users table so we can show the doctor's name
+	// It joins the doctors table so we can show the doctor's name
 	public function get_by_patient($patient_id) {
 		return $this->fetchAll(
-			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS doctor_name, u.phone AS doctor_phone FROM consultations c INNER JOIN users u ON c.doctor_id = u.id WHERE c.patient_id = ? ORDER BY c.created_at DESC, c.id DESC",
+			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS doctor_name, u.phone AS doctor_phone FROM consultations c INNER JOIN doctors u ON c.doctor_id = u.id WHERE c.patient_id = ? ORDER BY c.created_at DESC, c.id DESC",
 			"i",
 			[$patient_id]
 		);
@@ -138,14 +138,14 @@ class Consultation {
 	public function get_by_doctor($doctor_id, $date = null) {
 		if ($date === null) {
 			return $this->fetchAll(
-				"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM consultations c INNER JOIN users u ON c.patient_id = u.id WHERE c.doctor_id = ? ORDER BY c.created_at DESC, c.id DESC",
+				"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM consultations c INNER JOIN patients u ON c.patient_id = u.id WHERE c.doctor_id = ? ORDER BY c.created_at DESC, c.id DESC",
 				"i",
 				[$doctor_id]
 			);
 		}
 
 		return $this->fetchAll(
-			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM consultations c INNER JOIN users u ON c.patient_id = u.id WHERE c.doctor_id = ? AND DATE(c.created_at) = ? ORDER BY c.created_at DESC, c.id DESC",
+			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM consultations c INNER JOIN patients u ON c.patient_id = u.id WHERE c.doctor_id = ? AND DATE(c.created_at) = ? ORDER BY c.created_at DESC, c.id DESC",
 			"is",
 			[$doctor_id, $date]
 		);
@@ -154,7 +154,7 @@ class Consultation {
 	// This method returns one consultation by its ID
 	public function get_single($id) {
 		return $this->fetchOne(
-			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, p.full_name AS patient_name, d.full_name AS doctor_name FROM consultations c INNER JOIN users p ON c.patient_id = p.id INNER JOIN users d ON c.doctor_id = d.id WHERE c.id = ? LIMIT 1",
+			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, p.full_name AS patient_name, d.full_name AS doctor_name FROM consultations c INNER JOIN patients p ON c.patient_id = p.id INNER JOIN doctors d ON c.doctor_id = d.id WHERE c.id = ? LIMIT 1",
 			"i",
 			[$id]
 		);

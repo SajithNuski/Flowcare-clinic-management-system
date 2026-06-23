@@ -31,7 +31,7 @@ if ($queue_id <= 0 || $patient_id <= 0 || $notes === '' || $diagnosis === '') {
 	respond_json(["success" => false, "error" => "queue_id, patient_id, notes, and diagnosis are required"], 400);
 }
 
-$doctor_stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE user_id = ? LIMIT 1");
+$doctor_stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE id = ? LIMIT 1");
 mysqli_stmt_bind_param($doctor_stmt, "i", $_SESSION['user_id']);
 mysqli_stmt_execute($doctor_stmt);
 $doctor_result = mysqli_stmt_get_result($doctor_stmt);
@@ -54,7 +54,7 @@ if (!$queue->mark_complete($queue_id)) {
 	respond_json(["success" => false, "error" => "Could not complete queue entry"], 400);
 }
 
-$patient_stmt = mysqli_prepare($conn, "SELECT full_name FROM users WHERE id = ? LIMIT 1");
+$patient_stmt = mysqli_prepare($conn, "SELECT full_name FROM patients WHERE id = ? LIMIT 1");
 mysqli_stmt_bind_param($patient_stmt, "i", $patient_id);
 mysqli_stmt_execute($patient_stmt);
 $patient_result = mysqli_stmt_get_result($patient_stmt);

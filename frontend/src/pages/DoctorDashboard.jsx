@@ -9,12 +9,12 @@ import { useAuth } from "../context/AuthContext";
 function DoctorDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   // Dashboard state
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // Modal state
   const [showConsultationModal, setShowConsultationModal] = useState(false);
   const [selectedQueueEntry, setSelectedQueueEntry] = useState(null);
@@ -22,7 +22,7 @@ function DoctorDashboard() {
   const [diagnosis, setDiagnosis] = useState("");
   const [referral, setReferral] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  
+
   // Toast state
   const [toast, setToast] = useState({ message: "", type: "success" });
 
@@ -240,24 +240,22 @@ function DoctorDashboard() {
                 queue.map((entry, index) => {
                   const isCurrent = entry.status === "in_consultation";
                   const isNext = !inConsultationEntry && entry.status === "waiting" && entry.queue_id === firstWaitingEntry?.queue_id;
-                  
+
                   return (
                     <div
                       key={entry.queue_id}
-                      className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border transition-all ${
-                        isCurrent
+                      className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border transition-all ${isCurrent
                           ? "bg-blue-50/50 border-blue-200 shadow-sm"
                           : "bg-slate-50/50 border-slate-200"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-4">
                         {/* Queue badge */}
                         <div
-                          className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-sm ${
-                            isCurrent
+                          className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-sm ${isCurrent
                               ? "bg-[#1372E6] text-white"
                               : "bg-blue-50 text-[#1372E6] border border-blue-100"
-                          }`}
+                            }`}
                         >
                           Q{entry.queue_number < 10 ? `0${entry.queue_number}` : entry.queue_number}
                         </div>

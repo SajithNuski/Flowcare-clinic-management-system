@@ -5,11 +5,16 @@ $new_hash = password_hash('password', PASSWORD_DEFAULT);
 
 echo "New hash generated: $new_hash\n";
 
-$update = mysqli_query($conn, "UPDATE users SET password = '$new_hash'");
+$tables = ['admin', 'doctors', 'receptionist', 'patients'];
+$success = true;
+foreach ($tables as $table) {
+    if (!mysqli_query($conn, "UPDATE $table SET password = '$new_hash'")) {
+        echo "Failed to update passwords in table '$table': " . mysqli_error($conn) . "\n";
+        $success = false;
+    }
+}
 
-if ($update) {
-    echo "Successfully updated all user passwords to 'password'!\n";
-} else {
-    echo "Failed to update passwords: " . mysqli_error($conn) . "\n";
+if ($success) {
+    echo "Successfully updated passwords to 'password' in all tables!\n";
 }
 ?>

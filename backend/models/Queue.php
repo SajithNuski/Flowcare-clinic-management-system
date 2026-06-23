@@ -135,20 +135,20 @@ class Queue {
 	}
 
 	// This method gets all waiting patients for a doctor on a specific date
-	// It joins the users table so we can show the patient's name and phone number
+	// It joins the patients table so we can show the patient's name and phone number
 	public function get_live_queue($doctor_id, $date) {
 		return $this->fetchAll(
-			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, u.full_name AS patient_name, u.phone AS patient_phone FROM queue q INNER JOIN users u ON q.patient_id = u.id WHERE q.doctor_id = ? AND q.date = ? AND q.status = 'waiting' ORDER BY q.queue_number ASC",
+			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, u.full_name AS patient_name, u.phone AS patient_phone FROM queue q INNER JOIN patients u ON q.patient_id = u.id WHERE q.doctor_id = ? AND q.date = ? AND q.status = 'waiting' ORDER BY q.queue_number ASC",
 			"is",
 			[$doctor_id, $date]
 		);
 	}
 
 	// This method gets the live waiting queue for all doctors on a given date
-	// It joins the users table and the doctors table so the receptionist can see doctor and patient details together
+	// It joins the patients table and the doctors table so the receptionist can see doctor and patient details together
 	public function get_live_queue_all($date) {
 		return $this->fetchAll(
-			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, u.full_name AS patient_name, u.phone AS patient_phone, du.full_name AS doctor_name, d.specialisation FROM queue q INNER JOIN users u ON q.patient_id = u.id INNER JOIN doctors d ON q.doctor_id = d.id INNER JOIN users du ON d.user_id = du.id WHERE q.date = ? AND q.status = 'waiting' ORDER BY q.doctor_id ASC, q.queue_number ASC",
+			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, u.full_name AS patient_name, u.phone AS patient_phone, d.full_name AS doctor_name, d.specialisation FROM queue q INNER JOIN patients u ON q.patient_id = u.id INNER JOIN doctors d ON q.doctor_id = d.id WHERE q.date = ? AND q.status = 'waiting' ORDER BY q.doctor_id ASC, q.queue_number ASC",
 			"s",
 			[$date]
 		);
@@ -158,7 +158,7 @@ class Queue {
 	// Position means how many waiting patients are still ahead of them
 	public function get_my_queue_status($patient_id, $date) {
 		$queue_row = $this->fetchOne(
-			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, q.completed_time, u.full_name AS patient_name, u.phone AS patient_phone FROM queue q INNER JOIN users u ON q.patient_id = u.id WHERE q.patient_id = ? AND q.date = ? ORDER BY q.id DESC LIMIT 1",
+			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, q.completed_time, u.full_name AS patient_name, u.phone AS patient_phone FROM queue q INNER JOIN patients u ON q.patient_id = u.id WHERE q.patient_id = ? AND q.date = ? ORDER BY q.id DESC LIMIT 1",
 			"is",
 			[$patient_id, $date]
 		);
@@ -186,7 +186,7 @@ class Queue {
 		$today = date('Y-m-d');
 
 		$next_patient = $this->fetchOne(
-			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, u.full_name AS patient_name, u.phone AS patient_phone FROM queue q INNER JOIN users u ON q.patient_id = u.id WHERE q.doctor_id = ? AND q.date = ? AND q.status = 'waiting' ORDER BY q.queue_number ASC LIMIT 1",
+			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, u.full_name AS patient_name, u.phone AS patient_phone FROM queue q INNER JOIN patients u ON q.patient_id = u.id WHERE q.doctor_id = ? AND q.date = ? AND q.status = 'waiting' ORDER BY q.queue_number ASC LIMIT 1",
 			"is",
 			[$doctor_id, $today]
 		);

@@ -59,7 +59,7 @@ function create_queue_test_patient($suffix) {
 function delete_queue_test_patient($nic) {
 	global $conn;
 
-	$stmt = mysqli_prepare($conn, "DELETE FROM users WHERE nic = ?");
+	$stmt = mysqli_prepare($conn, "DELETE FROM patients WHERE nic = ?");
 	mysqli_stmt_bind_param($stmt, "s", $nic);
 	mysqli_stmt_execute($stmt);
 	mysqli_stmt_close($stmt);

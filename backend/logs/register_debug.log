@@ -1039,3 +1039,178 @@ RAW_BODY:'full_name=test02&nic=200333013250&date_of_birth=2000-05-22&gender=fema
 JSON_ERROR:'Syntax error'
 DECODED:NULL
 
+2026-06-23T17:58:15+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '131',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=0i8lqkl8fk6i81onjb3l9pdpk7',
+)
+CONTENT_LENGTH:131
+RAW_BODY:'full_name=test02&nic=200333013260&date_of_birth=2000-05-22&gender=male&phone=0775555555&email=nuski%40gmail.com&password=nuski%21N1'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-23T17:58:21+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '131',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=0i8lqkl8fk6i81onjb3l9pdpk7',
+)
+CONTENT_LENGTH:131
+RAW_BODY:'full_name=test02&nic=200333013261&date_of_birth=2000-05-22&gender=male&phone=0775555555&email=nuski%40gmail.com&password=nuski%21N1'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-23T17:58:30+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '133',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=0i8lqkl8fk6i81onjb3l9pdpk7',
+)
+CONTENT_LENGTH:133
+RAW_BODY:'full_name=test02&nic=200333013261&date_of_birth=2000-05-22&gender=male&phone=0775555555&email=nuski11%40gmail.com&password=nuski%21N1'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-23T18:22:56+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '135',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=c1jm0nf9fb6o9tl85pvkt1s7pc',
+)
+CONTENT_LENGTH:135
+RAW_BODY:'full_name=test02&nic=200333013260&date_of_birth=2000-05-22&gender=female&phone=0775555555&email=nuski11%40gmail.com&password=nuski%21N1'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-23T18:33:45+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '133',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=k0ple4ob7qe2pi6b1rvhg3f6qp',
+)
+CONTENT_LENGTH:133
+RAW_BODY:'full_name=test+3&nic=200333013260&date_of_birth=2026-06-10&gender=male&phone=0775555555&email=nuski11%40gmail.com&password=nuski%21N1'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-23T18:33:50+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '133',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=k0ple4ob7qe2pi6b1rvhg3f6qp',
+)
+CONTENT_LENGTH:133
+RAW_BODY:'full_name=test+3&nic=200333013261&date_of_birth=2026-06-10&gender=male&phone=0775555555&email=nuski11%40gmail.com&password=nuski%21N1'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-06-23T18:33:56+02:00
+HEADERS:array (
+  'host' => 'localhost',
+  'connection' => 'close',
+  'content-length' => '134',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=k0ple4ob7qe2pi6b1rvhg3f6qp',
+)
+CONTENT_LENGTH:134
+RAW_BODY:'full_name=test+3&nic=200333013261&date_of_birth=2026-06-10&gender=male&phone=0775555555&email=nuski111%40gmail.com&password=nuski%21N1'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+

@@ -26,7 +26,7 @@ if ($query_val === '') {
 $search_param = "%" . $query_val . "%";
 $stmt = mysqli_prepare(
 	$conn,
-	"SELECT id, full_name, nic, email, phone, date_of_birth, gender FROM users WHERE role = 'patient' AND (nic = ? OR full_name LIKE ? OR nic LIKE ?) LIMIT 10"
+	"SELECT id, full_name, nic, email, phone, date_of_birth, gender FROM patients WHERE nic = ? OR full_name LIKE ? OR nic LIKE ? LIMIT 10"
 );
 mysqli_stmt_bind_param($stmt, "sss", $query_val, $search_param, $search_param);
 mysqli_stmt_execute($stmt);

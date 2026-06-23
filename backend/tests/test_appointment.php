@@ -37,7 +37,7 @@ function print_fail($reason) {
 function delete_test_patient_by_nic($nic) {
 	global $conn;
 
-	$stmt = mysqli_prepare($conn, "DELETE FROM users WHERE nic = ?");
+	$stmt = mysqli_prepare($conn, "DELETE FROM patients WHERE nic = ?");
 	mysqli_stmt_bind_param($stmt, "s", $nic);
 	mysqli_stmt_execute($stmt);
 	mysqli_stmt_close($stmt);

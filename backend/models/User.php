@@ -3,11 +3,12 @@
 This file handles everything related to users - registering, logging in, and managing accounts.
 We use a class so all user-related code lives in one place.
 
-Prepared statements are used in every database query below so user input is treated as data,
-not as SQL code. That helps prevent SQL injection attacks.
+Since the users table has been split into: admin, doctors, receptionist, patients,
+this class dynamically routes queries to the correct table based on user role or direct lookup.
 */
 
-class User {
+class User
+{
 	// This stores the database connection so all methods can use it
 	private $conn;
 
@@ -15,12 +16,14 @@ class User {
 	public $last_error = null;
 
 	// Constructor: called when we do "new User($conn)"
-	public function __construct($conn) {
+	public function __construct($conn)
+	{
 		$this->conn = $conn;
 	}
 
 	// This helper runs a prepared SELECT query and returns the first matching row as an array
-	private function fetchOne($sql, $types, $params) {
+	private function fetchOne($sql, $types, $params)
+	{
 		$stmt = mysqli_prepare($this->conn, $sql);
 
 		if (!$stmt) {
@@ -53,7 +56,8 @@ class User {
 	}
 
 	// This helper runs a prepared SELECT query and returns all matching rows as an array
-	private function fetchAll($sql, $types, $params) {
+	private function fetchAll($sql, $types, $params)
+	{
 		$stmt = mysqli_prepare($this->conn, $sql);
 
 		if (!$stmt) {
@@ -86,7 +90,8 @@ class User {
 	}
 
 	// This helper runs a prepared INSERT, UPDATE, or DELETE query and returns true or false
-	private function executeQuery($sql, $types, $params) {
+	private function executeQuery($sql, $types, $params)
+	{
 		$stmt = mysqli_prepare($this->conn, $sql);
 
 		if (!$stmt) {
@@ -110,32 +115,34 @@ class User {
 		return true;
 	}
 
-	// This method creates a new user account
-	// It first checks if the NIC already exists, then hashes the password, then inserts the user
-	public function register($full_name, $nic, $date_of_birth, $gender, $phone, $email, $password, $role = 'patient') {
+	// Helper to resolve role to table name
+	private function get_table_by_role($role)
+	{
+		if ($role === 'doctor') return 'doctors';
+		if ($role === 'patient') return 'patients';
+		if ($role === 'receptionist') return 'receptionist';
+		return 'admin';
+	}
+
+	// This method creates a new user account in their corresponding table
+	public function register($full_name, $nic, $date_of_birth, $gender, $phone, $email, $password, $role = 'patient')
+	{
 		$this->last_error = null;
 
-		$existing_user = $this->fetchOne(
-			"SELECT id FROM users WHERE nic = ? LIMIT 1",
-			"s",
-			[$nic]
-		);
-
-		if ($existing_user) {
-			$this->last_error = 'NIC already exists';
-			return false;
-		}
-
-		if (!empty($email)) {
-			$existing_email = $this->fetchOne(
-				"SELECT id FROM users WHERE email = ? LIMIT 1",
-				"s",
-				[$email]
-			);
-
-			if ($existing_email) {
-				$this->last_error = 'Email already exists';
+		// 1. Check duplicate NIC/email across all 4 split tables
+		$tables = ['admin', 'doctors', 'receptionist', 'patients'];
+		foreach ($tables as $t) {
+			$existing_user = $this->fetchOne("SELECT id FROM $t WHERE nic = ? LIMIT 1", "s", [$nic]);
+			if ($existing_user) {
+				$this->last_error = 'NIC already exists';
 				return false;
+			}
+			if (!empty($email)) {
+				$existing_email = $this->fetchOne("SELECT id FROM $t WHERE email = ? LIMIT 1", "s", [$email]);
+				if ($existing_email) {
+					$this->last_error = 'Email already exists';
+					return false;
+				}
 			}
 		}
 
@@ -146,9 +153,11 @@ class User {
 			return false;
 		}
 
+		$target_table = $this->get_table_by_role($role);
+
 		$stmt = mysqli_prepare(
 			$this->conn,
-			"INSERT INTO users (full_name, nic, date_of_birth, gender, phone, email, password, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+			"INSERT INTO $target_table (full_name, nic, date_of_birth, gender, phone, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)"
 		);
 
 		if (!$stmt) {
@@ -156,17 +165,17 @@ class User {
 			return false;
 		}
 
+		$email_val = !empty($email) ? $email : null;
 		mysqli_stmt_bind_param(
 			$stmt,
-			"ssssssss",
+			"sssssss",
 			$full_name,
 			$nic,
 			$date_of_birth,
 			$gender,
 			$phone,
-			$email,
-			$hashed_password,
-			$role
+			$email_val,
+			$hashed_password
 		);
 
 		try {
@@ -179,12 +188,10 @@ class User {
 			$errorMessage = $exception->getMessage();
 			$lowerMessage = strtolower($errorMessage);
 
-			if (str_contains($lowerMessage, "key 'email'") || str_contains($lowerMessage, 'users.email')) {
+			if (str_contains($lowerMessage, 'email')) {
 				$this->last_error = 'Email already exists';
-			} elseif (str_contains($lowerMessage, "key 'nic'") || str_contains($lowerMessage, 'users.nic')) {
+			} elseif (str_contains($lowerMessage, 'nic')) {
 				$this->last_error = 'NIC already exists';
-			} elseif ($exception->getCode() === 1062 && str_contains($lowerMessage, 'duplicate entry')) {
-				$this->last_error = 'Duplicate user record';
 			} else {
 				$this->last_error = $errorMessage;
 			}
@@ -200,15 +207,26 @@ class User {
 	}
 
 	// This method checks if the email or NIC and password are correct
-	// It uses password_verify() to compare the plain password with the stored hashed password
-	public function login($identifier, $password) {
+	public function login($identifier, $password)
+	{
 		$this->last_error = null;
+		$user = null;
+		$role = null;
 
-		$user = $this->fetchOne(
-			"SELECT id, full_name, nic, email, password, role, status FROM users WHERE email = ? OR nic = ? LIMIT 1",
-			"ss",
-			[$identifier, $identifier]
-		);
+		$tables = ['admin', 'doctors', 'receptionist', 'patients'];
+		foreach ($tables as $t) {
+			$user = $this->fetchOne(
+				"SELECT id, full_name, nic, email, password, status FROM $t WHERE email = ? OR nic = ? LIMIT 1",
+				"ss",
+				[$identifier, $identifier]
+			);
+			if ($user) {
+				if ($t === 'doctors') $role = 'doctor';
+				elseif ($t === 'patients') $role = 'patient';
+				else $role = $t;
+				break;
+			}
+		}
 
 		if (!$user) {
 			$this->last_error = 'User not found';
@@ -228,76 +246,119 @@ class User {
 		return [
 			'id' => (int) $user['id'],
 			'full_name' => $user['full_name'],
-			'role' => $user['role'],
+			'role' => $role,
 			'email' => $user['email'],
 		];
 	}
 
 	// This method returns one user's data by their ID
-	public function get_by_id($id) {
+	public function get_by_id($id, $role = null)
+	{
 		$this->last_error = null;
 
-		return $this->fetchOne(
-			"SELECT id, full_name, nic, date_of_birth, gender, phone, email, role, status, created_at FROM users WHERE id = ? LIMIT 1",
-			"i",
-			[$id]
-		);
+		if ($role) {
+			$table = $this->get_table_by_role($role);
+			return $this->fetchOne(
+				"SELECT *, '$role' AS role FROM $table WHERE id = ? LIMIT 1",
+				"i",
+				[$id]
+			);
+		}
+
+		$tables = ['admin', 'doctors', 'receptionist', 'patients'];
+		foreach ($tables as $t) {
+			$role_name = ($t === 'doctors') ? 'doctor' : (($t === 'patients') ? 'patient' : $t);
+			$res = $this->fetchOne(
+				"SELECT *, '$role_name' AS role FROM $t WHERE id = ? LIMIT 1",
+				"i",
+				[$id]
+			);
+			if ($res) {
+				return $res;
+			}
+		}
+
+		return false;
 	}
 
-	// This method returns all users with a specific role, like all doctors or all patients
-	public function get_all_by_role($role) {
+	// This method returns all users with a specific role
+	public function get_all_by_role($role)
+	{
 		$this->last_error = null;
-
+		$table = $this->get_table_by_role($role);
 		return $this->fetchAll(
-			"SELECT id, full_name, nic, date_of_birth, gender, phone, email, role, status, created_at FROM users WHERE role = ? ORDER BY full_name ASC",
-			"s",
-			[$role]
+			"SELECT *, '$role' AS role FROM $table ORDER BY full_name ASC",
+			"",
+			[]
 		);
 	}
 
-	// This method updates a user's basic details using a prepared statement
-	public function update($id, $full_name, $phone, $email) {
+	// This method updates a user's basic details
+	public function update($id, $full_name, $phone, $email, $role = null)
+	{
 		$this->last_error = null;
 
+		if ($role === null) {
+			$user = $this->get_by_id($id);
+			if (!$user) {
+				$this->last_error = "User not found";
+				return false;
+			}
+			$role = $user['role'];
+		}
+
+		$table = $this->get_table_by_role($role);
 		return $this->executeQuery(
-			"UPDATE users SET full_name = ?, phone = ?, email = ? WHERE id = ?",
+			"UPDATE $table SET full_name = ?, phone = ?, email = ? WHERE id = ?",
 			"sssi",
 			[$full_name, $phone, $email, $id]
 		);
 	}
 
-	// This method sets status = inactive instead of deleting the user so we keep their history in the database
-	public function deactivate($id) {
+	// This method sets status = inactive
+	public function deactivate($id, $role = null)
+	{
 		$this->last_error = null;
 
+		if ($role === null) {
+			$user = $this->get_by_id($id);
+			if (!$user) return false;
+			$role = $user['role'];
+		}
+
+		$table = $this->get_table_by_role($role);
 		return $this->executeQuery(
-			"UPDATE users SET status = 'inactive' WHERE id = ?",
+			"UPDATE $table SET status = 'inactive' WHERE id = ?",
 			"i",
 			[$id]
 		);
 	}
 
-	// This method sets status = active again so the user can log in and use the system
-	public function activate($id) {
+	// This method sets status = active again
+	public function activate($id, $role = null)
+	{
 		$this->last_error = null;
 
+		if ($role === null) {
+			$user = $this->get_by_id($id);
+			if (!$user) return false;
+			$role = $user['role'];
+		}
+
+		$table = $this->get_table_by_role($role);
 		return $this->executeQuery(
-			"UPDATE users SET status = 'active' WHERE id = ?",
+			"UPDATE $table SET status = 'active' WHERE id = ?",
 			"i",
 			[$id]
 		);
 	}
 
 	// This method verifies the old password first, then saves the new hashed password
-	public function change_password($id, $old_password, $new_password) {
+	public function change_password($id, $old_password, $new_password, $role = null)
+	{
 		$this->last_error = null;
 
-		$user = $this->fetchOne(
-			"SELECT password, status FROM users WHERE id = ? LIMIT 1",
-			"i",
-			[$id]
-		);
-
+		$user = $this->get_by_id($id, $role);
 		if (!$user) {
 			$this->last_error = 'User not found';
 			return false;
@@ -320,10 +381,12 @@ class User {
 			return false;
 		}
 
+		$table = $this->get_table_by_role($user['role']);
 		return $this->executeQuery(
-			"UPDATE users SET password = ? WHERE id = ?",
+			"UPDATE $table SET password = ? WHERE id = ?",
 			"si",
 			[$hashed_new_password, $id]
 		);
 	}
 }
+?>

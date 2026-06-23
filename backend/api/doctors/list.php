@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 $stmt = mysqli_prepare(
 	$conn,
-	"SELECT d.id AS doctor_id, u.id AS user_id, u.full_name, d.specialisation, d.working_days, d.bio FROM doctors d INNER JOIN users u ON d.user_id = u.id WHERE u.role = 'doctor' AND u.status = 'active' ORDER BY u.full_name ASC"
+	"SELECT d.id AS doctor_id, d.id AS user_id, d.full_name, d.specialisation, d.working_days, d.bio FROM doctors d WHERE d.status = 'active' ORDER BY d.full_name ASC"
 );
-	mysqli_stmt_execute($stmt);
+mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 $doctors = $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
 mysqli_stmt_close($stmt);

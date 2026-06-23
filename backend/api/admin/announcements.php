@@ -12,7 +12,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	$stmt = mysqli_prepare(
 		$conn,
-		"SELECT a.id, a.title, a.message, a.created_by, a.created_at, u.full_name AS created_by_name FROM announcements a INNER JOIN users u ON a.created_by = u.id ORDER BY a.created_at DESC, a.id DESC"
+		"SELECT a.id, a.title, a.message, a.created_by, a.created_at, u.full_name AS created_by_name FROM announcements a INNER JOIN admin u ON a.created_by = u.id ORDER BY a.created_at DESC, a.id DESC"
 	);
 	mysqli_stmt_execute($stmt);
 	$result = mysqli_stmt_get_result($stmt);

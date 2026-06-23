@@ -14,7 +14,10 @@ require_role('admin');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	$stmt = mysqli_prepare(
 		$conn,
-		"SELECT u.id, u.full_name, u.nic, u.date_of_birth, u.gender, u.phone, u.email, u.role, u.status, u.created_at, d.id AS doctor_id, d.specialisation, d.working_days, d.bio FROM users u LEFT JOIN doctors d ON u.id = d.user_id WHERE u.role IN ('doctor', 'receptionist') ORDER BY u.role ASC, u.full_name ASC"
+		"SELECT id, full_name, nic, date_of_birth, gender, phone, email, 'doctor' AS role, status, created_at, id AS doctor_id, specialisation, working_days, bio FROM doctors
+		 UNION ALL
+		 SELECT id, full_name, nic, date_of_birth, gender, phone, email, 'receptionist' AS role, status, created_at, NULL AS doctor_id, NULL AS specialisation, NULL AS working_days, NULL AS bio FROM receptionist
+		 ORDER BY role ASC, full_name ASC"
 	);
 	mysqli_stmt_execute($stmt);
 	$result = mysqli_stmt_get_result($stmt);
@@ -73,14 +76,14 @@ if ($action === 'create') {
 	}
 
 	if ($role === 'doctor') {
-		$stmt = mysqli_prepare($conn, "INSERT INTO doctors (user_id, specialisation, working_days, bio) VALUES (?, ?, ?, ?)");
+		$stmt = mysqli_prepare($conn, "UPDATE doctors SET specialisation = ?, working_days = ?, bio = ? WHERE id = ?");
 		$bio = trim($data['bio'] ?? '');
-		mysqli_stmt_bind_param($stmt, "isss", $user_id, $specialisation, $working_days, $bio);
+		mysqli_stmt_bind_param($stmt, "sssi", $specialisation, $working_days, $bio, $user_id);
 
 		if (!mysqli_stmt_execute($stmt)) {
 			mysqli_stmt_close($stmt);
 			mysqli_rollback($conn);
-			respond_json(["success" => false, "error" => "Could not create doctor profile"], 400);
+			respond_json(["success" => false, "error" => "Could not update doctor profile"], 400);
 		}
 
 		mysqli_stmt_close($stmt);
@@ -110,15 +113,17 @@ if ($action === 'toggle_status') {
 	}
 
 	$new_status = $target['status'] === 'active' ? 'inactive' : 'active';
-	$stmt = mysqli_prepare($conn, "UPDATE users SET status = ? WHERE id = ?");
-	mysqli_stmt_bind_param($stmt, "si", $new_status, $target_user_id);
+	
+	if ($new_status === 'inactive') {
+		$status_updated = $user_model->deactivate($target_user_id, $target['role']);
+	} else {
+		$status_updated = $user_model->activate($target_user_id, $target['role']);
+	}
 
-	if (!mysqli_stmt_execute($stmt)) {
-		mysqli_stmt_close($stmt);
+	if (!$status_updated) {
 		respond_json(["success" => false, "error" => "Could not update status"], 400);
 	}
 
-	mysqli_stmt_close($stmt);
 	log_activity($conn, (int) $_SESSION['user_id'], 'admin_toggle_user_status', 'Toggled status for user #' . $target_user_id . ' to ' . $new_status);
 
 	respond_json(["success" => true, "message" => "User status updated", "status" => $new_status]);

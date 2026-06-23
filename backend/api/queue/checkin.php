@@ -42,7 +42,7 @@ if ($appointment_id > 0) {
 	$appointment->mark_completed($appointment_id);
 }
 
-$patient_stmt = mysqli_prepare($conn, "SELECT full_name FROM users WHERE id = ? LIMIT 1");
+$patient_stmt = mysqli_prepare($conn, "SELECT full_name FROM patients WHERE id = ? LIMIT 1");
 mysqli_stmt_bind_param($patient_stmt, "i", $patient_id);
 mysqli_stmt_execute($patient_stmt);
 $patient_result = mysqli_stmt_get_result($patient_stmt);

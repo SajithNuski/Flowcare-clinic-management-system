@@ -3,9 +3,9 @@ require_once __DIR__ . '/../config/db.php';
 
 $res = mysqli_query($conn, "
     SELECT a.id AS appointment_id, a.patient_id, a.appointment_date, a.time_slot,
-           u.full_name AS user_full_name, u.phone AS user_phone, u.role AS user_role
+           u.full_name AS user_full_name, u.phone AS user_phone, 'patient' AS user_role
     FROM appointments a
-    LEFT JOIN users u ON a.patient_id = u.id
+    LEFT JOIN patients u ON a.patient_id = u.id
 ");
 
 echo "APPOINTMENT PATIENT DETAIL DUMP:\n";

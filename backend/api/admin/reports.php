@@ -63,7 +63,7 @@ mysqli_stmt_close($avg_wait_stmt);
 
 $doctor_stmt = mysqli_prepare(
 	$conn,
-	"SELECT q.doctor_id, du.full_name AS doctor_name, COUNT(*) AS total_completed, COALESCE(AVG(TIMESTAMPDIFF(MINUTE, q.check_in_time, q.completed_time)), 0) AS avg_wait_time FROM queue q INNER JOIN doctors d ON q.doctor_id = d.id INNER JOIN users du ON d.user_id = du.id WHERE q.date BETWEEN ? AND ? AND q.status = 'completed' GROUP BY q.doctor_id, du.full_name ORDER BY du.full_name ASC"
+	"SELECT q.doctor_id, d.full_name AS doctor_name, COUNT(*) AS total_completed, COALESCE(AVG(TIMESTAMPDIFF(MINUTE, q.check_in_time, q.completed_time)), 0) AS avg_wait_time FROM queue q INNER JOIN doctors d ON q.doctor_id = d.id WHERE q.date BETWEEN ? AND ? AND q.status = 'completed' GROUP BY q.doctor_id, d.full_name ORDER BY d.full_name ASC"
 );
 mysqli_stmt_bind_param($doctor_stmt, "ss", $date_from, $date_to);
 mysqli_stmt_execute($doctor_stmt);

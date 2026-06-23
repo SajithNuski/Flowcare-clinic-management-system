@@ -140,10 +140,10 @@ class Appointment {
 	}
 
 	// This method gets all appointments for one patient, newest first
-	// It joins doctors and users so we can show the doctor's name to the patient
+	// It joins doctors so we can show the doctor's name to the patient
 	public function get_by_patient($patient_id) {
 		return $this->fetchAll(
-			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.time_slot, a.visit_reason, a.notes, a.status, a.created_at, u.full_name AS doctor_name, u.phone AS doctor_phone, d.specialisation FROM appointments a INNER JOIN doctors d ON a.doctor_id = d.id INNER JOIN users u ON d.user_id = u.id WHERE a.patient_id = ? ORDER BY a.created_at DESC, a.id DESC",
+			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.time_slot, a.visit_reason, a.notes, a.status, a.created_at, d.full_name AS doctor_name, d.phone AS doctor_phone, d.specialisation FROM appointments a INNER JOIN doctors d ON a.doctor_id = d.id WHERE a.patient_id = ? ORDER BY a.created_at DESC, a.id DESC",
 			"i",
 			[$patient_id]
 		);
@@ -152,7 +152,7 @@ class Appointment {
 	// This method gets all appointments for a specific doctor on a specific date
 	public function get_by_doctor_and_date($doctor_id, $date) {
 		return $this->fetchAll(
-			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.time_slot, a.visit_reason, a.notes, a.status, a.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM appointments a INNER JOIN users u ON a.patient_id = u.id WHERE a.doctor_id = ? AND a.appointment_date = ? ORDER BY a.time_slot ASC, a.id ASC",
+			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.time_slot, a.visit_reason, a.notes, a.status, a.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM appointments a INNER JOIN patients u ON a.patient_id = u.id WHERE a.doctor_id = ? AND a.appointment_date = ? ORDER BY a.time_slot ASC, a.id ASC",
 			"is",
 			[$doctor_id, $date]
 		);
@@ -164,7 +164,7 @@ class Appointment {
 		$target_date = $date ?: date('Y-m-d');
 
 		return $this->fetchAll(
-			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.time_slot, a.visit_reason, a.notes, a.status, a.created_at, p.full_name AS patient_name, p.phone AS patient_phone, du.full_name AS doctor_name, d.specialisation FROM appointments a INNER JOIN users p ON a.patient_id = p.id INNER JOIN doctors d ON a.doctor_id = d.id INNER JOIN users du ON d.user_id = du.id WHERE a.appointment_date = ? ORDER BY a.time_slot ASC, a.id ASC",
+			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.time_slot, a.visit_reason, a.notes, a.status, a.created_at, p.full_name AS patient_name, p.phone AS patient_phone, d.full_name AS doctor_name, d.specialisation FROM appointments a INNER JOIN patients p ON a.patient_id = p.id INNER JOIN doctors d ON a.doctor_id = d.id WHERE a.appointment_date = ? ORDER BY a.time_slot ASC, a.id ASC",
 			"s",
 			[$target_date]
 		);
