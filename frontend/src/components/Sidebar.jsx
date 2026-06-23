@@ -18,11 +18,6 @@ function Sidebar({ role, activePage }) {
         icon: "ti ti-layout-dashboard",
       },
       {
-        label: "My Queue",
-        to: "/patient/consultations",
-        icon: "ti ti-list-numbers",
-      },
-      {
         label: "Book Appointment",
         to: "/patient/book",
         icon: "ti ti-calendar-plus",
@@ -89,8 +84,12 @@ function Sidebar({ role, activePage }) {
   };
 
   const items = menuByRole[role] || [];
-  const isActive = (item) =>
-    activePage === item.label || location.pathname === item.to;
+  const isActive = (item) => {
+    if (activePage) {
+      return activePage === item.label;
+    }
+    return location.pathname === item.to;
+  };
 
   async function handleLogout() {
     await logout();

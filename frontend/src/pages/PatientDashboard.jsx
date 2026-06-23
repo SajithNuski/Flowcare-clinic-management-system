@@ -102,7 +102,7 @@ function PatientDashboard() {
 
       // Fetch Queue Status for today
       const qRes = await getQueueStatus();
-      if (qRes && !qRes.error) {
+      if (qRes && qRes.checked_in) {
         setQueueStatus(qRes);
       } else {
         setQueueStatus(null);

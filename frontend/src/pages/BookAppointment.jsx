@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Sidebar from "../components/Sidebar";
 import { useAuth } from "../context/AuthContext";
 import { getDoctors } from "../api/doctors";
 import { createAppointment, getAvailableSlots } from "../api/appointments";
@@ -231,10 +230,29 @@ function BookAppointment() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#0F172A]">
-      <Navbar />
+    <div className="flex min-h-screen bg-[#F8FAFC]">
+      {/* App Sidebar */}
+      <Sidebar role="patient" activePage="Book Appointment" />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        
+        {/* Header Bar */}
+        <header className="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-slate-800">Book Appointment</h1>
+            <p className="text-xs text-slate-400">FlowCare Patient Portal</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full capitalize">
+              Patient ID: #{user?.id}
+            </span>
+          </div>
+        </header>
+
+        {/* Main Panel Content */}
+        <main className="flex-1 overflow-y-auto bg-[#F8FAFC] p-6">
+          <div className="max-w-7xl mx-auto w-full">
         
         {/* Success Screen State */}
         {successMessage ? (
@@ -757,9 +775,9 @@ function BookAppointment() {
           </div>
         )}
 
-      </main>
-
-      <Footer />
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

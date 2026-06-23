@@ -61,7 +61,11 @@ if ($role === 'patient') {
 	$status = $queue->get_my_queue_status((int) $_SESSION['user_id'], $today);
 
 	if ($status === false) {
-		respond_json(["error" => "Queue entry not found"], 404);
+		respond_json([
+			"success" => true,
+			"checked_in" => false,
+			"message" => "Queue entry not found"
+		]);
 	}
 
 	$avg_wait = $queue->calculate_avg_wait($today);
@@ -72,6 +76,8 @@ if ($role === 'patient') {
 	}
 
 	respond_json([
+		"success" => true,
+		"checked_in" => true,
 		"queue_number" => (int) $status['queue_number'],
 		"position" => (int) $status['position'],
 		"estimated_wait_minutes" => $estimated_wait_minutes,

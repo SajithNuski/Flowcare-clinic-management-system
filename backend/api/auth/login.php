@@ -20,8 +20,8 @@ if ($identifier === '' || $password === '') {
 	respond_json(["success" => false, "error" => "Invalid credentials"], 401);
 }
 
-$user = new User($conn);
-$logged_in_user = $user->login($identifier, $password);
+$user_model = new User($conn);
+$logged_in_user = $user_model->login($identifier, $password);
 
 if ($logged_in_user === false) {
 	respond_json(["success" => false, "error" => "Invalid credentials"], 401);
@@ -33,12 +33,19 @@ $_SESSION['name'] = $logged_in_user['full_name'];
 
 log_activity($conn, $logged_in_user['id'], 'login', 'User logged in');
 
-respond_json([
-	"success" => true,
-	"user" => [
+$full_user = $user_model->get_by_id($logged_in_user['id'], $logged_in_user['role']);
+if ($full_user) {
+	unset($full_user['password']);
+} else {
+	$full_user = [
 		"id" => $logged_in_user['id'],
 		"full_name" => $logged_in_user['full_name'],
 		"role" => $logged_in_user['role'],
 		"email" => $logged_in_user['email'],
-	],
+	];
+}
+
+respond_json([
+	"success" => true,
+	"user" => $full_user,
 ]);

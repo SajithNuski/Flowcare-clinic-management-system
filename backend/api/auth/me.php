@@ -18,11 +18,13 @@ if (!isset($_SESSION['user_id'])) {
 require_once __DIR__ . '/../../models/User.php';
 
 $user = new User($conn);
-$current_user = $user->get_by_id((int) $_SESSION['user_id']);
+$current_user = $user->get_by_id((int) $_SESSION['user_id'], $_SESSION['role']);
 
 if ($current_user === false) {
 	respond_json(["error" => "Not logged in"], 401);
 }
+
+unset($current_user['password']);
 
 respond_json([
 	"success" => true,
