@@ -36,3 +36,19 @@ export async function searchPatients(q) {
     };
   }
 }
+
+/**
+ * Updates the logged-in patient's profile and medical details.
+ * @param {object} profileData
+ */
+export async function updatePatientProfile(profileData) {
+  try {
+    const response = await axios.post(`${API_BASE}/patients/update_profile.php`, profileData);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    return { success: false, error: error.message };
+  }
+}

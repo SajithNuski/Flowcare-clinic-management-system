@@ -18,6 +18,7 @@ import BookAppointment from "./pages/BookAppointment";
 import ReceptionistDashboard from "./pages/ReceptionistDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import ManageAppointments from "./pages/ManageAppointments";
+import PatientDashboard from "./pages/PatientDashboard";
 
 function PageStub({ title }) {
   return (
@@ -46,7 +47,7 @@ function App() {
             path="/patient/dashboard"
             element={
               <ProtectedRoute allowedRole="patient">
-                <PageStub title="Patient Dashboard" />
+                <PatientDashboard />
               </ProtectedRoute>
             }
           />
@@ -62,7 +63,7 @@ function App() {
             path="/patient/consultations"
             element={
               <ProtectedRoute allowedRole="patient">
-                <PageStub title="My Consultations" />
+                <PatientDashboard />
               </ProtectedRoute>
             }
           />
@@ -70,7 +71,7 @@ function App() {
             path="/patient/profile"
             element={
               <ProtectedRoute allowedRole="patient">
-                <PageStub title="My Profile" />
+                <PatientDashboard />
               </ProtectedRoute>
             }
           />

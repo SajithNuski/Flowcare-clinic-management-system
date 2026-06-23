@@ -388,5 +388,48 @@ class User
 			[$hashed_new_password, $id]
 		);
 	}
+
+	// This method updates a patient's personal and medical details
+	public function update_patient_profile($id, $full_name, $phone, $email, $gender, $date_of_birth, $medical_history, $allergies, $blood_group, $emergency_contact)
+	{
+		$this->last_error = null;
+
+		// Check if email already exists for another user in any of the tables
+		$tables = ['admin', 'doctors', 'receptionist', 'patients'];
+		if (!empty($email)) {
+			foreach ($tables as $t) {
+				$existing = $this->fetchOne("SELECT id FROM $t WHERE email = ? AND NOT (id = ? AND '$t' = 'patients') LIMIT 1", "si", [$email, $id]);
+				if ($existing) {
+					$this->last_error = 'Email already exists';
+					return false;
+				}
+			}
+		}
+
+		$sql = "UPDATE patients SET 
+					full_name = ?, 
+					phone = ?, 
+					email = ?, 
+					gender = ?, 
+					date_of_birth = ?, 
+					medical_history = ?, 
+					allergies = ?, 
+					blood_group = ?, 
+					emergency_contact = ? 
+				WHERE id = ?";
+		
+		return $this->executeQuery($sql, "sssssssssi", [
+			$full_name,
+			$phone,
+			$email,
+			$gender,
+			$date_of_birth,
+			$medical_history,
+			$allergies,
+			$blood_group,
+			$emergency_contact,
+			$id
+		]);
+	}
 }
 ?>

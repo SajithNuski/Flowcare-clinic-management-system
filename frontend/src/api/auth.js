@@ -83,3 +83,23 @@ export async function getCurrentUser() {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Changes password of the logged-in user.
+ * @param {string} oldPassword
+ * @param {string} newPassword
+ */
+export async function changePassword(oldPassword, newPassword) {
+  try {
+    const response = await axios.post(`${API_BASE}/auth/change_password.php`, {
+      old_password: oldPassword,
+      new_password: newPassword,
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    return { success: false, error: error.message };
+  }
+}

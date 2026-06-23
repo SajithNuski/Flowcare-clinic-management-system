@@ -41,6 +41,8 @@ function LoginPage() {
           navigate("/doctor/dashboard");
         } else if (user?.role === "receptionist") {
           navigate("/receptionist/dashboard");
+        } else if (user?.role === "patient") {
+          navigate("/patient/dashboard");
         } else {
           navigate("/");
         }
