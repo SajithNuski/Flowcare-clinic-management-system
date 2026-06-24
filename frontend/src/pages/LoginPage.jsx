@@ -101,7 +101,7 @@ function LoginPage() {
           </div>
 
           <div className="relative z-10 text-xs text-white/60 pt-6">
-            &copy; {new Date().getFullYear()} Badulla Medical Centre. All rights reserved.
+            &copy; {new Date().getFullYear()} ASHINI Family Clinic Center. All rights reserved.
           </div>
         </div>
 

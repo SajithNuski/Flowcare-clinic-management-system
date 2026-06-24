@@ -115,13 +115,13 @@ function Sidebar({ role, activePage }) {
     : "US";
 
   return (
-    <aside className="flex min-h-screen w-48 shrink-0 flex-col border-r border-[#E5E7EB] bg-white">
-      <div className="border-b border-[#EEF2F7] px-4 py-4">
+    <aside className="flex min-h-screen w-48 shrink-0 flex-col border-r border-[#1e2f4d] bg-[#0E1E38]">
+      <div className="border-b border-[#1e2f4d] px-4 py-4">
         <Link to={`/${role}/dashboard`} className="block">
-          <div className="text-lg font-semibold leading-tight text-[#1A73E8]">
+          <div className="text-lg font-bold leading-tight text-white">
             FlowCare
           </div>
-          <div className="text-[11px] text-[#6B7280]">Clinic Management</div>
+          <div className="text-[11px] text-blue-300/60">Clinic Management</div>
         </Link>
       </div>
 
@@ -137,8 +137,8 @@ function Sidebar({ role, activePage }) {
                 className={
                   "flex items-center gap-3 rounded-md px-4 py-2.5 text-sm transition-colors duration-150 " +
                   (active
-                    ? "border-l-4 border-[#1A73E8] bg-[#E8F0FE] font-semibold text-[#1A73E8]"
-                    : "text-[#374151] hover:bg-[#F9FAFB] hover:text-[#1A73E8]")
+                    ? "border-l-4 border-[#1A73E8] bg-[#1A73E8]/20 font-semibold text-white"
+                    : "text-blue-200 hover:bg-[#1A73E8]/10 hover:text-white")
                 }
               >
                 <i className={`${item.icon} text-base`} />
@@ -149,16 +149,16 @@ function Sidebar({ role, activePage }) {
         </div>
       </nav>
 
-      <div className="mt-auto border-t border-[#EEF2F7] p-3">
+      <div className="mt-auto border-t border-[#1e2f4d] p-3">
         <div className="flex items-center gap-3 rounded-xl px-2 py-2">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1A73E8] text-xs font-semibold text-white">
             {initials}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-medium text-[#0F172A]">
+            <div className="truncate text-sm font-semibold text-white">
               {user?.full_name || "User"}
             </div>
-            <div className="text-[11px] text-[#6B7280] capitalize">
+            <div className="text-[11px] text-blue-300/70 capitalize">
               {roleLabel}
             </div>
           </div>
@@ -167,7 +167,7 @@ function Sidebar({ role, activePage }) {
         <button
           type="button"
           onClick={handleLogout}
-          className="mt-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-[#374151] transition-colors duration-150 hover:bg-[#F9FAFB] hover:text-[#1A73E8]"
+          className="mt-3 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-blue-200 transition-colors duration-150 hover:bg-[#1A73E8]/10 hover:text-white"
         >
           <i className="ti ti-logout text-base" />
           <span>Logout</span>

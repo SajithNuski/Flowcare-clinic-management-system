@@ -180,10 +180,10 @@ VALUES ('Priyanti de Silva', '885432109V', '1988-09-20', 'female', '0714567890',
 
 -- Insert clinic settings
 INSERT INTO clinic_settings (setting_key, setting_value) VALUES
-('clinic_name', 'Badulla Medical Centre'),
+('clinic_name', 'ASHINI Family Clinic Center'),
 ('clinic_address', 'No. 14, Bandarawela Road, Badulla, Uva Province'),
 ('clinic_phone', '055 222 4567'),
-('clinic_email', 'badullamedical@gmail.com'),
+('clinic_email', 'ashinifamilyclinic@gmail.com'),
 ('open_time', '08:00'),
 ('close_time', '17:00'),
 ('open_days', 'Mon,Tue,Wed,Thu,Fri,Sat');

@@ -159,7 +159,7 @@ function RegisterPage() {
               Create Your Account
             </h2>
             <p className="mt-4 max-w-sm text-sm text-[#E8F0FE] leading-relaxed">
-              Join Badulla Medical Centre's digital health system and experience
+              Join ASHINI Family Clinic Center's digital health system and experience
               seamless healthcare management at your fingertips.
             </p>
           </div>
@@ -186,7 +186,7 @@ function RegisterPage() {
           </div>
 
           <div className="relative z-10 text-xs text-white/60 pt-6">
-            &copy; {new Date().getFullYear()} Badulla Medical Centre. Trusted by thousands of patients.
+            &copy; {new Date().getFullYear()} ASHINI Family Clinic Center. Trusted by thousands of patients.
           </div>
         </div>
 

@@ -14,6 +14,7 @@ import consultImg from "../assets/images/cunsult.png";
 import doctorOneImg from "../assets/images/doctor1.png";
 import doctorTwoImg from "../assets/images/doctor2.png";
 import doctorThreeImg from "../assets/images/doctor3.png";
+import ashiniLogo from "../assets/images/Ashini logo.png";
 
 const featureItems = [
   {
@@ -221,8 +222,9 @@ function LandingPage() {
           
           <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8">
             <div className="mx-auto flex max-w-4xl flex-col items-center text-center text-white">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8F0FE] mb-6 backdrop-blur-sm border border-white/10">
-                Badulla Medical Centre
+              <div className="inline-flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[#E8F0FE] mb-6 backdrop-blur-sm border border-white/10 shadow-lg">
+                <img src={ashiniLogo} alt="Logo" className="h-6 w-auto object-contain bg-white rounded p-0.5" />
+                <span>ASHINI Family Clinic Center</span>
               </div>
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-white drop-shadow-md sm:text-5xl lg:text-6xl leading-[1.15]">
                 Quality Healthcare,<br className="hidden sm:inline" /> Now Easier to Access
@@ -295,7 +297,7 @@ function LandingPage() {
                 Meet Our Qualified Doctors
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-[#4B5563]">
-                At Badulla Medical Centre, our specialists bring decades of clinical precision and compassionate care. 
+                At ASHINI Family Clinic Center, our specialists bring decades of clinical precision and compassionate care. 
                 From complex surgical interventions to routine family wellness, we are committed to your health journey.
               </p>
             </div>
@@ -548,7 +550,7 @@ function LandingPage() {
                   <br />
                   <strong>Mobile:</strong> 077 123 4567
                   <br />
-                  <strong>Email:</strong> badullamedical@gmail.com
+                  <strong>Email:</strong> ashinifamilyclinic@gmail.com
                   <br />
                   <strong>WhatsApp:</strong> 077 123 4567
                 </p>

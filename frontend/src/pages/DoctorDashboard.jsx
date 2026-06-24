@@ -387,7 +387,7 @@ function DoctorDashboard() {
                 <span className="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full uppercase tracking-wider">FlowCare</span>
                 <h3 className="text-xl font-bold mt-3">Wellness First Excellence</h3>
                 <p className="mt-2 text-sm text-white/80 max-w-lg">
-                  Providing state-of-the-art cardiovascular care at the heart of Badulla Medical Centre.
+                  Providing state-of-the-art cardiovascular care at the heart of ASHINI Family Clinic Center.
                 </p>
               </div>
             </div>
@@ -403,7 +403,7 @@ function DoctorDashboard() {
                 Leading healthcare management system designed for medical professionals who prioritize precision and patient care.
               </p>
               <div className="text-xs text-slate-400 mt-4">
-                © 2024 Badulla Medical Centre. All rights reserved.
+                © 2024 ASHINI Family Clinic Center. All rights reserved.
               </div>
             </div>
             <div>

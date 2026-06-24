@@ -309,7 +309,7 @@ function BookAppointment() {
                 <div className="absolute right-0 bottom-0 translate-x-8 translate-y-8 opacity-10">
                   <i className="ti ti-activity-heartbeat text-[180px] font-bold" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200">Badulla Medical Centre</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-200">ASHINI Family Clinic Center</span>
                 <h2 className="text-xl font-bold mt-1">Book an Appointment</h2>
                 <p className="text-xs text-white/80 mt-2 leading-relaxed">
                   Secure your consultation slot in just three quick steps. We track doctor availability and clinic queue volume in real time.

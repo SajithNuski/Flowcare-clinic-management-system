@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Badge from "./Badge";
+import ashiniLogo from "../assets/images/Ashini logo.png";
 
 function Navbar() {
   const location = useLocation();
@@ -33,12 +34,12 @@ function Navbar() {
         
         {/* Logo and Branding */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#1A73E8] to-[#115EC3] text-white shadow-[0_4px_10px_rgba(26,115,232,0.25)] transition-transform duration-300 group-hover:scale-105">
-            <i className="ti ti-activity-heartbeat text-lg" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm transition-transform duration-300 group-hover:scale-105 p-1 border border-slate-100">
+            <img src={ashiniLogo} alt="ASHINI Family Clinic Center" className="h-full w-full object-contain" />
           </div>
           <div className="leading-tight">
             <span className="block text-sm font-bold text-[#0F172A] tracking-tight group-hover:text-[#1A73E8] transition-colors duration-200">
-              Badulla Medical Centre
+              ASHINI Family Clinic Center
             </span>
             <span className="block text-[9px] uppercase tracking-widest font-bold text-[#64748B]">
               FlowCare Platform

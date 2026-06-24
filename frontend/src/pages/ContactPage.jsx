@@ -116,9 +116,9 @@ function ContactPage() {
                       Address
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-[#4B5563]">
-                      123 Health Street, Wellness City,
+                      No. 14, Bandarawela Road,
                       <br />
-                      Colombo 07, Sri Lanka
+                      Badulla, Uva Province
                     </p>
                   </div>
 
@@ -127,9 +127,9 @@ function ContactPage() {
                       Phone
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-[#4B5563]">
-                      +94 11 234 5678
+                      055 222 4567
                       <br />
-                      +94 11 234 5679
+                      077 123 4567
                     </p>
                   </div>
 
@@ -138,9 +138,7 @@ function ContactPage() {
                       Email
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-[#4B5563]">
-                      info@flowcare.lk
-                      <br />
-                      support@flowcare.lk
+                      ashinifamilyclinic@gmail.com
                     </p>
                   </div>
 
@@ -149,9 +147,7 @@ function ContactPage() {
                       Working Hours
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-[#4B5563]">
-                      <strong>Mon - Fri:</strong> 8:00 AM - 6:00 PM
-                      <br />
-                      <strong>Saturday:</strong> 8:00 AM - 1:00 PM
+                      <strong>Mon - Sat:</strong> 8:00 AM - 5:00 PM
                       <br />
                       <strong>Sunday:</strong> Closed
                     </p>
@@ -167,12 +163,12 @@ function ContactPage() {
                         <i className="ti ti-map-pin" />
                       </div>
                       <h3 className="mt-3 text-sm font-bold text-[#0F172A]">
-                        FlowCare Clinic
+                        ASHINI Family Clinic Center
                       </h3>
                       <p className="mt-1.5 text-xs leading-relaxed text-[#4B5563]">
-                        123 Health Street,
+                        No. 14, Bandarawela Road,
                         <br />
-                        Wellness City, Colombo 07
+                        Badulla, Uva Province
                       </p>
                     </div>
                   </div>
