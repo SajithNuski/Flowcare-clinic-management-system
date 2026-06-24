@@ -29,73 +29,74 @@ function Navbar() {
   };
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 bg-transparent p-0 md:p-4">
-      {/* Main Floating Pill Navbar Container */}
-      <div className="w-full bg-[#F0F7FF]/90 backdrop-blur-md border-b border-blue-100/80 md:max-w-6xl md:w-[92%] md:mx-auto md:rounded-full md:border md:border-blue-100/50 md:shadow-[0_12px_40px_rgba(26,115,232,0.06)] relative transition-all duration-300">
-        
-        {/* Content wrapper with three equal flex columns */}
-        <div className="mx-auto flex h-16 md:h-18 items-center justify-between px-4 sm:px-6 md:px-8 relative">
+    <header className="sticky top-0 z-50 w-full bg-[#F0F7FF]/95 backdrop-blur-md border-b border-blue-100/80 shadow-[0_2px_15px_rgba(26,115,232,0.02)]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 md:h-20 items-center justify-between gap-4">
           
-          {/* Column 1: Desktop Links (Left-aligned) */}
-          <div className="hidden md:flex flex-1 justify-start items-center">
-            <nav className="flex items-center gap-1.5">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`px-4 py-2 rounded-full text-xs lg:text-sm font-semibold transition-all duration-300 ${
-                    isActive(link.to)
-                      ? "text-[#1A73E8] bg-blue-100/50 font-bold"
-                      : "text-[#4B5563] hover:text-[#1A73E8] hover:bg-blue-50/50"
+          {/* Left: Logo and Branding */}
+          <Link to="/" className="flex items-center gap-3 shrink-0 group">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm transition-all duration-500 ease-out group-hover:scale-105 group-hover:rotate-3 p-1 border border-slate-100">
+              <img src={ashiniLogo} alt="ASHINI Family Clinic Center" className="h-full w-full object-contain" />
+            </div>
+            <div className="leading-tight">
+              <span className="block text-sm md:text-base font-bold text-slate-800 tracking-tight group-hover:text-[#1A73E8] transition-colors duration-300">
+                ASHINI Family Clinic Center
+              </span>
+              <span className="block text-[9px] uppercase tracking-widest font-bold text-slate-400">
+                FlowCare Platform
+              </span>
+            </div>
+          </Link>
+
+          {/* Center: Navigation Links with Smooth Animated Bottom Indicators */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={`group relative px-4 py-2 text-sm font-semibold transition-all duration-300 ease-out ${
+                  isActive(link.to)
+                    ? "text-[#1A73E8]"
+                    : "text-slate-600 hover:text-[#1A73E8]"
+                }`}
+              >
+                <span className="relative z-10">{link.label}</span>
+                <span
+                  className={`absolute bottom-0 left-4 right-4 h-0.5 rounded-full bg-[#1A73E8] transition-transform duration-300 ease-out origin-center ${
+                    isActive(link.to) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                   }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+                />
+              </Link>
+            ))}
+          </nav>
 
-          {/* Column 2: Logo and Branding (Centered on desktop, Left-aligned on mobile) */}
-          <div className="flex md:flex-1 justify-start md:justify-center items-center">
-            <Link to="/" className="flex items-center gap-3 group z-10">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white shadow-sm transition-transform duration-300 group-hover:scale-105 p-1 border border-slate-100">
-                <img src={ashiniLogo} alt="ASHINI Family Clinic Center" className="h-full w-full object-contain" />
-              </div>
-              <div className="leading-tight">
-                <span className="block text-xs lg:text-sm font-bold text-[#0F172A] tracking-tight group-hover:text-[#1A73E8] transition-colors duration-200">
-                  ASHINI Family Clinic Center
-                </span>
-                <span className="block text-[8px] lg:text-[9px] uppercase tracking-widest font-bold text-[#64748B]">
-                  FlowCare Platform
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          {/* Column 3: Desktop Auth Controls (Right-aligned) & Mobile Menu Button */}
-          <div className="flex flex-1 justify-end items-center gap-4">
+          {/* Right: Auth Controls / Hamburger with hover scale transitions */}
+          <div className="flex items-center gap-4">
             {!user ? (
-              <div className="hidden md:flex items-center gap-4">
-                <Link
-                  to="/login"
-                  className="px-3 py-2 text-xs lg:text-sm font-bold text-[#4B5563] hover:text-[#1A73E8] transition-colors duration-200"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  className="cursor-pointer rounded-full bg-[#10B981] px-5 py-2.5 text-xs lg:text-sm font-bold text-white shadow-[0_4px_12px_rgba(16,185,129,0.2)] transition-all duration-300 hover:bg-[#059669] hover:shadow-[0_6px_18px_rgba(16,185,129,0.35)] hover:-translate-y-0.5 active:translate-y-0"
-                >
-                  Register
-                </Link>
+              <div className="hidden md:flex items-center">
+                {/* Segmented Sign in / Register Button */}
+                <div className="flex items-center border border-[#1A73E8] rounded-full overflow-hidden bg-white shadow-sm hover:shadow transition-all duration-300 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-98">
+                  <Link
+                    to="/login"
+                    className="px-5 py-2 text-xs lg:text-sm font-extrabold text-white bg-[#1A73E8] hover:bg-[#1557B0] transition-colors duration-300 text-center min-w-[85px] lg:min-w-[95px]"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-5 py-2 text-xs lg:text-sm font-extrabold text-[#1A73E8] bg-white hover:bg-blue-50/60 transition-colors duration-300 text-center min-w-[85px] lg:min-w-[95px]"
+                  >
+                    Register
+                  </Link>
+                </div>
               </div>
             ) : (
-              <div className="hidden md:flex items-center gap-3 bg-white/60 backdrop-blur-sm border border-blue-100 rounded-full p-1.5 pr-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#E8F0FE] text-[#1A73E8] border border-[#1A73E8]/10 font-bold text-[10px]">
+              <div className="hidden md:flex items-center gap-3 bg-white/60 border border-blue-50 rounded-2xl p-1.5 pr-3 shadow-sm transition-all duration-300 hover:shadow-md">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] border border-[#1A73E8]/10 font-bold text-xs">
                   {getUserInitials(user.full_name)}
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-[#374151]">
+                  <span className="text-xs font-bold text-slate-700">
                     {user.full_name.split(" ")[0]}
                   </span>
                   <Badge text={user.role} color="blue" />
@@ -103,10 +104,10 @@ function Navbar() {
                 <button
                   type="button"
                   onClick={logout}
-                  className="cursor-pointer flex items-center justify-center p-1 text-[#6B7280] hover:text-[#DC2626] transition-colors duration-200"
+                  className="cursor-pointer flex items-center justify-center p-1.5 text-slate-400 hover:text-red-500 hover:scale-110 transition-all duration-300 ease-out"
                   title="Logout"
                 >
-                  <i className="ti ti-logout text-sm" />
+                  <i className="ti ti-logout text-base" />
                 </button>
               </div>
             )}
@@ -115,22 +116,22 @@ function Navbar() {
             <button
               aria-label="Toggle navigation menu"
               onClick={() => setMenuOpen((s) => !s)}
-              className="relative z-50 inline-flex h-9 w-9 items-center justify-center rounded-full border border-blue-100 bg-[#F0F7FF] p-2 text-[#0F172A] transition-all duration-200 hover:bg-blue-50 md:hidden"
+              className="relative z-50 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 p-2 text-slate-700 transition-all duration-300 hover:bg-slate-100 md:hidden"
             >
-              <div className="flex flex-col gap-1 justify-center items-center w-4">
+              <div className="flex flex-col gap-1.5 justify-center items-center w-5">
                 <span
-                  className={`block h-0.5 w-4 bg-[#0F172A] transition duration-300 ${
-                    menuOpen ? "rotate-45 translate-y-1.5" : ""
+                  className={`block h-0.5 w-5 bg-slate-800 transition duration-300 ${
+                    menuOpen ? "rotate-45 translate-y-2" : ""
                   }`}
                 />
                 <span
-                  className={`block h-0.5 w-4 bg-[#0F172A] transition duration-300 ${
+                  className={`block h-0.5 w-5 bg-slate-800 transition duration-300 ${
                     menuOpen ? "opacity-0" : "opacity-100"
                   }`}
                 />
                 <span
-                  className={`block h-0.5 w-4 bg-[#0F172A] transition duration-300 ${
-                    menuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                  className={`block h-0.5 w-5 bg-slate-800 transition duration-300 ${
+                    menuOpen ? "-rotate-45 -translate-y-2" : ""
                   }`}
                 />
               </div>
@@ -140,11 +141,11 @@ function Navbar() {
 
         {/* Mobile Menu Panel */}
         <div
-          className={`md:hidden bg-[#F0F7FF] border-t border-blue-100/80 shadow-md transition-all duration-300 ease-in-out overflow-hidden rounded-b-2xl ${
+          className={`md:hidden bg-white border-t border-slate-100 transition-all duration-300 ease-in-out overflow-hidden ${
             menuOpen ? "max-h-[380px] opacity-100 py-5" : "max-h-0 opacity-0 py-0"
           }`}
         >
-          <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-4">
+          <div className="space-y-4">
             <nav className="flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
@@ -154,7 +155,7 @@ function Navbar() {
                   className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors duration-150 ${
                     isActive(link.to)
                       ? "bg-[#E8F0FE] text-[#1A73E8]"
-                      : "text-[#4B5563] hover:bg-blue-50 hover:text-[#1A73E8]"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-[#1A73E8]"
                   }`}
                 >
                   {link.label}
@@ -162,32 +163,34 @@ function Navbar() {
               ))}
             </nav>
 
-            <div className="border-t border-blue-100 pt-4">
+            <div className="border-t border-slate-100 pt-4">
               {!user ? (
-                <div className="grid grid-cols-2 gap-3">
-                  <Link
-                    to="/login"
-                    onClick={() => setMenuOpen(false)}
-                    className="rounded-xl border border-blue-200 px-4 py-3 text-center text-sm font-bold text-[#4B5563]"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMenuOpen(false)}
-                    className="rounded-xl bg-[#10B981] px-4 py-3 text-center text-sm font-bold text-white shadow-sm"
-                  >
-                    Register
-                  </Link>
+                <div className="flex justify-center px-2">
+                  <div className="flex w-full items-center border border-[#1A73E8] rounded-full overflow-hidden bg-white shadow-sm">
+                    <Link
+                      to="/login"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex-1 py-2.5 text-sm font-bold text-white bg-[#1A73E8] hover:bg-[#1557B0] transition-colors text-center"
+                    >
+                      Sign in
+                    </Link>
+                    <Link
+                      to="/register"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex-1 py-2.5 text-sm font-bold text-[#1A73E8] bg-white hover:bg-blue-50/60 transition-colors text-center"
+                    >
+                      Register
+                    </Link>
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center gap-3 bg-white/60 border border-blue-100 rounded-2xl p-2.5">
+                  <div className="flex items-center gap-3 bg-slate-50 border border-slate-100 rounded-2xl p-2.5">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] font-bold text-xs">
                       {getUserInitials(user.full_name)}
                     </div>
                     <div>
-                      <span className="block text-xs font-bold text-[#374151]">
+                      <span className="block text-xs font-bold text-slate-700">
                         {user.full_name}
                       </span>
                       <span className="block mt-0.5">

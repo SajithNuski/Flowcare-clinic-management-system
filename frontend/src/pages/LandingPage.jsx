@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import DoctorCard from "../components/DoctorCard";
 import { getInitials, formatTime } from "../utils/helpers";
 import { COLORS } from "../utils/constants";
-import heroImage from "../assets/images/hero-clinic.jpg";
+import heroImage from "../assets/images/hero-clinic.png";
 import { getDoctors } from "../api/doctors";
 import bookImg from "../assets/images/book.png";
 import walkingImg from "../assets/images/walking.png";
@@ -249,7 +249,7 @@ function LandingPage() {
         >
           {/* Subtle gradient overlay for better contrast & premium feel */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/70" />
-          
+
           <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8">
             <div className="mx-auto flex max-w-4xl flex-col items-center text-center text-white">
               <div className="bg-gradient-to-r from-[#EF4444] via-[#10B981] to-[#1A73E8] p-[1.5px] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(239,68,68,0.25)]">
@@ -329,7 +329,7 @@ function LandingPage() {
                 Meet Our Qualified Doctors
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-[#4B5563]">
-                At ASHINI Family Clinic Center, our specialists bring decades of clinical precision and compassionate care. 
+                At ASHINI Family Clinic Center, our specialists bring decades of clinical precision and compassionate care.
                 From complex surgical interventions to routine family wellness, we are committed to your health journey.
               </p>
             </div>
@@ -418,7 +418,7 @@ function LandingPage() {
         {/* Our Services Section */}
         <section className="bg-white px-4 py-20 sm:px-8">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
-            
+
             {/* Left Column: Services */}
             <div className="lg:col-span-7">
               <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
@@ -463,10 +463,10 @@ function LandingPage() {
                 <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#EF4444]/20 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#10B981]/20 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/10 rounded-full blur-3xl pointer-events-none" />
-                
+
                 {/* Visual backdrop grid pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.03)_1px,_transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
-                
+
                 <h3 className="relative z-10 text-xl font-bold tracking-tight text-white mb-6">
                   Trusted by the Badulla Community
                 </h3>
