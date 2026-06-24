@@ -19,6 +19,7 @@ import ReceptionistDashboard from "./pages/ReceptionistDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import ManageAppointments from "./pages/ManageAppointments";
 import PatientDashboard from "./pages/PatientDashboard";
+import ManageUsers from "./pages/ManageUsers";
 
 function PageStub({ title }) {
   return (
@@ -149,7 +150,7 @@ function App() {
             path="/admin/users"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Staff" />
+                <ManageUsers />
               </ProtectedRoute>
             }
           />

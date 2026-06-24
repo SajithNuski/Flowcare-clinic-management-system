@@ -5,7 +5,9 @@ require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/helpers.php';
 
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
+}
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	respond_json(["success" => false, "error" => "Method not allowed"], 405);
