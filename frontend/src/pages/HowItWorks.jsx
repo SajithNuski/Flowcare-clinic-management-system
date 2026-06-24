@@ -10,21 +10,37 @@ const steps = [
     number: 1,
     title: "Book an Appointment",
     text: "Accessibly appear online or in-person. Use our streamlined online portal to choose your preferred specialist and time slot, or call our clinic reception to book directly.",
+    badgeClass: "bg-[#E8F0FE] border-[#1A73E8]/20 text-[#1A73E8]",
+    bulletClass: "bg-[#E8F0FE] border-[#1A73E8]/30 text-[#1A73E8]",
+    cardHoverClass: "hover:border-[#1A73E8]/30 hover:shadow-[0_15px_30px_rgba(26,115,232,0.06)] hover:text-[#1A73E8]",
+    textColor: "group-hover:text-[#1A73E8]",
   },
   {
     number: 2,
     title: "Visit the Clinic",
     text: "On arrival, present your identification at our main reception desk. Our patient coordinator will assist you with quick check-in processes and direct you to the comfortable waiting lounge.",
+    badgeClass: "bg-[#EBF7ED] border-[#16A34A]/20 text-[#16A34A]",
+    bulletClass: "bg-[#EBF7ED] border-[#16A34A]/30 text-[#16A34A]",
+    cardHoverClass: "hover:border-[#16A34A]/30 hover:shadow-[0_15px_30px_rgba(22,163,74,0.06)] hover:text-[#16A34A]",
+    textColor: "group-hover:text-[#16A34A]",
   },
   {
     number: 3,
     title: "Consult with Specialists",
     text: "Meet with our board-certified specialists for a comprehensive evaluation. This phase includes a detailed assessment, diagnostic testing if necessary, and a clear explanation of your medical condition and plan.",
+    badgeClass: "bg-[#FEF2F2] border-[#EF4444]/20 text-[#EF4444]",
+    bulletClass: "bg-[#FEF2F2] border-[#EF4444]/30 text-[#EF4444]",
+    cardHoverClass: "hover:border-[#EF4444]/30 hover:shadow-[0_15px_30px_rgba(239,68,68,0.06)] hover:text-[#EF4444]",
+    textColor: "group-hover:text-[#EF4444]",
   },
   {
     number: 4,
     title: "Treatment & Follow-up",
     text: "Receive your personalised treatment plan and digital prescriptions. Our team will help you schedule any necessary follow-ups to monitor progress and ensure full recovery.",
+    badgeClass: "bg-[#EBF7ED] border-[#16A34A]/20 text-[#16A34A]",
+    bulletClass: "bg-[#EBF7ED] border-[#16A34A]/30 text-[#16A34A]",
+    cardHoverClass: "hover:border-[#16A34A]/30 hover:shadow-[0_15px_30px_rgba(22,163,74,0.06)] hover:text-[#16A34A]",
+    textColor: "group-hover:text-[#16A34A]",
   },
 ];
 
@@ -72,14 +88,16 @@ function HowItWorks() {
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/70" />
           <div className="relative mx-auto max-w-4xl text-center z-10">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8F0FE] mb-6 backdrop-blur-sm border border-white/10">
-              Patient Care Pathway
+            <div className="bg-gradient-to-r from-[#EF4444] via-[#10B981] to-[#1A73E8] p-[1.5px] rounded-full inline-flex mb-6 shadow-lg">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#0E1E38]/95 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8F0FE] backdrop-blur-sm">
+                Patient Care Pathway
+              </div>
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl leading-[1.2]">
               Your Path to Better Health
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-base text-[#E2E8F0] sm:text-lg leading-relaxed">
-              FlowCare Medical Centre simplifies your healthcare journey. From
+              ASHINI Family Clinic Center simplifies your healthcare journey. From
               the first click to your first follow-up, we ensure a seamless and
               professional experience focused entirely on your recovery.
             </p>
@@ -105,7 +123,7 @@ function HowItWorks() {
                   {/* Timeline Bullet (hidden on mobile, styled nicely on tablet/desktop) */}
                   <div className="absolute left-0 top-2 hidden h-full w-12 md:block">
                     <div className="flex h-full flex-col items-center">
-                      <div className="mb-4 h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-full bg-[#E8F0FE] border-2 border-[#1A73E8]/30 text-[#1A73E8] font-bold shadow-sm font-sans text-sm">
+                      <div className={`mb-4 h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-full border-2 font-bold shadow-sm font-sans text-sm ${s.bulletClass}`}>
                         {s.number}
                       </div>
                       <div className="flex-1 w-[2px] bg-slate-100" />
@@ -115,17 +133,17 @@ function HowItWorks() {
                   <div
                     data-idx={idx}
                     ref={(el) => (refs.current[idx] = el)}
-                    className={`ml-0 md:ml-16 flex-1 transform rounded-2xl border border-slate-200/50 bg-white p-8 shadow-sm transition-all duration-700 ease-out ${
+                    className={`group ml-0 md:ml-16 flex-1 transform rounded-2xl border border-slate-200/50 bg-white p-8 shadow-sm transition-all duration-700 ease-out ${
                       visible[idx]
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-6"
-                    } hover:shadow-md hover:-translate-y-0.5 text-left`}
+                    } ${s.cardHoverClass} text-left`}
                   >
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-200">
+                      <h3 className={`text-lg font-bold text-[#0F172A] transition-colors duration-200 ${s.textColor}`}>
                         {s.title}
                       </h3>
-                      <div className="rounded-full bg-[#F1F5F9] px-2.5 py-1 text-[10px] font-bold text-[#64748B] uppercase tracking-wider font-sans">
+                      <div className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider font-sans border ${s.badgeClass}`}>
                         Step {s.number}
                       </div>
                     </div>
@@ -142,20 +160,27 @@ function HowItWorks() {
           <div className="mx-auto max-w-5xl">
             <div className="mx-auto rounded-[24px] overflow-hidden shadow-xl border border-slate-100 md:max-w-4xl bg-white">
               <div className="grid grid-cols-1 md:grid-cols-2">
-                <div className="bg-gradient-to-br from-[#1A73E8] to-[#1557B0] p-8 sm:p-10 text-white flex flex-col justify-center">
-                  <h3 className="text-2xl font-extrabold tracking-tight text-white">
+                <div className="relative bg-slate-900 p-8 sm:p-10 text-white flex flex-col justify-center overflow-hidden border border-slate-800">
+                  {/* Glowing red, green, and blue accents */}
+                  <div className="absolute -top-12 -left-12 w-40 h-40 bg-[#EF4444]/20 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute -bottom-12 -right-12 w-40 h-40 bg-[#10B981]/20 rounded-full blur-3xl pointer-events-none" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/10 rounded-full blur-3xl pointer-events-none" />
+                  
+                  {/* Grid overlay */}
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.02)_1px,_transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+
+                  <h3 className="relative z-10 text-2xl font-extrabold tracking-tight text-white">
                     Ready to start your journey?
                   </h3>
-                  <p className="mt-4 text-sm text-white/90 leading-relaxed">
-                    Book your first consultation today at FlowCare Medical
-                    Center. Our specialists are ready to provide the clinical
+                  <p className="relative z-10 mt-4 text-sm text-white/80 leading-relaxed">
+                    Book your first consultation today at ASHINI Family Clinic Center. Our specialists are ready to provide the clinical
                     precision you deserve.
                   </p>
 
-                  <div className="mt-8 flex flex-wrap gap-4">
+                  <div className="relative z-10 mt-8 flex flex-wrap gap-4">
                     <button
                       onClick={() => navigate("/patient/book")}
-                      className="cursor-pointer rounded-xl bg-white px-6 py-3.5 text-xs font-bold text-[#1A73E8] shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5 active:translate-y-0"
+                      className="cursor-pointer rounded-xl bg-white px-6 py-3.5 text-xs font-bold text-slate-900 shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5 active:translate-y-0"
                     >
                       Book Online Now
                     </button>

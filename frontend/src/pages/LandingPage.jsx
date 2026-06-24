@@ -20,44 +20,50 @@ const featureItems = [
   {
     icon: "ti-device-mobile",
     accent: "rgba(26,115,232,0.06)",
-    color: COLORS.PRIMARY,
+    color: "#1A73E8",
     title: "Book From Your Phone",
     text: "Register once and book from mobile browser, no calls needed",
+    hoverBorder: "hover:border-[#1A73E8]/30 hover:shadow-[0_15px_30px_rgba(26,115,232,0.08)]",
   },
   {
     icon: "ti-list-numbers",
-    accent: "rgba(46,204,113,0.06)",
-    color: COLORS.SUCCESS,
+    accent: "rgba(16,185,129,0.06)",
+    color: "#10B981",
     title: "Live Queue Tracking",
     text: "Watch your queue position update in real time from anywhere",
+    hoverBorder: "hover:border-[#10B981]/30 hover:shadow-[0_15px_30px_rgba(16,185,129,0.08)]",
   },
   {
     icon: "ti-notes",
-    accent: "rgba(26,115,232,0.05)",
-    color: COLORS.PRIMARY,
+    accent: "rgba(26,115,232,0.06)",
+    color: "#1A73E8",
     title: "Digital Consultation Records",
     text: "Every diagnosis and doctor note saved and accessible forever",
+    hoverBorder: "hover:border-[#1A73E8]/30 hover:shadow-[0_15px_30px_rgba(26,115,232,0.08)]",
   },
   {
     icon: "ti-user-check",
-    accent: "rgba(229,57,53,0.06)",
-    color: COLORS.DANGER,
+    accent: "rgba(239,68,68,0.06)",
+    color: "#EF4444",
     title: "Walk-ins Always Welcome",
     text: "No appointment needed — just arrive and we add you to queue",
+    hoverBorder: "hover:border-[#EF4444]/30 hover:shadow-[0_15px_30px_rgba(239,68,68,0.08)]",
   },
   {
     icon: "ti-heart-rate-monitor",
-    accent: "rgba(26,115,232,0.05)",
-    color: COLORS.PRIMARY,
+    accent: "rgba(239,68,68,0.06)",
+    color: "#EF4444",
     title: "Experienced Specialists",
     text: "Qualified MBBS doctors with years of Uva Province experience",
+    hoverBorder: "hover:border-[#EF4444]/30 hover:shadow-[0_15px_30px_rgba(239,68,68,0.08)]",
   },
   {
     icon: "ti-clock",
-    accent: "rgba(46,204,113,0.06)",
-    color: COLORS.SUCCESS,
+    accent: "rgba(16,185,129,0.06)",
+    color: "#10B981",
     title: "Minimal Waiting Time",
     text: "Smart queue system keeps average wait under 25 minutes",
+    hoverBorder: "hover:border-[#10B981]/30 hover:shadow-[0_15px_30px_rgba(16,185,129,0.08)]",
   },
 ];
 
@@ -77,6 +83,8 @@ const stepItems = [
     text: "Create your free patient account in under 2 minutes",
     image: bookImg,
     alt: "Register",
+    badgeClass: "bg-[#FEF2F2] border-[#EF4444]/20 text-[#EF4444]",
+    hoverClass: "hover:border-[#EF4444]/20 hover:shadow-[0_15px_30px_rgba(239,68,68,0.06)]",
   },
   {
     number: "2",
@@ -84,6 +92,8 @@ const stepItems = [
     text: "Choose your doctor and time slot online, or just arrive",
     image: walkingImg,
     alt: "Book or Walk In",
+    badgeClass: "bg-[#EBF7ED] border-[#16A34A]/20 text-[#16A34A]",
+    hoverClass: "hover:border-[#16A34A]/20 hover:shadow-[0_15px_30px_rgba(22,163,74,0.06)]",
   },
   {
     number: "3",
@@ -91,18 +101,23 @@ const stepItems = [
     text: "Track your queue live and see the doctor when called",
     image: consultImg,
     alt: "Track and Consult",
+    badgeClass: "bg-[#E8F0FE] border-[#1A73E8]/20 text-[#1A73E8]",
+    hoverClass: "hover:border-[#1A73E8]/20 hover:shadow-[0_15px_30px_rgba(26,115,232,0.06)]",
   },
 ];
 
 const doctorShowcaseItems = [
   {
     specialty: "Cardiology",
-    badgeClass: "bg-[#E8F0FE] text-[#1A73E8] border border-[#1A73E8]/10",
+    badgeClass: "bg-[#FEF2F2] text-[#EF4444] border border-[#EF4444]/10",
     image: doctorOneImg,
     name: "Dr. Prasanna Perera",
     title: "Senior Cardiologist",
     credentials: "MD, FRCP Cardiology (Oxford)",
     experience: "15+ Years Experience",
+    hoverClass: "hover:border-[#EF4444]/30 hover:shadow-[0_20px_45px_rgba(239,68,68,0.08)]",
+    titleHoverClass: "group-hover:text-[#EF4444]",
+    subtitleColorClass: "text-[#EF4444]",
   },
   {
     specialty: "Pediatrics",
@@ -112,15 +127,21 @@ const doctorShowcaseItems = [
     title: "Pediatric Specialist",
     credentials: "MBBS, DCH, MD (Colombo)",
     experience: "12+ Years Experience",
+    hoverClass: "hover:border-[#16A34A]/30 hover:shadow-[0_20px_45px_rgba(22,163,74,0.08)]",
+    titleHoverClass: "group-hover:text-[#16A34A]",
+    subtitleColorClass: "text-[#16A34A]",
   },
   {
     specialty: "Surgery",
-    badgeClass: "bg-[#FEE2E2] text-[#DC2626] border border-[#DC2626]/10",
+    badgeClass: "bg-[#FEF2F2] text-[#EF4444] border border-[#EF4444]/10",
     image: doctorThreeImg,
     name: "Dr. Aruna Perera",
     title: "General Surgeon",
     credentials: "MS, FRCS (Edinburgh)",
     experience: "20+ Years Experience",
+    hoverClass: "hover:border-[#EF4444]/30 hover:shadow-[0_20px_45px_rgba(239,68,68,0.08)]",
+    titleHoverClass: "group-hover:text-[#EF4444]",
+    subtitleColorClass: "text-[#EF4444]",
   },
 ];
 
@@ -187,18 +208,27 @@ function LandingPage() {
       label: "Our Doctors",
       sublabel: "Meet our specialist team",
       icon: "ti-stethoscope",
+      colorClass: "bg-[#FEF2F2] text-[#EF4444] group-hover:bg-[#FEE2E2]",
+      hoverBgClass: "hover:bg-[#FEF2F2]/40 hover:border-[#EF4444]/20",
+      hoverTextClass: "group-hover:text-[#EF4444]",
       action: () => navigate("/about"),
     },
     {
       label: "Location",
       sublabel: "Find us in Badulla town",
       icon: "ti-map-pin",
+      colorClass: "bg-[#ECFDF5] text-[#10B981] group-hover:bg-[#D1FAE5]",
+      hoverBgClass: "hover:bg-[#ECFDF5]/40 hover:border-[#10B981]/20",
+      hoverTextClass: "group-hover:text-[#10B981]",
       action: () => navigate("/contact"),
     },
     {
       label: "Appointments",
       sublabel: "Book your consultation",
       icon: "ti-calendar-plus",
+      colorClass: "bg-[#E8F0FE] text-[#1A73E8] group-hover:bg-[#D2E3FC]",
+      hoverBgClass: "hover:bg-[#E8F0FE]/40 hover:border-[#1A73E8]/20",
+      hoverTextClass: "group-hover:text-[#1A73E8]",
       action: handleBookAppointment,
     },
   ];
@@ -222,9 +252,11 @@ function LandingPage() {
           
           <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8">
             <div className="mx-auto flex max-w-4xl flex-col items-center text-center text-white">
-              <div className="inline-flex items-center gap-3 rounded-2xl bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-[#E8F0FE] mb-6 backdrop-blur-sm border border-white/10 shadow-lg">
-                <img src={ashiniLogo} alt="Logo" className="h-6 w-auto object-contain bg-white rounded p-0.5" />
-                <span>ASHINI Family Clinic Center</span>
+              <div className="bg-gradient-to-r from-[#EF4444] via-[#10B981] to-[#1A73E8] p-[1.5px] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(239,68,68,0.25)]">
+                <div className="flex items-center gap-3 rounded-[15px] bg-[#0E1E38]/90 px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-[#E8F0FE] backdrop-blur-md">
+                  <img src={ashiniLogo} alt="Logo" className="h-6 w-auto object-contain bg-white rounded p-0.5" />
+                  <span>ASHINI Family Clinic Center</span>
+                </div>
               </div>
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-white drop-shadow-md sm:text-5xl lg:text-6xl leading-[1.15]">
                 Quality Healthcare,<br className="hidden sm:inline" /> Now Easier to Access
@@ -264,13 +296,13 @@ function LandingPage() {
                 type="button"
                 onClick={item.action}
                 aria-label={item.label}
-                className="group flex items-center gap-4 text-left cursor-pointer rounded-xl border border-transparent p-4 transition-all duration-300 hover:bg-[#E8F0FE]/40 hover:border-[#1A73E8]/10"
+                className={`group flex items-center gap-4 text-left cursor-pointer rounded-xl border border-transparent p-4 transition-all duration-300 ${item.hoverBgClass}`}
               >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${item.colorClass}`}>
                   <i className={`ti ${item.icon} text-lg`} />
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-200">
+                  <div className={`text-sm font-bold text-[#0F172A] transition-colors duration-200 ${item.hoverTextClass}`}>
                     {item.label}
                   </div>
                   <div className="mt-0.5 text-xs text-[#6B7280]">
@@ -306,7 +338,7 @@ function LandingPage() {
               {doctorShowcaseItems.map((doctor) => (
                 <article
                   key={doctor.name}
-                  className="group overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+                  className={`group overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 ${doctor.hoverClass}`}
                 >
                   <div className="relative overflow-hidden bg-slate-100">
                     <img
@@ -322,10 +354,10 @@ function LandingPage() {
                   </div>
 
                   <div className="p-6">
-                    <h3 className="text-lg font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-200">
+                    <h3 className={`text-lg font-bold text-[#0F172A] transition-colors duration-200 ${doctor.titleHoverClass}`}>
                       {doctor.name}
                     </h3>
-                    <p className="mt-0.5 text-xs font-semibold text-[#1A73E8] uppercase tracking-wider">
+                    <p className={`mt-0.5 text-xs font-semibold uppercase tracking-wider ${doctor.subtitleColorClass}`}>
                       {doctor.title}
                     </p>
 
@@ -364,7 +396,7 @@ function LandingPage() {
             {featureItems.map((item) => (
               <div
                 key={item.title}
-                className="group rounded-2xl border border-slate-200/50 bg-white p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/20"
+                className={`group rounded-2xl border border-slate-200/50 bg-white p-6 transition-all duration-300 ${item.hoverBorder}`}
               >
                 <div
                   className="flex h-11 w-11 items-center justify-center rounded-xl text-xl transition-transform duration-300 group-hover:scale-110"
@@ -426,22 +458,27 @@ function LandingPage() {
 
             {/* Right Column: Stats Card */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl bg-gradient-to-br from-[#1A73E8] to-[#1557B0] p-8 text-white shadow-xl overflow-hidden">
-                {/* Visual backdrop grid pattern */}
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/15 to-transparent pointer-events-none" />
+              <div className="relative rounded-2xl bg-slate-900 p-8 text-white shadow-xl overflow-hidden border border-slate-800">
+                {/* Decorative Glowing Blurs */}
+                <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#EF4444]/20 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#10B981]/20 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/10 rounded-full blur-3xl pointer-events-none" />
                 
-                <h3 className="text-xl font-bold tracking-tight text-white mb-6">
+                {/* Visual backdrop grid pattern */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.03)_1px,_transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+                
+                <h3 className="relative z-10 text-xl font-bold tracking-tight text-white mb-6">
                   Trusted by the Badulla Community
                 </h3>
-                <div className="space-y-6">
+                <div className="relative z-10 space-y-6">
                   {[
                     ["15+", "Years serving Badulla"],
                     ["3", "Specialist Doctors"],
                     ["50+", "Patients per day"],
                   ].map(([value, label]) => (
-                    <div key={label} className="border-b border-white/15 pb-4 last:border-0 last:pb-0">
+                    <div key={label} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
                       <div className="text-4xl font-extrabold text-white font-sans">{value}</div>
-                      <div className="mt-1 text-xs sm:text-sm text-white/80 font-medium">{label}</div>
+                      <div className="mt-1 text-xs sm:text-sm text-white/70 font-medium">{label}</div>
                     </div>
                   ))}
                 </div>
@@ -449,7 +486,7 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={() => navigate("/register")}
-                  className="mt-8 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-[#1A73E8] shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5 active:translate-y-0"
+                  className="relative z-10 mt-8 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-slate-900 shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5 active:translate-y-0"
                 >
                   Register as a Patient
                 </button>
@@ -476,7 +513,7 @@ function LandingPage() {
             {stepItems.map((step) => (
               <article
                 key={step.title}
-                className="group relative bg-white rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-lg hover:border-[#1A73E8]/10 flex flex-col items-center text-center"
+                className={`group relative bg-white rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 flex flex-col items-center text-center ${step.hoverClass}`}
               >
                 <div className="relative mb-6 overflow-hidden rounded-xl bg-slate-50 w-full">
                   <img
@@ -484,7 +521,7 @@ function LandingPage() {
                     alt={step.alt}
                     className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#E8F0FE] border border-[#1A73E8]/20 text-[#1A73E8] text-xs font-bold shadow-md font-sans">
+                  <div className={`absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full border text-xs font-bold shadow-md font-sans ${step.badgeClass}`}>
                     {step.number}
                   </div>
                 </div>
@@ -516,8 +553,8 @@ function LandingPage() {
         <section className="bg-white border-t border-slate-100 px-4 py-16 sm:px-8">
           <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Opening Hours */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/10">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#10B981]/25">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EBF7ED] text-[#16A34A] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-clock text-lg" />
               </div>
               <div>
@@ -536,8 +573,8 @@ function LandingPage() {
             </div>
 
             {/* Contact Us */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/10">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#EF4444]/25">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#EF4444] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-phone text-lg" />
               </div>
               <div>
@@ -558,7 +595,7 @@ function LandingPage() {
             </div>
 
             {/* Find Us */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/10 col-span-1 sm:col-span-2 lg:col-span-1">
+            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/25 col-span-1 sm:col-span-2 lg:col-span-1">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-map-pin text-lg" />
               </div>

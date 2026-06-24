@@ -9,18 +9,21 @@ const valueItems = [
     accent: "bg-[#E8F0FE] text-[#1A73E8] border border-[#1A73E8]/10",
     title: "Clinical Excellence",
     text: "We uphold the highest medical standards through rigorous evidence-based practice and continuous staff training.",
+    hoverBorder: "hover:border-[#1A73E8]/35 hover:shadow-[0_15px_30px_rgba(26,115,232,0.06)]",
   },
   {
     icon: "ti-users",
     accent: "bg-[#EBF7ED] text-[#16A34A] border border-[#16A34A]/10",
     title: "Community First",
     text: "Deeply rooted in Badulla, we prioritize local outreach and accessible medical programs for all residents.",
+    hoverBorder: "hover:border-[#16A34A]/35 hover:shadow-[0_15px_30px_rgba(22,163,74,0.06)]",
   },
   {
     icon: "ti-heart",
-    accent: "bg-[#FEE2E2] text-[#DC2626] border border-[#DC2626]/10",
+    accent: "bg-[#FEE2E2] text-[#EF4444] border border-[#EF4444]/10",
     title: "Patient Care",
     text: "Every patient is treated with dignity, empathy, and a commitment to their long-term health and well-being.",
+    hoverBorder: "hover:border-[#EF4444]/35 hover:shadow-[0_15px_30px_rgba(239,68,68,0.06)]",
   },
 ];
 
@@ -43,8 +46,10 @@ function AboutPage() {
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black/70" />
           <div className="relative mx-auto max-w-4xl text-center z-10">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8F0FE] mb-6 backdrop-blur-sm border border-white/10">
-              Our Vision
+            <div className="bg-gradient-to-r from-[#EF4444] via-[#10B981] to-[#1A73E8] p-[1.5px] rounded-full inline-flex mb-6 shadow-lg">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#0E1E38]/95 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-[#E8F0FE] backdrop-blur-sm">
+                Our Vision
+              </div>
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl leading-[1.2]">
               Compassionate Healthcare for<br />Badulla
@@ -66,9 +71,11 @@ function AboutPage() {
             <h2 className="mt-4 text-3xl font-extrabold text-[#0F172A]">
               Our Story
             </h2>
-            <div className="relative mt-6 rounded-2xl border border-slate-100 bg-[#F8FAFC] p-8 shadow-sm">
+            <div className="relative mt-6 rounded-2xl border-t-4 border-t-[#1A73E8] border-x border-b border-slate-100 bg-[#F8FAFC] p-8 shadow-sm">
+              {/* Bottom decorative accents */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#EF4444] via-[#10B981] to-[#1A73E8] rounded-b-2xl opacity-80" />
               <p className="mx-auto max-w-3xl text-sm sm:text-base leading-relaxed text-[#4B5563]">
-                Founded in 2018, FlowCare Badulla began as a small community
+                Founded in 2018, ASHINI Family Clinic Center began as a small community
                 clinic with a vision to modernize healthcare delivery in the Uva
                 Province. Today, we have grown into a leading medical center,
                 combining advanced clinical practice with the warmth and trust of
@@ -91,7 +98,7 @@ function AboutPage() {
               {valueItems.map((item) => (
                 <article
                   key={item.title}
-                  className="group rounded-2xl border border-slate-200/50 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  className={`group rounded-2xl border border-slate-200/50 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 ${item.hoverBorder}`}
                 >
                   <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-xl text-xl transition-transform duration-300 group-hover:scale-110 ${item.accent}`}>
                     <i className={`ti ${item.icon}`} />
@@ -110,18 +117,26 @@ function AboutPage() {
 
         {/* Call to Action Section */}
         <section className="bg-white px-4 py-20 sm:px-8">
-          <div className="mx-auto max-w-4xl rounded-3xl bg-gradient-to-r from-[#1A73E8] to-[#1557B0] px-8 py-14 text-center text-white shadow-xl sm:px-12">
-            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
+          <div className="relative mx-auto max-w-4xl rounded-3xl bg-slate-900 px-8 py-14 text-center text-white shadow-xl sm:px-12 overflow-hidden border border-slate-800">
+            {/* Glowing red, green, and blue accents */}
+            <div className="absolute -top-12 -left-12 w-48 h-48 bg-[#EF4444]/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-[#10B981]/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-56 h-56 bg-[#1A73E8]/10 rounded-full blur-3xl pointer-events-none" />
+            
+            {/* Grid Pattern overlay */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.02)_1px,_transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+
+            <h2 className="relative z-10 text-3xl font-extrabold tracking-tight sm:text-4xl">
               Start Your Wellness Journey Today
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm sm:text-base text-white/90 leading-relaxed">
+            <p className="relative z-10 mx-auto mt-4 max-w-xl text-sm sm:text-base text-white/80 leading-relaxed">
               Our specialized medical team is ready to provide you with the best
               healthcare available in Badulla.
             </p>
             <button
               type="button"
               onClick={() => navigate("/patient/book")}
-              className="mt-8 cursor-pointer rounded-xl bg-white px-8 py-4 text-sm font-bold text-[#1A73E8] shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5"
+              className="relative z-10 mt-8 cursor-pointer rounded-xl bg-white px-8 py-4 text-sm font-bold text-slate-900 shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5"
             >
               Book an Appointment
             </button>
