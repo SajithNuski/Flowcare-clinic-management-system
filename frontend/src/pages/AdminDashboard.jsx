@@ -157,7 +157,7 @@ function AdminDashboard() {
   const latestAnnouncements = announcements.slice(0, 3);
 
   return (
-    <div className="flex min-h-screen bg-[#F5F7FB] text-[#0F172A]">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#F5F7FB] text-[#0F172A]">
       <Sidebar role="admin" activePage="Dashboard" />
 
       <main className="min-w-0 flex-1">

@@ -230,7 +230,7 @@ function BookAppointment() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC]">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#F8FAFC]">
       {/* App Sidebar */}
       <Sidebar role="patient" activePage="Book Appointment" />
 
@@ -241,7 +241,7 @@ function BookAppointment() {
         <header className="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-slate-800">Book Appointment</h1>
-            <p className="text-xs text-slate-400">FlowCare Patient Portal</p>
+            <p className="text-xs text-slate-400">ASHINI Family Clinic Center Portal</p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full capitalize">

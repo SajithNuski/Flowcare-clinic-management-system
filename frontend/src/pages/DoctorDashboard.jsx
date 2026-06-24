@@ -146,7 +146,7 @@ function DoctorDashboard() {
 
   if (loading && !dashboardData) {
     return (
-      <div className="flex min-h-screen bg-slate-50">
+      <div className="flex flex-col md:flex-row min-h-screen bg-slate-50">
         <Sidebar role="doctor" activePage="Dashboard" />
         <main className="flex-1 flex items-center justify-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
@@ -167,7 +167,7 @@ function DoctorDashboard() {
   const firstWaitingEntry = queue.find(q => q.status === "waiting");
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex flex-col md:flex-row min-h-screen bg-slate-50">
       <Sidebar role="doctor" activePage="Dashboard" />
 
       {/* Toast Alert overlay */}
