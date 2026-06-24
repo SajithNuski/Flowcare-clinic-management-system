@@ -7,7 +7,7 @@ function ContactPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FFFFFF] text-[#1F2937]">
+    <div className="flex min-h-screen flex-col bg-[#E8F1FC] text-[#1F2937]">
       <Navbar />
 
       <main className="flex-1">
@@ -39,11 +39,11 @@ function ContactPage() {
         </section>
 
         {/* Contact Info and Message Form Grid */}
-        <section className="px-4 py-16 sm:px-8 bg-white">
+        <section className="px-4 py-16 sm:px-8 bg-transparent">
           <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-2">
             
             {/* Message Form */}
-            <div className="rounded-2xl border-t-4 border-t-[#10B981] border-x border-b border-slate-200/60 bg-white p-8 shadow-sm">
+            <div className="rounded-2xl border-t-4 border-t-[#10B981] border-x border-b border-blue-100/50 bg-white p-8 shadow-sm">
               <div className="mb-6 flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EBF7ED] text-[#16A34A] border border-[#16A34A]/10 shadow-sm">
                   <i className="ti ti-message-dots text-lg" />
@@ -99,7 +99,7 @@ function ContactPage() {
             </div>
 
             {/* Contact Details & Map Card */}
-            <div className="rounded-2xl border-t-4 border-t-[#EF4444] border-x border-b border-slate-200/60 bg-white p-8 shadow-sm">
+            <div className="rounded-2xl border-t-4 border-t-[#EF4444] border-x border-b border-blue-100/50 bg-white p-8 shadow-sm">
               <div className="mb-6 flex items-start gap-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#EF4444] border border-[#EF4444]/10 shadow-sm">
                   <i className="ti ti-phone text-lg" />
@@ -181,7 +181,7 @@ function ContactPage() {
         </section>
 
         {/* Immediate Assistance Banner */}
-        <section className="px-4 pb-16 sm:px-8 bg-white">
+        <section className="px-4 pb-16 sm:px-8 bg-transparent">
           <div className="relative mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 rounded-2xl bg-slate-900 border border-slate-800 px-8 py-6 shadow-xl overflow-hidden">
             {/* Glowing accents */}
             <div className="absolute -top-10 -left-10 w-36 h-36 bg-[#EF4444]/20 rounded-full blur-3xl pointer-events-none" />

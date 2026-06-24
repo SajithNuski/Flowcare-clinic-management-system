@@ -31,7 +31,7 @@ function AboutPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FFFFFF] text-[#1F2937]">
+    <div className="flex min-h-screen flex-col bg-[#E8F1FC] text-[#1F2937]">
       <Navbar />
 
       <main className="flex-1">
@@ -63,7 +63,7 @@ function AboutPage() {
         </section>
 
         {/* Story Section */}
-        <section className="bg-white px-4 py-20 sm:px-8">
+        <section className="bg-transparent px-4 py-20 sm:px-8">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] border border-[#1A73E8]/10 shadow-sm">
               <i className="ti ti-archive text-lg" />
@@ -71,7 +71,7 @@ function AboutPage() {
             <h2 className="mt-4 text-3xl font-extrabold text-[#0F172A]">
               Our Story
             </h2>
-            <div className="relative mt-6 rounded-2xl border-t-4 border-t-[#1A73E8] border-x border-b border-slate-100 bg-[#F8FAFC] p-8 shadow-sm">
+            <div className="relative mt-6 rounded-2xl border-t-4 border-t-[#1A73E8] border-x border-b border-blue-100/50 bg-white p-8 shadow-sm">
               {/* Bottom decorative accents */}
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#EF4444] via-[#10B981] to-[#1A73E8] rounded-b-2xl opacity-80" />
               <p className="mx-auto max-w-3xl text-sm sm:text-base leading-relaxed text-[#4B5563]">
@@ -86,7 +86,7 @@ function AboutPage() {
         </section>
 
         {/* Core Values Section */}
-        <section className="bg-[#F8FAFC] px-4 py-20 sm:px-8 border-y border-slate-100">
+        <section className="bg-transparent px-4 py-20 sm:px-8 border-y border-blue-100/20">
           <div className="mx-auto max-w-7xl text-center">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Beliefs &amp; Culture
@@ -98,7 +98,7 @@ function AboutPage() {
               {valueItems.map((item) => (
                 <article
                   key={item.title}
-                  className={`group rounded-2xl border border-slate-200/50 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 ${item.hoverBorder}`}
+                  className={`group rounded-2xl border border-blue-100/40 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 ${item.hoverBorder}`}
                 >
                   <div className={`mx-auto flex h-12 w-12 items-center justify-center rounded-xl text-xl transition-transform duration-300 group-hover:scale-110 ${item.accent}`}>
                     <i className={`ti ${item.icon}`} />
@@ -116,7 +116,7 @@ function AboutPage() {
         </section>
 
         {/* Call to Action Section */}
-        <section className="bg-white px-4 py-20 sm:px-8">
+        <section className="bg-transparent px-4 py-20 sm:px-8">
           <div className="relative mx-auto max-w-4xl rounded-3xl bg-slate-900 px-8 py-14 text-center text-white shadow-xl sm:px-12 overflow-hidden border border-slate-800">
             {/* Glowing red, green, and blue accents */}
             <div className="absolute -top-12 -left-12 w-48 h-48 bg-[#EF4444]/20 rounded-full blur-3xl pointer-events-none" />

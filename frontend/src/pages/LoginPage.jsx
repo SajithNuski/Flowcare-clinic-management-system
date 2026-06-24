@@ -58,8 +58,8 @@ function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      <div className="mx-auto flex w-full max-w-5xl overflow-hidden rounded-[24px] bg-white border border-slate-200/60 shadow-[0_20px_50px_rgba(15,23,42,0.06)] min-h-[600px]">
+    <div className="min-h-screen bg-[#E8F1FC] flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto flex w-full max-w-5xl overflow-hidden rounded-[24px] bg-white border border-blue-100/60 shadow-[0_20px_50px_rgba(15,23,42,0.06)] min-h-[600px]">
         
         {/* Left Hero Panel */}
         <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-[#1A73E8] to-[#1557B0] p-12 text-white sm:flex overflow-hidden">

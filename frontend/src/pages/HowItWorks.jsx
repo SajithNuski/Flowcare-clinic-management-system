@@ -73,7 +73,7 @@ function HowItWorks() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FFFFFF] text-[#1F2937]">
+    <div className="flex min-h-screen flex-col bg-[#E8F1FC] text-[#1F2937]">
       <Navbar />
 
       <main className="flex-1">
@@ -105,7 +105,7 @@ function HowItWorks() {
         </section>
 
         {/* 4-Step Care Process Section */}
-        <section className="px-4 py-20 sm:px-8 bg-white">
+        <section className="px-4 py-20 sm:px-8 bg-transparent">
           <div className="mx-auto max-w-4xl text-center">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Step-by-Step Guide
@@ -126,14 +126,14 @@ function HowItWorks() {
                       <div className={`mb-4 h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-full border-2 font-bold shadow-sm font-sans text-sm ${s.bulletClass}`}>
                         {s.number}
                       </div>
-                      <div className="flex-1 w-[2px] bg-slate-100" />
+                      <div className="flex-1 w-[2px] bg-blue-200/40" />
                     </div>
                   </div>
 
                   <div
                     data-idx={idx}
                     ref={(el) => (refs.current[idx] = el)}
-                    className={`group ml-0 md:ml-16 flex-1 transform rounded-2xl border border-slate-200/50 bg-white p-8 shadow-sm transition-all duration-700 ease-out ${
+                    className={`group ml-0 md:ml-16 flex-1 transform rounded-2xl border border-blue-100/40 bg-white p-8 shadow-sm transition-all duration-700 ease-out ${
                       visible[idx]
                         ? "opacity-100 translate-y-0"
                         : "opacity-0 translate-y-6"
@@ -156,9 +156,9 @@ function HowItWorks() {
         </section>
 
         {/* CTA Banner Section */}
-        <section className="px-4 pb-20 sm:px-8 bg-white">
+        <section className="px-4 pb-20 sm:px-8 bg-transparent">
           <div className="mx-auto max-w-5xl">
-            <div className="mx-auto rounded-[24px] overflow-hidden shadow-xl border border-slate-100 md:max-w-4xl bg-white">
+            <div className="mx-auto rounded-[24px] overflow-hidden shadow-xl border border-blue-100/30 md:max-w-4xl bg-white">
               <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className="relative bg-slate-900 p-8 sm:p-10 text-white flex flex-col justify-center overflow-hidden border border-slate-800">
                   {/* Glowing red, green, and blue accents */}

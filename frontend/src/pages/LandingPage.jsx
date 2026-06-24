@@ -57,14 +57,6 @@ const featureItems = [
     text: "Qualified MBBS doctors with years of Uva Province experience",
     hoverBorder: "hover:border-[#EF4444]/30 hover:shadow-[0_15px_30px_rgba(239,68,68,0.08)]",
   },
-  {
-    icon: "ti-clock",
-    accent: "rgba(16,185,129,0.06)",
-    color: "#10B981",
-    title: "Minimal Waiting Time",
-    text: "Smart queue system keeps average wait under 25 minutes",
-    hoverBorder: "hover:border-[#10B981]/30 hover:shadow-[0_15px_30px_rgba(16,185,129,0.08)]",
-  },
 ];
 
 const serviceItems = [
@@ -234,7 +226,7 @@ function LandingPage() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FFFFFF] text-[#1F2937]">
+    <div className="flex min-h-screen flex-col bg-[#E8F1FC] text-[#1F2937]">
       <Navbar />
 
       <main className="flex-1">
@@ -252,12 +244,7 @@ function LandingPage() {
 
           <div className="absolute inset-0 z-10 flex items-center justify-center px-4 sm:px-8">
             <div className="mx-auto flex max-w-4xl flex-col items-center text-center text-white">
-              <div className="bg-gradient-to-r from-[#EF4444] via-[#10B981] to-[#1A73E8] p-[1.5px] rounded-2xl mb-6 shadow-[0_4px_20px_rgba(239,68,68,0.25)]">
-                <div className="flex items-center gap-3 rounded-[15px] bg-[#0E1E38]/90 px-4 py-2 text-xs font-bold uppercase tracking-[0.1em] text-[#E8F0FE] backdrop-blur-md">
-                  <img src={ashiniLogo} alt="Logo" className="h-6 w-auto object-contain bg-white rounded p-0.5" />
-                  <span>ASHINI Family Clinic Center</span>
-                </div>
-              </div>
+
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-white drop-shadow-md sm:text-5xl lg:text-6xl leading-[1.15]">
                 Quality Healthcare,<br className="hidden sm:inline" /> Now Easier to Access
               </h1>
@@ -318,8 +305,8 @@ function LandingPage() {
         </section>
 
         {/* Doctor Showcase Section */}
-        <section className="bg-[#FFFFFF] px-4 py-20 sm:px-8">
-          <div className="mx-auto max-w-7xl rounded-[24px] bg-[#F8FAFC] px-6 py-14 shadow-[0_20px_50px_rgba(15,23,42,0.02)] border border-slate-100/80 sm:px-8 lg:px-12 lg:py-16">
+        <section className="bg-transparent px-4 py-20 sm:px-8">
+          <div className="mx-auto max-w-7xl rounded-[24px] bg-white px-6 py-14 shadow-[0_15px_30px_rgba(26,115,232,0.05)] border border-blue-100/60 sm:px-8 lg:px-12 lg:py-16">
             <div className="mx-auto max-w-3xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A73E8]">
                 <i className="ti ti-shield-check" />
@@ -379,7 +366,7 @@ function LandingPage() {
         </section>
 
         {/* Why Choose Us Section */}
-        <section className="bg-[#F8FAFC] px-4 py-20 sm:px-8 border-y border-slate-100">
+        <section className="bg-transparent px-4 py-20 sm:px-8 border-y border-blue-100/20">
           <div className="mx-auto max-w-7xl text-center">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Why Choose Us
@@ -416,7 +403,7 @@ function LandingPage() {
         </section>
 
         {/* Our Services Section */}
-        <section className="bg-white px-4 py-20 sm:px-8">
+        <section className="bg-transparent px-4 py-20 sm:px-8">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
 
             {/* Left Column: Services */}
@@ -435,7 +422,7 @@ function LandingPage() {
                 {serviceItems.map((service) => (
                   <div
                     key={service}
-                    className="flex items-center gap-3 rounded-xl border border-slate-100 p-3 transition-colors duration-200 hover:bg-[#F8FAFC]"
+                    className="flex items-center gap-3 bg-white rounded-xl border border-blue-100/40 p-3 shadow-sm transition-all duration-200 hover:bg-blue-50/50 hover:border-blue-200/60"
                   >
                     <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#EAFAF1] text-[#2ECC71]">
                       <i className="ti ti-check text-xs font-bold" />
@@ -496,7 +483,7 @@ function LandingPage() {
         </section>
 
         {/* How It Works Section */}
-        <section className="bg-[#F8FAFC] px-4 py-20 sm:px-8 border-t border-slate-100">
+        <section className="bg-transparent px-4 py-20 sm:px-8 border-t border-blue-100/20">
           <div className="mx-auto max-w-7xl text-center">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Simple Process
@@ -550,10 +537,10 @@ function LandingPage() {
         </section>
 
         {/* Contact Info Grid */}
-        <section className="bg-white border-t border-slate-100 px-4 py-16 sm:px-8">
+        <section className="bg-transparent border-t border-blue-100/20 px-4 py-16 sm:px-8">
           <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Opening Hours */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#10B981]/25">
+            <div className="group flex items-start gap-4 rounded-2xl border border-blue-100/40 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-200/50">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EBF7ED] text-[#16A34A] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-clock text-lg" />
               </div>
@@ -573,7 +560,7 @@ function LandingPage() {
             </div>
 
             {/* Contact Us */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#EF4444]/25">
+            <div className="group flex items-start gap-4 rounded-2xl border border-blue-100/40 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-200/50">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#EF4444] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-phone text-lg" />
               </div>
@@ -595,7 +582,7 @@ function LandingPage() {
             </div>
 
             {/* Find Us */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 hover:shadow-md hover:border-[#1A73E8]/25 col-span-1 sm:col-span-2 lg:col-span-1">
+            <div className="group flex items-start gap-4 rounded-2xl border border-blue-100/40 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-200/50 col-span-1 sm:col-span-2 lg:col-span-1">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-map-pin text-lg" />
               </div>
