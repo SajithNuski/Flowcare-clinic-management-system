@@ -25,11 +25,13 @@ CREATE TABLE doctors (
 	date_of_birth DATE NOT NULL,
 	gender ENUM('male','female','other') NOT NULL,
 	phone VARCHAR(15) NOT NULL,
+	address VARCHAR(255) DEFAULT NULL,
 	email VARCHAR(100) UNIQUE,
 	password VARCHAR(255) NOT NULL,
 	status ENUM('active','inactive') DEFAULT 'active',
 	specialisation VARCHAR(100),
 	working_days VARCHAR(50) DEFAULT 'Mon,Tue,Wed,Thu,Fri',
+	working_time VARCHAR(100) DEFAULT NULL,
 	bio TEXT,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
@@ -42,6 +44,7 @@ CREATE TABLE receptionist (
 	date_of_birth DATE NOT NULL,
 	gender ENUM('male','female','other') NOT NULL,
 	phone VARCHAR(15) NOT NULL,
+	address VARCHAR(255) DEFAULT NULL,
 	email VARCHAR(100) UNIQUE,
 	password VARCHAR(255) NOT NULL,
 	status ENUM('active','inactive') DEFAULT 'active',

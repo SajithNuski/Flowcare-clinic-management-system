@@ -9,7 +9,7 @@ export default defineConfig({
       // So fetch('/api/auth/login.php') actually calls
       // http://localhost/flowcare/backend/api/auth/login.php
       "/api": {
-        target: "http://localhost",
+        target: "http://127.0.0.1",
         rewrite: (path) => path.replace("/api", "/flowcare/backend/api"),
         changeOrigin: true,
       },

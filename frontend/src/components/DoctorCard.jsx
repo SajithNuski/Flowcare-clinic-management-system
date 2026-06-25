@@ -37,6 +37,12 @@ function DoctorCard({ doctor }) {
           <i className="ti ti-calendar text-[#9CA3AF]" />
           <span>{doctor.working_days || "Mon, Tue, Wed, Thu, Fri"}</span>
         </div>
+        {doctor.working_time && (
+          <div className="flex items-start gap-2">
+            <i className="ti ti-clock text-[#9CA3AF]" />
+            <span>{doctor.working_time}</span>
+          </div>
+        )}
         <p className="leading-6 text-[#4B5563]">
           {doctor.bio || "No bio available."}
         </p>

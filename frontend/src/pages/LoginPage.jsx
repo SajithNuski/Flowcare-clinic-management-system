@@ -133,14 +133,14 @@ function LoginPage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#4B5563] uppercase tracking-wider">
-                  Email Address
+                  Email Address / NIC Number
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   required
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="name@example.com"
+                  placeholder="e.g. name@example.com or 123456789V"
                   className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10"
                 />
               </div>

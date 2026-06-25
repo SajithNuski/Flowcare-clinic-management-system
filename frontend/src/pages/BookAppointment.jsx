@@ -520,9 +520,17 @@ function BookAppointment() {
                                     {doc.bio && (
                                       <p className="text-xs text-slate-400 leading-normal line-clamp-2 mt-1">{doc.bio}</p>
                                     )}
-                                    <div className="flex items-center gap-1 text-[10px] text-slate-500 bg-slate-100 rounded-lg px-2 py-0.5 mt-2 max-w-fit">
-                                      <i className="ti ti-calendar" />
-                                      <span>Works: {doc.working_days}</span>
+                                    <div className="flex flex-wrap gap-1.5 mt-2">
+                                      <div className="flex items-center gap-1 text-[10px] text-slate-500 bg-slate-100 rounded-lg px-2 py-0.5 max-w-fit">
+                                        <i className="ti ti-calendar" />
+                                        <span>Works: {doc.working_days}</span>
+                                      </div>
+                                      {doc.working_time && (
+                                        <div className="flex items-center gap-1 text-[10px] text-slate-500 bg-slate-100 rounded-lg px-2 py-0.5 max-w-fit">
+                                          <i className="ti ti-clock" />
+                                          <span>Hours: {doc.working_time}</span>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
                                   {isSel && (
@@ -570,7 +578,10 @@ function BookAppointment() {
                       <div>
                         <div className="text-[10px] uppercase font-bold text-slate-400">Booking With:</div>
                         <div className="text-sm font-bold text-slate-800">{selectedDoctor.full_name}</div>
-                        <div className="text-xs text-slate-500">Scheduled days: {selectedDoctorWorkingDays}</div>
+                        <div className="text-xs text-slate-500">
+                          Scheduled days: {selectedDoctorWorkingDays}
+                          {selectedDoctor.working_time && ` | Hours: ${selectedDoctor.working_time}`}
+                        </div>
                       </div>
                     </div>
                   )}

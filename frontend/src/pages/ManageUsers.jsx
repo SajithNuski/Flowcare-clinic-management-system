@@ -12,6 +12,7 @@ function ManageUsers() {
   const [staff, setStaff] = useState([])
   const [loading, setLoading] = useState(true)
   const [showAddForm, setShowAddForm] = useState(false)
+  const [showNewUserPassword, setShowNewUserPassword] = useState(false)
   const [activeTab, setActiveTab] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [error, setError] = useState('')
@@ -21,9 +22,12 @@ function ManageUsers() {
     email: '',
     password: '',
     phone: '',
+    nic: '',
+    address: '',
     role: 'doctor',
     specialisation: '',
-    working_days: []
+    working_days: [],
+    working_time: ''
   })
 
   // This useEffect fetches staff users once when the component mounts.
@@ -66,14 +70,51 @@ function ManageUsers() {
     setSuccess('')
 
     // Validate that required fields are filled.
-    if (!newUser.full_name || !newUser.email || !newUser.password || !newUser.phone) {
-      setError('Full name, email, password, and phone number are required.')
+    if (!newUser.full_name || !newUser.email || !newUser.password || !newUser.phone || !newUser.nic || !newUser.address) {
+      setError('Full name, email, password, phone, NIC, and address are required.')
       return
     }
 
-    // Validate doctor specialisation if the doctor role is selected.
+    // Validate phone number format (must start with 07 and contain 10 digits)
+    if (!/^07\d{8}$/.test(newUser.phone)) {
+      setError('Phone number must start with 07 and contain 10 digits (e.g. 0771234567).')
+      return
+    }
+
+    // Validate NIC format (9 digits + V/X or 12 digits)
+    if (!/^(?:\d{9}[VvXx]|\d{12})$/.test(newUser.nic)) {
+      setError('Invalid NIC format. Please enter a valid Sri Lankan NIC (9 digits + V/X or 12 digits).')
+      return
+    }
+
+    // Validate password complexity
+    const pwd = newUser.password
+    const minLength = 8
+    const hasUpper = /[A-Z]/.test(pwd)
+    const hasLower = /[a-z]/.test(pwd)
+    const hasDigit = /[0-9]/.test(pwd)
+    const hasSpecial = /[!@#\$%\^&\*\(\)\-_=+\[\]{};:'"\\|,.<>\/?]/.test(pwd)
+
+    if (
+      pwd.length < minLength ||
+      !hasUpper ||
+      !hasLower ||
+      !hasDigit ||
+      !hasSpecial
+    ) {
+      setError(
+        `Password must be at least ${minLength} characters and include uppercase, lowercase, a number, and a special character.`
+      )
+      return
+    }
+
+    // Validate doctor specialisation and working time if the doctor role is selected.
     if (newUser.role === 'doctor' && !newUser.specialisation) {
       setError('Doctor specialisation is required.')
+      return
+    }
+    if (newUser.role === 'doctor' && !newUser.working_time) {
+      setError('Doctor working time / hours is required.')
       return
     }
 
@@ -84,9 +125,12 @@ function ManageUsers() {
         email: newUser.email,
         password: newUser.password,
         phone: newUser.phone,
+        nic: newUser.nic,
+        address: newUser.address,
         role: newUser.role,
         specialisation: newUser.role === 'doctor' ? newUser.specialisation : '',
-        working_days: newUser.role === 'doctor' ? newUser.working_days.join(',') : ''
+        working_days: newUser.role === 'doctor' ? newUser.working_days.join(',') : '',
+        working_time: newUser.role === 'doctor' ? newUser.working_time : ''
       }
 
       const response = await fetch('/api/admin/users.php', {
@@ -103,14 +147,18 @@ function ManageUsers() {
         setSuccess('Account created.')
         fetchStaff()
         setShowAddForm(false)
+        setShowNewUserPassword(false)
         setNewUser({
           full_name: '',
           email: '',
           password: '',
           phone: '',
+          nic: '',
+          address: '',
           role: 'doctor',
           specialisation: '',
-          working_days: []
+          working_days: [],
+          working_time: ''
         })
       } else {
         setError(data.error || 'Failed to create user.')
@@ -121,7 +169,7 @@ function ManageUsers() {
   }
 
   // Activates or deactivates a user account after requesting confirmation.
-  const handleToggleStatus = async (userId, currentStatus) => {
+  const handleToggleStatus = async (userId, role, currentStatus) => {
     setError('')
     setSuccess('')
 
@@ -137,7 +185,8 @@ function ManageUsers() {
         },
         body: JSON.stringify({
           action: 'toggle_status',
-          user_id: userId
+          user_id: userId,
+          role: role
         }),
         credentials: 'include'
       })
@@ -170,7 +219,7 @@ function ManageUsers() {
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       {/* Renders the left sidebar navigation */}
-      <Sidebar role="admin" activePage="users" />
+      <Sidebar role="admin" activePage="Staff" />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
@@ -183,7 +232,10 @@ function ManageUsers() {
                 <p className="text-sm text-gray-500">Manage doctors and receptionists</p>
               </div>
               <button
-                onClick={() => setShowAddForm(!showAddForm)}
+                onClick={() => {
+                  setShowAddForm(!showAddForm)
+                  setShowNewUserPassword(false)
+                }}
                 className="bg-[#1A73E8] hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm flex items-center font-medium cursor-pointer transition-colors"
               >
                 <i className="ti ti-plus mr-2" />
@@ -242,14 +294,25 @@ function ManageUsers() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                      <input
-                        type="password"
-                        value={newUser.password}
-                        onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
-                        className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
-                        placeholder="••••••••"
-                        required
-                      />
+                      <div className="relative">
+                        <input
+                          type={showNewUserPassword ? 'text' : 'password'}
+                          value={newUser.password}
+                          onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                          className="border border-gray-200 rounded-lg pl-3 pr-10 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                          placeholder="••••••••"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewUserPassword(!showNewUserPassword)}
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
+                          aria-label={showNewUserPassword ? 'Hide password' : 'Show password'}
+                        >
+                          <i className={showNewUserPassword ? 'ti ti-eye text-base' : 'ti ti-eye-off text-base'} />
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-gray-400 mt-1">At least 8 chars, uppercase, lowercase, number, symbol.</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
@@ -259,6 +322,28 @@ function ManageUsers() {
                         onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
                         className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
                         placeholder="0771234567"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">NIC</label>
+                      <input
+                        type="text"
+                        value={newUser.nic}
+                        onChange={(e) => setNewUser({ ...newUser, nic: e.target.value })}
+                        className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                        placeholder="e.g. 199912345678 or 991234567V"
+                        required
+                      />
+                    </div>
+                    <div className="col-span-1 md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                      <input
+                        type="text"
+                        value={newUser.address}
+                        onChange={(e) => setNewUser({ ...newUser, address: e.target.value })}
+                        className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                        placeholder="e.g. No. 12, Ward Place, Colombo"
                         required
                       />
                     </div>
@@ -287,6 +372,17 @@ function ManageUsers() {
                             onChange={(e) => setNewUser({ ...newUser, specialisation: e.target.value })}
                             className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
                             placeholder="e.g. Cardiologist, Pediatrician, General Practitioner"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Working Time / Hours</label>
+                          <input
+                            type="text"
+                            value={newUser.working_time}
+                            onChange={(e) => setNewUser({ ...newUser, working_time: e.target.value })}
+                            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                            placeholder="e.g. 08:00 AM - 04:00 PM, or Morning Shift"
                             required
                           />
                         </div>
@@ -325,9 +421,12 @@ function ManageUsers() {
                     >
                       Create Account
                     </button>
-                    <button
+                     <button
                       type="button"
-                      onClick={() => setShowAddForm(false)}
+                      onClick={() => {
+                        setShowAddForm(false)
+                        setShowNewUserPassword(false)
+                      }}
                       className="border border-gray-300 hover:bg-gray-50 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-colors"
                     >
                       Cancel
@@ -449,17 +548,28 @@ function ManageUsers() {
                               )}
                             </td>
 
-                            {/* Contact details cell */}
-                            <td className="px-4 py-3 text-gray-600 font-medium">
-                              {member.phone || '—'}
+                             {/* Contact details cell */}
+                            <td className="px-4 py-3">
+                              <div className="text-sm font-medium text-gray-800">{member.phone || '—'}</div>
+                              {member.address && <div className="text-xs text-gray-500">{member.address}</div>}
+                              {member.nic && <div className="text-xs text-gray-400">NIC: {member.nic}</div>}
                             </td>
 
                             {/* Doctor working days cell */}
                             <td className="px-4 py-3 text-xs text-gray-500">
-                              {member.role === 'doctor' && member.working_days ? (
-                                <span className="bg-gray-50 border border-gray-100 rounded px-2 py-1">
-                                  {member.working_days}
-                                </span>
+                              {member.role === 'doctor' ? (
+                                <div className="space-y-1">
+                                  {member.working_days && (
+                                    <div className="bg-gray-50 border border-gray-100 rounded px-2 py-1 inline-block">
+                                      Days: {member.working_days}
+                                    </div>
+                                  )}
+                                  {member.working_time && (
+                                    <div className="text-xs text-gray-500 font-medium mt-1">
+                                      Time: {member.working_time}
+                                    </div>
+                                  )}
+                                </div>
                               ) : '—'}
                             </td>
 
@@ -494,14 +604,14 @@ function ManageUsers() {
                                 </span>
                               ) : member.status === 'active' ? (
                                 <button
-                                  onClick={() => handleToggleStatus(member.id, 'active')}
+                                  onClick={() => handleToggleStatus(member.id, member.role, 'active')}
                                   className="text-[#E53935] hover:underline cursor-pointer bg-transparent border-none p-0 focus:outline-none"
                                 >
                                   Deactivate
                                 </button>
                               ) : (
                                 <button
-                                  onClick={() => handleToggleStatus(member.id, 'inactive')}
+                                  onClick={() => handleToggleStatus(member.id, member.role, 'inactive')}
                                   className="text-[#2ECC71] hover:underline cursor-pointer bg-transparent border-none p-0 focus:outline-none"
                                 >
                                   Activate

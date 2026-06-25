@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 $stmt = mysqli_prepare(
 	$conn,
-	"SELECT d.id AS doctor_id, d.id AS user_id, d.full_name, d.specialisation, d.working_days, d.bio FROM doctors d WHERE d.status = 'active' ORDER BY d.full_name ASC"
+	"SELECT d.id AS doctor_id, d.id AS user_id, d.full_name, d.specialisation, d.working_days, d.working_time, d.bio FROM doctors d WHERE d.status = 'active' ORDER BY d.full_name ASC"
 );
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);

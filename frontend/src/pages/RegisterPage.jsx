@@ -34,7 +34,14 @@ function RegisterPage() {
     e.preventDefault();
     setError("");
 
-    if (!form.full_name || !form.email || !form.password) {
+    if (
+      !form.full_name ||
+      !form.nic ||
+      !form.dob ||
+      !form.gender ||
+      !form.phone ||
+      !form.password
+    ) {
       setError("Please fill all required fields.");
       return;
     }
@@ -279,14 +286,14 @@ function RegisterPage() {
 
               <div>
                 <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
-                  Email Address
+                  Email Address (Optional)
                 </label>
                 <input
                   type="email"
                   value={form.email}
                   onChange={(e) => update("email", e.target.value)}
                   className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10"
-                  placeholder="name@example.com"
+                  placeholder="name@example.com (optional)"
                 />
               </div>
 

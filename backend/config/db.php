@@ -2,7 +2,7 @@
 // This file connects our PHP code to the MySQL database
 // Every other PHP file will include this file to get the $conn variable
 
-$host = "localhost";       // MySQL runs on localhost in XAMPP
+$host = "127.0.0.1";       // MySQL runs on localhost in XAMPP
 $user = "root";            // Default XAMPP MySQL username
 $password = "";            // Default XAMPP MySQL password is empty
 $database = "flowcare";    // The database name we created
