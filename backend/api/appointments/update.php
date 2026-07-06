@@ -1,5 +1,4 @@
 <?php
-// This endpoint updates appointment status or timing for receptionist and admin users.
 
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
@@ -39,10 +38,10 @@ if ($action === 'cancel') {
 	$activity_message = 'Marked appointment #' . $appointment_id . ' as no-show';
 } elseif ($action === 'reschedule') {
 	$new_date = trim($data['new_date'] ?? '');
-	$new_time_slot = trim($data['new_time_slot'] ?? '');
+	$new_appointment_time = trim($data['new_appointment_time'] ?? $data['new_time_slot'] ?? '');
 
-	if ($new_date === '' || $new_time_slot === '') {
-		respond_json(["success" => false, "error" => "New date and time slot are required"], 400);
+	if ($new_date === '' || $new_appointment_time === '') {
+		respond_json(["success" => false, "error" => "New date and appointment time are required"], 400);
 	}
 
 	$date_object = DateTime::createFromFormat('Y-m-d', $new_date);
@@ -50,8 +49,8 @@ if ($action === 'cancel') {
 		respond_json(["success" => false, "error" => "Invalid new date"], 400);
 	}
 
-	$success = $appointment->reschedule($appointment_id, $new_date, $new_time_slot);
-	$activity_message = 'Rescheduled appointment #' . $appointment_id . ' to ' . $new_date . ' ' . $new_time_slot;
+	$success = $appointment->reschedule($appointment_id, $new_date, $new_appointment_time);
+	$activity_message = 'Rescheduled appointment #' . $appointment_id . ' to ' . $new_date . ' ' . $new_appointment_time;
 } else {
 	respond_json(["success" => false, "error" => "Invalid action"], 400);
 }

@@ -1613,3 +1613,52 @@ RAW_BODY:'full_name=sajith+nuski&nic=200333013261&date_of_birth=2000-06-25&gende
 JSON_ERROR:'Syntax error'
 DECODED:NULL
 
+2026-06-25T20:56:04+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '146',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+)
+CONTENT_LENGTH:146
+RAW_BODY:'full_name=sajith+nuski&nic=200333013260&date_of_birth=2005-10-26&gender=male&phone=0771084960&email=sajithnuski878%40gmail.com&password=Nus%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-06T15:10:36+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '147',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36 Edg/150.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Not;A=Brand";v="8", "Chromium";v="150", "Microsoft Edge";v="150"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=bs05l0v0tags9rp00bovfb0sug',
+)
+CONTENT_LENGTH:147
+RAW_BODY:'full_name=sajith+nuski&nic=200333013250&date_of_birth=2016-06-16&gender=male&phone=0771084960&email=sajithnuski736%40gmail.com&password=Saji%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+

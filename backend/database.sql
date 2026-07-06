@@ -73,9 +73,10 @@ CREATE TABLE patients (
 CREATE TABLE appointments (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	patient_id INT NOT NULL,
+	patient_name VARCHAR(100) DEFAULT NULL,
 	doctor_id INT NOT NULL,
 	appointment_date DATE NOT NULL,
-	time_slot VARCHAR(10) NOT NULL,
+	appointment_time VARCHAR(100) NOT NULL,
 	visit_reason VARCHAR(100) DEFAULT 'General consultation',
 	notes TEXT,
 	status ENUM('confirmed','cancelled','rescheduled','no_show','completed') DEFAULT 'confirmed',

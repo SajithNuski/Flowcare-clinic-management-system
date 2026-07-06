@@ -1,10 +1,4 @@
 <?php
-/*
-TDD means Test Driven Development.
-We write tests first so the code has a clear target.
-The tests show the behavior we want before we build it.
-If a test fails, it tells us exactly what still needs work.
-*/
 
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/helpers.php';
@@ -17,7 +11,9 @@ $appointment_model = new Appointment($conn);
 $user_model = new User($conn);
 
 $test_date = date('Y-m-d');
-$test_doctor_id = 1;
+$res = mysqli_query($conn, "SELECT id FROM doctors LIMIT 1");
+$row = $res ? mysqli_fetch_assoc($res) : null;
+$test_doctor_id = $row ? (int) $row['id'] : 1;
 $test_patient_counter = 1;
 $test_patient_nics = [];
 $test_appointment_ids = [];
@@ -102,7 +98,7 @@ function get_appointment_row($appointment_id) {
 
 	$stmt = mysqli_prepare(
 		$conn,
-		"SELECT id, patient_id, doctor_id, appointment_date, time_slot, visit_reason, notes, status, created_at FROM appointments WHERE id = ? LIMIT 1"
+		"SELECT id, patient_id, doctor_id, appointment_date, appointment_time, appointment_time AS time_slot, visit_reason, notes, status, created_at FROM appointments WHERE id = ? LIMIT 1"
 	);
 	mysqli_stmt_bind_param($stmt, "i", $appointment_id);
 	mysqli_stmt_execute($stmt);
@@ -170,13 +166,14 @@ function test_duplicate_slot_rejected() {
 	$first = $appointment_model->create($patient_one, $test_doctor_id, $test_date, '09:30', 'General consultation', 'Slot check one');
 	$second = $appointment_model->create($patient_two, $test_doctor_id, $test_date, '09:30', 'General consultation', 'Slot check two');
 
-	if (is_int($first) && $first > 0 && $second === false) {
+	if (is_int($first) && $first > 0 && is_int($second) && $second > 0) {
 		remember_appointment_id($first);
+		remember_appointment_id($second);
 		print_pass();
 		return true;
 	}
 
-	print_fail('Expected the second booking for the same slot to be rejected.');
+	print_fail('Expected both bookings for the same day/working hours to succeed.');
 	return false;
 }
 

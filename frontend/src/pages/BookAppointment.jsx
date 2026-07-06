@@ -607,7 +607,7 @@ function BookAppointment() {
 
                     {/* Time Slot Picker */}
                     <div className="space-y-3">
-                      <label className="block text-sm font-bold text-slate-600">Available Session Slots</label>
+                      <label className="block text-sm font-bold text-slate-600">Consultand Time</label>
                       <div className="rounded-2xl border border-slate-100 bg-[#F9FAFB]/80 p-5 min-h-[140px] flex flex-col justify-center">
                         {!appointmentDate ? (
                           <div className="text-center text-xs text-slate-400 py-6">
@@ -620,29 +620,10 @@ function BookAppointment() {
                             <span className="text-xs text-slate-400">Loading session timeline...</span>
                           </div>
                         ) : slots.length > 0 ? (
-                          <div className="space-y-4">
-                            <div className="flex justify-between text-[11px] text-slate-400">
-                              <span>Clinic Hours:</span>
-                              <span className="font-bold text-slate-600">8:00 AM - 4:30 PM</span>
-                            </div>
-                            <div className="grid grid-cols-2 gap-2">
-                              {slots.map((slot) => {
-                                const isSel = selectedSlot === slot;
-                                return (
-                                  <button
-                                    key={slot}
-                                    type="button"
-                                    onClick={() => setSelectedSlot(slot)}
-                                    className={`py-2 px-3.5 rounded-xl border text-xs font-bold transition-all text-center ${
-                                      isSel
-                                        ? "bg-[#E8F0FE] border-[#1A73E8] text-[#1A73E8] shadow-sm font-black"
-                                        : "bg-white border-slate-150 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
-                                    }`}
-                                  >
-                                    {formatTime(slot)}
-                                  </button>
-                                );
-                              })}
+                          <div className="text-center py-6 animate-fadeIn">
+                            <i className="ti ti-clock text-4xl text-[#1A73E8] block mb-2.5 opacity-85" />
+                            <div className="text-2xl font-black text-slate-800 tracking-tight">
+                              {slots[0]}
                             </div>
                           </div>
                         ) : (
