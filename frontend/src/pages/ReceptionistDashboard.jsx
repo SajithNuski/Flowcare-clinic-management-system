@@ -12,6 +12,8 @@ import { getDoctors } from "../api/doctors";
 import { getReceptionistStats } from "../api/receptionist";
 import { searchPatientByNic, searchPatients } from "../api/patients";
 import { registerUser } from "../api/auth";
+import { getAnnouncements } from "../api/admin";
+
 
 function ReceptionistDashboard() {
   const [stats, setStats] = useState({
@@ -31,6 +33,7 @@ function ReceptionistDashboard() {
 
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [doctors, setDoctors] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Walk-in modal state
@@ -80,10 +83,11 @@ function ReceptionistDashboard() {
     }
     const targetDate = date !== null ? date : selectedDate;
     try {
-      const [statsRes, queueRes, appointmentsRes] = await Promise.all([
+      const [statsRes, queueRes, appointmentsRes, annRes] = await Promise.all([
         getReceptionistStats(),
         getLiveQueue(),
         getTodayAppointments(targetDate),
+        getAnnouncements(),
       ]);
 
       if (statsRes?.success) {
@@ -97,6 +101,10 @@ function ReceptionistDashboard() {
       if (appointmentsRes?.success) {
         console.log("TODAY APPOINTMENTS:", appointmentsRes.appointments);
         setTodayAppointments(appointmentsRes.appointments);
+      }
+
+      if (annRes?.success) {
+        setAnnouncements(annRes.announcements || []);
       }
     } catch (err) {
       console.error("Error fetching receptionist dashboard data", err);
@@ -605,6 +613,43 @@ function ReceptionistDashboard() {
               </div>
 
             </div>
+
+            {/* Clinic Announcements Section */}
+            <section className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mt-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <i className="ti ti-bell-ringing text-[#1A73E8]" />
+                Clinic Announcements
+              </h2>
+              {announcements.length === 0 ? (
+                <div className="text-center py-6 text-slate-400 text-sm font-medium">
+                  No announcements published yet.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {announcements.map((ann) => (
+                    <div
+                      key={ann.id}
+                      className="p-4 rounded-xl border border-slate-200 bg-[#FAFBFF] hover:border-blue-100 transition-colors"
+                    >
+                      <div className="flex justify-between items-start gap-4">
+                        <h3 className="text-sm font-bold text-slate-800 leading-tight">
+                          {ann.title}
+                        </h3>
+                        <span className="text-[10px] text-slate-400 font-semibold shrink-0">
+                          {new Date(ann.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-650 leading-relaxed mt-2 whitespace-pre-wrap">
+                        {ann.message}
+                      </p>
+                      <span className="block text-[9px] text-[#1A73E8] font-bold mt-2">
+                        Posted by: {ann.created_by_name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
           </>
         )}
       </main>

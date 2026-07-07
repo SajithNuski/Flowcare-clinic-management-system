@@ -81,6 +81,7 @@ function Sidebar({ role, activePage }) {
         icon: "ti ti-calendar-event",
       },
       { label: "Report", to: "/admin/reports", icon: "ti ti-chart-bar" },
+      { label: "Announcements", to: "/admin/announcements", icon: "ti ti-bell" },
       { label: "Settings", to: "/admin/settings", icon: "ti ti-settings" },
     ],
   };

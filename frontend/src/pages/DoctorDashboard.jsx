@@ -5,6 +5,8 @@ import Modal from "../components/Modal";
 import { getDoctorDashboardData } from "../api/doctors";
 import { callNextPatient, completeConsultation } from "../api/queue";
 import { useAuth } from "../context/AuthContext";
+import { getAnnouncements } from "../api/admin";
+
 
 function DoctorDashboard() {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ function DoctorDashboard() {
 
   // Dashboard state
   const [dashboardData, setDashboardData] = useState(null);
+  const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -43,6 +46,12 @@ function DoctorDashboard() {
         setDashboardData(res);
       } else {
         setError(res?.error || "Failed to load dashboard data");
+      }
+
+      // Fetch announcements
+      const annRes = await getAnnouncements();
+      if (annRes?.success) {
+        setAnnouncements(annRes.announcements || []);
       }
     } catch (err) {
       setError("An error occurred while fetching dashboard data.");
@@ -392,6 +401,43 @@ function DoctorDashboard() {
               </div>
             </div>
           </div>
+
+          {/* Clinic Announcements Section */}
+          <section className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <i className="ti ti-bell-ringing text-[#1372E6]" />
+              Clinic Announcements
+            </h2>
+            {announcements.length === 0 ? (
+              <div className="text-center py-6 text-slate-400 text-sm font-medium">
+                No announcements published yet.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {announcements.map((ann) => (
+                  <div
+                    key={ann.id}
+                    className="p-4 rounded-xl border border-slate-200 bg-[#FAFBFF] hover:border-blue-100 transition-colors"
+                  >
+                    <div className="flex justify-between items-start gap-4">
+                      <h3 className="text-sm font-bold text-slate-800 leading-tight">
+                        {ann.title}
+                      </h3>
+                      <span className="text-[10px] text-slate-400 font-semibold shrink-0">
+                        {new Date(ann.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed mt-2 whitespace-pre-wrap">
+                      {ann.message}
+                    </p>
+                    <span className="block text-[9px] text-[#1372E6] font-bold mt-2">
+                      Posted by: {ann.created_by_name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
         </div>
 
         {/* Footer */}

@@ -1662,3 +1662,152 @@ RAW_BODY:'full_name=sajith+nuski&nic=200333013250&date_of_birth=2016-06-16&gende
 JSON_ERROR:'Syntax error'
 DECODED:NULL
 
+2026-07-07T11:36:14+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '156',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=pku5sl7mf35qi002agm5b353fq',
+)
+CONTENT_LENGTH:156
+RAW_BODY:'full_name=Sajith+nuski&nic=200333013260&date_of_birth=2003-06-19&gender=male&phone=kihuhhhvgvvg&email=sajithnuski878%40gmail.com&password=Sajithnuski%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T11:36:30+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '154',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=pku5sl7mf35qi002agm5b353fq',
+)
+CONTENT_LENGTH:154
+RAW_BODY:'full_name=Sajith+nuski&nic=200333013260&date_of_birth=2003-06-19&gender=male&phone=077108496l&email=sajithnuski878%40gmail.com&password=Sajithnuski%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T11:36:35+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '154',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=pku5sl7mf35qi002agm5b353fq',
+)
+CONTENT_LENGTH:154
+RAW_BODY:'full_name=Sajith+nuski&nic=200333013260&date_of_birth=2003-06-19&gender=male&phone=0771084960&email=sajithnuski878%40gmail.com&password=Sajithnuski%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T11:44:03+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '136',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+)
+CONTENT_LENGTH:136
+RAW_BODY:'full_name=fthima+Amra&nic=20039180385&date_of_birth=2003-12-09&gender=female&phone=0771234567&email=fath%40gmail.com&password=Abcd%40123'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T11:44:13+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '137',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=u0ovmbmonkpn5ahrrdehbfkim3',
+)
+CONTENT_LENGTH:137
+RAW_BODY:'full_name=fthima+Amra&nic=20039180385v&date_of_birth=2003-12-09&gender=female&phone=0771234567&email=fath%40gmail.com&password=Abcd%40123'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T11:44:38+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '135',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=u0ovmbmonkpn5ahrrdehbfkim3',
+)
+CONTENT_LENGTH:135
+RAW_BODY:'full_name=fthima+Amra&nic=662631809v&date_of_birth=2003-12-09&gender=female&phone=0771234567&email=fath%40gmail.com&password=Abcd%40123'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+

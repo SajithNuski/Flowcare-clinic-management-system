@@ -92,12 +92,16 @@ function PatientDashboard() {
     try {
       // Fetch appointments
       const apptsRes = await getMyAppointments();
-      const apptsList = Array.isArray(apptsRes) ? apptsRes : apptsRes?.appointments || [];
+      const apptsList = Array.isArray(apptsRes)
+        ? apptsRes
+        : apptsRes?.appointments || [];
       setAppointments(apptsList);
 
       // Fetch consultations
       const consRes = await getMyConsultations();
-      const consList = Array.isArray(consRes) ? consRes : consRes?.consultations || [];
+      const consList = Array.isArray(consRes)
+        ? consRes
+        : consRes?.consultations || [];
       setConsultations(consList);
 
       // Fetch Queue Status for today
@@ -133,7 +137,8 @@ function PatientDashboard() {
 
   // Handle Cancel Appointment
   const handleCancelAppointment = async (apptId) => {
-    if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
+    if (!window.confirm("Are you sure you want to cancel this appointment?"))
+      return;
 
     try {
       const res = await cancelAppointment(apptId);
@@ -155,7 +160,10 @@ function PatientDashboard() {
     try {
       const res = await updatePatientProfile(profileData);
       if (res?.success) {
-        showToast("Profile and medical history updated successfully!", "success");
+        showToast(
+          "Profile and medical history updated successfully!",
+          "success",
+        );
         // Refetch/sync user context data by refreshing session info
         const meRes = await axios.get(`${API_BASE}/auth/me.php`);
         if (meRes.data?.success) {
@@ -182,29 +190,43 @@ function PatientDashboard() {
 
     setPasswordSaving(true);
     try {
-      const res = await changePassword(passwordData.old_password, passwordData.new_password);
+      const res = await changePassword(
+        passwordData.old_password,
+        passwordData.new_password,
+      );
       if (res?.success) {
         showToast("Password updated successfully!", "success");
-        setPasswordData({ old_password: "", new_password: "", confirm_password: "" });
+        setPasswordData({
+          old_password: "",
+          new_password: "",
+          confirm_password: "",
+        });
       } else {
         showToast(res?.error || "Failed to change password.", "error");
       }
     } catch (err) {
-      showToast("Error changing password. Ensure requirements are met.", "error");
+      showToast(
+        "Error changing password. Ensure requirements are met.",
+        "error",
+      );
     } finally {
       setPasswordSaving(false);
     }
   };
 
   // Get unique doctors list from consultations for filter
-  const uniqueDoctors = [...new Set(consultations.map((c) => c.doctor_name).filter(Boolean))];
+  const uniqueDoctors = [
+    ...new Set(consultations.map((c) => c.doctor_name).filter(Boolean)),
+  ];
 
   // Filter consultations based on search query and doctor selection
   const filteredConsultations = consultations.filter((c) => {
     const matchesSearch =
-      (c.diagnosis && c.diagnosis.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (c.diagnosis &&
+        c.diagnosis.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (c.notes && c.notes.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (c.referral && c.referral.toLowerCase().includes(searchQuery.toLowerCase()));
+      (c.referral &&
+        c.referral.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesDoctor = doctorFilter ? c.doctor_name === doctorFilter : true;
 
@@ -221,8 +243,16 @@ function PatientDashboard() {
 
   // Next upcoming active appointment
   const nextAppointment = appointments
-    .filter((a) => a.status === "confirmed" && new Date(a.appointment_date) >= new Date().setHours(0,0,0,0))
-    .sort((a, b) => new Date(`${a.appointment_date} ${a.time_slot}`) - new Date(`${b.appointment_date} ${b.time_slot}`))[0];
+    .filter(
+      (a) =>
+        a.status === "confirmed" &&
+        new Date(a.appointment_date) >= new Date().setHours(0, 0, 0, 0),
+    )
+    .sort(
+      (a, b) =>
+        new Date(`${a.appointment_date} ${a.time_slot}`) -
+        new Date(`${b.appointment_date} ${b.time_slot}`),
+    )[0];
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#F8FAFC]">
@@ -231,15 +261,18 @@ function PatientDashboard() {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        
         {/* Floating Toast Notification */}
         {toast.message && (
-          <div className={`fixed top-5 right-5 z-50 flex items-center gap-2 rounded-2xl border px-4 py-3.5 shadow-xl transition-all duration-300 animate-slideIn ${
-            toast.type === "success" 
-              ? "border-[#B7E4C7] bg-[#F1FBF5] text-[#166534]" 
-              : "border-[#F5C2C7] bg-[#FDEDED] text-[#991B1B]"
-          }`}>
-            <i className={`ti ${toast.type === "success" ? "ti-circle-check" : "ti-alert-triangle"} text-lg`}></i>
+          <div
+            className={`fixed top-5 right-5 z-50 flex items-center gap-2 rounded-2xl border px-4 py-3.5 shadow-xl transition-all duration-300 animate-slideIn ${
+              toast.type === "success"
+                ? "border-[#B7E4C7] bg-[#F1FBF5] text-[#166534]"
+                : "border-[#F5C2C7] bg-[#FDEDED] text-[#991B1B]"
+            }`}
+          >
+            <i
+              className={`ti ${toast.type === "success" ? "ti-circle-check" : "ti-alert-triangle"} text-lg`}
+            ></i>
             <span className="text-sm font-semibold">{toast.message}</span>
           </div>
         )}
@@ -248,7 +281,9 @@ function PatientDashboard() {
         <header className="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-slate-800">{activeTab}</h1>
-            <p className="text-xs text-slate-400">ASHINI Family Clinic Center Portal</p>
+            <p className="text-xs text-slate-400">
+              ASHINI Family Clinic Center Portal
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full capitalize">
@@ -262,15 +297,19 @@ function PatientDashboard() {
           {loading ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center gap-3">
               <div className="animate-spin h-8 w-8 border-4 border-[#1A73E8] border-t-transparent rounded-full" />
-              <span className="text-sm text-slate-400 font-medium">Fetching details...</span>
+              <span className="text-sm text-slate-400 font-medium">
+                Fetching details...
+              </span>
             </div>
           ) : error ? (
             <div className="rounded-3xl border border-[#F5C2C7] bg-[#FDEDED] p-6 text-center max-w-xl mx-auto my-12">
               <i className="ti ti-alert-circle text-4xl text-[#DC2626] mb-3 inline-block"></i>
-              <h3 className="text-lg font-bold text-slate-800">Connection Issue</h3>
+              <h3 className="text-lg font-bold text-slate-800">
+                Connection Issue
+              </h3>
               <p className="text-sm text-slate-600 mt-1">{error}</p>
-              <button 
-                onClick={() => loadDashboardData(true)} 
+              <button
+                onClick={() => loadDashboardData(true)}
                 className="mt-4 px-5 py-2 bg-white border border-[#F5C2C7] rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
               >
                 Retry Request
@@ -285,19 +324,22 @@ function PatientDashboard() {
                   <div className="relative rounded-[2rem] overflow-hidden bg-gradient-to-r from-[#1A73E8] to-[#115EC3] p-6 sm:p-8 text-white shadow-xl shadow-blue-500/10">
                     <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
                     <div className="relative z-10 max-w-2xl">
-                      <span className="text-xs uppercase font-bold tracking-widest text-blue-200">Patient Dashboard</span>
+                      <span className="text-xs uppercase font-bold tracking-widest text-blue-200">
+                        Patient Dashboard
+                      </span>
                       <h2 className="text-2xl sm:text-3xl font-extrabold mt-1 leading-tight">
                         {getGreeting()}, {user?.full_name}!
                       </h2>
                       <p className="text-sm text-blue-100/90 mt-2 leading-relaxed">
-                        Welcome to your personal health records dashboard. Here you can track active prescriptions, review your current queue standing, and request specialized appointments.
+                        Welcome to your personal health records dashboard. Here
+                        you can track active prescriptions, review your current
+                        queue standing, and request specialized appointments.
                       </p>
                     </div>
                   </div>
 
                   {/* Top Stats Grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    
                     {/* Live Queue Status Widget */}
                     <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 flex flex-col justify-between min-h-[220px]">
                       <div>
@@ -317,39 +359,62 @@ function PatientDashboard() {
                         {queueStatus ? (
                           <div className="mt-4 grid grid-cols-3 gap-4 text-center items-center">
                             <div className="bg-slate-50/50 border border-slate-100 p-3 rounded-2xl">
-                              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Your No.</span>
-                              <span className="block text-2xl font-black text-slate-800 mt-1">#{queueStatus.queue_number}</span>
+                              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                Your No.
+                              </span>
+                              <span className="block text-2xl font-black text-slate-800 mt-1">
+                                #{queueStatus.queue_number}
+                              </span>
                             </div>
                             <div className="bg-slate-50/50 border border-slate-100 p-3 rounded-2xl">
-                              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Ahead of you</span>
-                              <span className="block text-2xl font-black text-[#1A73E8] mt-1">{queueStatus.position}</span>
+                              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                Ahead of you
+                              </span>
+                              <span className="block text-2xl font-black text-[#1A73E8] mt-1">
+                                {queueStatus.position}
+                              </span>
                             </div>
                             <div className="bg-slate-50/50 border border-slate-100 p-3 rounded-2xl">
-                              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Est. Wait</span>
+                              <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                Est. Wait
+                              </span>
                               <span className="block text-lg font-black text-slate-800 mt-1">
-                                {queueStatus.estimated_wait_minutes !== null ? `${queueStatus.estimated_wait_minutes} min` : "Calculating"}
+                                {queueStatus.estimated_wait_minutes !== null
+                                  ? `${queueStatus.estimated_wait_minutes} min`
+                                  : "Calculating"}
                               </span>
                             </div>
                           </div>
                         ) : (
                           <div className="mt-6 text-center py-4">
-                            <p className="text-sm text-slate-400 font-medium">You are not checked into the clinic queue today.</p>
-                            <p className="text-xs text-slate-400/80 mt-1">Check-in at the reception desk to join the queue when you arrive.</p>
+                            <p className="text-sm text-slate-400 font-medium">
+                              You are not checked into the clinic queue today.
+                            </p>
+                            <p className="text-xs text-slate-400/80 mt-1">
+                              Check-in at the reception desk to join the queue
+                              when you arrive.
+                            </p>
                           </div>
                         )}
                       </div>
 
                       {queueStatus && (
                         <div className="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between text-xs">
-                          <span className="text-slate-400 font-medium">Status:</span>
-                          <span className={`px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-[9px] ${
-                            queueStatus.status === "waiting" 
-                              ? "bg-amber-50 text-amber-600 border border-amber-100" 
-                              : queueStatus.status === "in_consultation"
-                              ? "bg-emerald-50 text-emerald-600 border border-emerald-100 animate-pulse"
-                              : "bg-slate-100 text-slate-600"
-                          }`}>
-                            {queueStatus.status === "in_consultation" ? "In Consultation" : queueStatus.status}
+                          <span className="text-slate-400 font-medium">
+                            Status:
+                          </span>
+                          <span
+                            className={`px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-[9px] ${
+                              queueStatus.status === "waiting"
+                                ? "bg-amber-50 text-amber-600 border border-amber-100"
+                                : queueStatus.status === "in_consultation"
+                                  ? "bg-emerald-50 text-emerald-600 border border-emerald-100 animate-pulse"
+                                  : "bg-slate-100 text-slate-600"
+                            }`}
+                          >
+                            {queueStatus.status === "in_consultation"
+                              ? "In Consultation"
+                              : queueStatus.status}
                           </span>
                         </div>
                       )}
@@ -369,8 +434,12 @@ function PatientDashboard() {
                           <div className="mt-4 space-y-3">
                             <div className="flex justify-between items-start">
                               <div>
-                                <h4 className="text-sm font-bold text-slate-800">{nextAppointment.doctor_name}</h4>
-                                <span className="text-[11px] font-semibold text-slate-400">{nextAppointment.specialisation}</span>
+                                <h4 className="text-sm font-bold text-slate-800">
+                                  {nextAppointment.doctor_name}
+                                </h4>
+                                <span className="text-[11px] font-semibold text-slate-400">
+                                  {nextAppointment.specialisation}
+                                </span>
                               </div>
                               <span className="bg-[#E8F0FE] text-[#1A73E8] px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase">
                                 {formatTime(nextAppointment.time_slot)}
@@ -378,14 +447,21 @@ function PatientDashboard() {
                             </div>
                             <div className="text-xs text-slate-500 flex items-center gap-1">
                               <i className="ti ti-calendar-time"></i>
-                              <span>Scheduled for: <strong>{nextAppointment.appointment_date}</strong></span>
+                              <span>
+                                Scheduled for:{" "}
+                                <strong>
+                                  {nextAppointment.appointment_date}
+                                </strong>
+                              </span>
                             </div>
                           </div>
                         ) : (
                           <div className="mt-6 text-center py-4">
-                            <p className="text-sm text-slate-400 font-medium">No upcoming appointments booked.</p>
-                            <button 
-                              onClick={() => navigate("/patient/book")} 
+                            <p className="text-sm text-slate-400 font-medium">
+                              No upcoming appointments booked.
+                            </p>
+                            <button
+                              onClick={() => navigate("/patient/book")}
                               className="mt-3 text-xs bg-[#E8F0FE] text-[#1A73E8] px-3.5 py-1.5 rounded-xl font-bold hover:bg-blue-100 transition"
                             >
                               Book Appointment
@@ -396,8 +472,10 @@ function PatientDashboard() {
 
                       {nextAppointment && (
                         <div className="mt-4 pt-3 border-t border-slate-50 flex justify-end">
-                          <button 
-                            onClick={() => handleCancelAppointment(nextAppointment.id)} 
+                          <button
+                            onClick={() =>
+                              handleCancelAppointment(nextAppointment.id)
+                            }
                             className="text-xs font-bold text-[#DC2626] hover:text-[#B91C1C] transition flex items-center gap-1"
                           >
                             <i className="ti ti-trash"></i> Cancel Booking
@@ -405,36 +483,41 @@ function PatientDashboard() {
                         </div>
                       )}
                     </div>
-
                   </div>
 
                   {/* Main Grid: Info Panels / Announcements */}
                   <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                    
                     {/* Clinical Summary info card */}
                     <div className="xl:col-span-5 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 space-y-4">
                       <h3 className="text-sm font-bold text-slate-700 pb-2 border-b border-slate-50 flex items-center gap-1.5">
                         <i className="ti ti-clipboard-list text-base text-[#1A73E8]"></i>
                         Patient Clinical Info
                       </h3>
-                      
+
                       <div className="space-y-3.5 text-xs">
                         <div className="flex justify-between items-center py-1.5 border-b border-slate-50">
-                          <span className="text-slate-400 font-semibold">Blood Group</span>
+                          <span className="text-slate-400 font-semibold">
+                            Blood Group
+                          </span>
                           <span className="font-bold text-slate-700 bg-red-50 text-red-600 px-2.5 py-0.5 rounded-lg border border-red-100">
                             {user?.blood_group || "Not Specified"}
                           </span>
                         </div>
                         <div className="space-y-1.5 py-1.5 border-b border-slate-50">
-                          <span className="text-slate-400 font-semibold block">Known Allergies</span>
+                          <span className="text-slate-400 font-semibold block">
+                            Known Allergies
+                          </span>
                           <p className="text-slate-700 font-medium bg-slate-50 p-2.5 rounded-xl border border-slate-100/60 leading-relaxed">
                             {user?.allergies || "No recorded allergies."}
                           </p>
                         </div>
                         <div className="space-y-1.5 py-1.5">
-                          <span className="text-slate-400 font-semibold block">Clinical Medical History</span>
+                          <span className="text-slate-400 font-semibold block">
+                            Clinical Medical History
+                          </span>
                           <p className="text-slate-700 font-medium bg-slate-50 p-2.5 rounded-xl border border-slate-100/60 leading-relaxed">
-                            {user?.medical_history || "No previous records added."}
+                            {user?.medical_history ||
+                              "No previous records added."}
                           </p>
                         </div>
                       </div>
@@ -450,12 +533,23 @@ function PatientDashboard() {
                       {announcements.length > 0 ? (
                         <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
                           {announcements.map((ann) => (
-                            <div key={ann.id} className="bg-slate-50/50 border border-slate-100 p-4 rounded-2xl space-y-1 hover:border-blue-100 hover:bg-slate-50 transition duration-200">
+                            <div
+                              key={ann.id}
+                              className="bg-slate-50/50 border border-slate-100 p-4 rounded-2xl space-y-1 hover:border-blue-100 hover:bg-slate-50 transition duration-200"
+                            >
                               <div className="flex justify-between items-start gap-4">
-                                <h4 className="text-xs font-bold text-slate-800 leading-tight">{ann.title}</h4>
-                                <span className="text-[10px] text-slate-400 shrink-0 font-medium">{new Date(ann.created_at).toLocaleDateString()}</span>
+                                <h4 className="text-xs font-bold text-slate-800 leading-tight">
+                                  {ann.title}
+                                </h4>
+                                <span className="text-[10px] text-slate-400 shrink-0 font-medium">
+                                  {new Date(
+                                    ann.created_at,
+                                  ).toLocaleDateString()}
+                                </span>
                               </div>
-                              <p className="text-xs text-slate-600 leading-relaxed pt-1 whitespace-pre-wrap">{ann.message}</p>
+                              <p className="text-xs text-slate-600 leading-relaxed pt-1 whitespace-pre-wrap">
+                                {ann.message}
+                              </p>
                               <span className="block text-[9px] text-[#1A73E8] font-semibold pt-1">
                                 Posted by: {ann.created_by_name}
                               </span>
@@ -465,11 +559,12 @@ function PatientDashboard() {
                       ) : (
                         <div className="text-center py-12">
                           <i className="ti ti-bell text-3xl text-slate-300"></i>
-                          <p className="text-xs text-slate-400 mt-2 font-medium">No announcements published yet.</p>
+                          <p className="text-xs text-slate-400 mt-2 font-medium">
+                            No announcements published yet.
+                          </p>
                         </div>
                       )}
                     </div>
-
                   </div>
                 </div>
               )}
@@ -483,15 +578,15 @@ function PatientDashboard() {
                       <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <i className="ti ti-search text-base"></i>
                       </span>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         placeholder="Search consultations by diagnosis, notes, prescription..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-sm focus:bg-white focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition duration-150"
                       />
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                       <select
                         value={doctorFilter}
@@ -500,13 +595,18 @@ function PatientDashboard() {
                       >
                         <option value="">All Doctors</option>
                         {uniqueDoctors.map((doc) => (
-                          <option key={doc} value={doc}>{doc}</option>
+                          <option key={doc} value={doc}>
+                            {doc}
+                          </option>
                         ))}
                       </select>
 
                       {(searchQuery || doctorFilter) && (
-                        <button 
-                          onClick={() => { setSearchQuery(""); setDoctorFilter(""); }}
+                        <button
+                          onClick={() => {
+                            setSearchQuery("");
+                            setDoctorFilter("");
+                          }}
                           className="text-xs font-semibold text-[#DC2626] hover:text-[#B91C1C] transition"
                         >
                           Clear Filters
@@ -519,31 +619,49 @@ function PatientDashboard() {
                   {filteredConsultations.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {filteredConsultations.map((cons) => (
-                        <div key={cons.id} className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300">
-                          
+                        <div
+                          key={cons.id}
+                          className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300"
+                        >
                           <div className="space-y-4">
                             {/* Card Header: Doctor info */}
                             <div className="flex justify-between items-start pb-3 border-b border-slate-100/60">
                               <div>
-                                <h3 className="text-sm font-bold text-slate-800">{cons.doctor_name}</h3>
-                                <p className="text-[10px] text-slate-400 font-semibold">Specialist Doctor</p>
+                                <h3 className="text-sm font-bold text-slate-800">
+                                  {cons.doctor_name}
+                                </h3>
+                                <p className="text-[10px] text-slate-400 font-semibold">
+                                  Specialist Doctor
+                                </p>
                               </div>
                               <span className="bg-blue-50 text-[#1A73E8] border border-blue-100 px-3 py-1 rounded-full text-[10px] font-bold">
-                                {new Date(cons.created_at).toLocaleDateString("en-US", { year: 'numeric', month: 'short', day: 'numeric' })}
+                                {new Date(cons.created_at).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  },
+                                )}
                               </span>
                             </div>
 
                             {/* Diagnosis Badge */}
                             <div>
-                              <span className="text-[10px] uppercase font-bold text-slate-400 block pb-1">Diagnosis</span>
+                              <span className="text-[10px] uppercase font-bold text-slate-400 block pb-1">
+                                Diagnosis
+                              </span>
                               <div className="bg-slate-50 border border-slate-100 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 inline-block">
-                                {cons.diagnosis || "No primary diagnosis recorded"}
+                                {cons.diagnosis ||
+                                  "No primary diagnosis recorded"}
                               </div>
                             </div>
 
                             {/* Prescriptions & Doctor Advice */}
                             <div className="space-y-1">
-                              <span className="text-[10px] uppercase font-bold text-slate-400 block">Prescriptions & Medical Notes</span>
+                              <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                                Prescriptions & Medical Notes
+                              </span>
                               <p className="text-xs text-slate-600 leading-relaxed bg-slate-50/50 p-3 rounded-xl border border-slate-100/30 whitespace-pre-line">
                                 {cons.notes || "No prescription notes entered."}
                               </p>
@@ -553,9 +671,12 @@ function PatientDashboard() {
                             {cons.referral && (
                               <div className="bg-[#FFF9E6] border border-[#FFEBA3] rounded-2xl p-3 text-xs">
                                 <span className="font-bold text-[#8F6B00] flex items-center gap-1.5">
-                                  <i className="ti ti-notes-medical"></i> Clinical Referral Recommendation
+                                  <i className="ti ti-notes-medical"></i>{" "}
+                                  Clinical Referral Recommendation
                                 </span>
-                                <p className="text-[#8F6B00]/90 mt-1 leading-normal font-medium">{cons.referral}</p>
+                                <p className="text-[#8F6B00]/90 mt-1 leading-normal font-medium">
+                                  {cons.referral}
+                                </p>
                               </div>
                             )}
                           </div>
@@ -565,19 +686,24 @@ function PatientDashboard() {
                             <div className="mt-6 pt-3 border-t border-slate-100/60 flex items-center justify-between text-[11px] text-slate-400">
                               <span>Inquiry Phone:</span>
                               <span className="font-bold text-slate-600 flex items-center gap-1">
-                                <i className="ti ti-phone text-xs"></i> {cons.doctor_phone}
+                                <i className="ti ti-phone text-xs"></i>{" "}
+                                {cons.doctor_phone}
                               </span>
                             </div>
                           )}
-
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-16 bg-white rounded-3xl border border-slate-100 shadow-md">
                       <i className="ti ti-heart-rate-monitor text-4xl text-slate-300"></i>
-                      <p className="text-sm text-slate-400 mt-3 font-semibold">No medical consultations matching your criteria found.</p>
-                      <p className="text-xs text-slate-400/80 mt-1">If this is incorrect, try modifying your keyword filters.</p>
+                      <p className="text-sm text-slate-400 mt-3 font-semibold">
+                        No medical consultations matching your criteria found.
+                      </p>
+                      <p className="text-xs text-slate-400/80 mt-1">
+                        If this is incorrect, try modifying your keyword
+                        filters.
+                      </p>
                     </div>
                   )}
                 </div>
@@ -586,11 +712,12 @@ function PatientDashboard() {
               {/* PANEL 3: PROFILE & MEDICAL INFO */}
               {activeTab === "Profile" && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  
                   {/* Left Column: Demographic & Clinical Profile Editor */}
                   <div className="lg:col-span-8 space-y-6">
-                    <form onSubmit={handleUpdateProfile} className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 sm:p-8 space-y-6">
-                      
+                    <form
+                      onSubmit={handleUpdateProfile}
+                      className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 sm:p-8 space-y-6"
+                    >
                       {/* section: Demographics */}
                       <div className="space-y-4">
                         <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 pb-2 border-b border-slate-100">
@@ -600,20 +727,29 @@ function PatientDashboard() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">Full Name</label>
-                            <input 
-                              type="text" 
+                            <label className="block text-xs font-bold text-slate-500">
+                              Full Name
+                            </label>
+                            <input
+                              type="text"
                               required
                               value={profileData.full_name}
-                              onChange={(e) => setProfileData({ ...profileData, full_name: e.target.value })}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  full_name: e.target.value,
+                                })
+                              }
                               className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                             />
                           </div>
 
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">National Identity Card (NIC)</label>
-                            <input 
-                              type="text" 
+                            <label className="block text-xs font-bold text-slate-500">
+                              National Identity Card (NIC)
+                            </label>
+                            <input
+                              type="text"
                               disabled
                               value={user?.nic || ""}
                               className="w-full rounded-xl border border-slate-200 bg-slate-100/60 px-4 py-2.5 text-sm text-slate-500 cursor-not-allowed outline-none"
@@ -624,23 +760,37 @@ function PatientDashboard() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">Email Address</label>
-                            <input 
-                              type="email" 
+                            <label className="block text-xs font-bold text-slate-500">
+                              Email Address
+                            </label>
+                            <input
+                              type="email"
                               required
                               value={profileData.email}
-                              onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  email: e.target.value,
+                                })
+                              }
                               className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                             />
                           </div>
 
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">Phone Number</label>
-                            <input 
-                              type="tel" 
+                            <label className="block text-xs font-bold text-slate-500">
+                              Phone Number
+                            </label>
+                            <input
+                              type="tel"
                               required
                               value={profileData.phone}
-                              onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  phone: e.target.value,
+                                })
+                              }
                               className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                             />
                           </div>
@@ -648,10 +798,17 @@ function PatientDashboard() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">Gender</label>
+                            <label className="block text-xs font-bold text-slate-500">
+                              Gender
+                            </label>
                             <select
                               value={profileData.gender}
-                              onChange={(e) => setProfileData({ ...profileData, gender: e.target.value })}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  gender: e.target.value,
+                                })
+                              }
                               className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] outline-none transition"
                             >
                               <option value="male">Male</option>
@@ -661,12 +818,19 @@ function PatientDashboard() {
                           </div>
 
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">Date of Birth</label>
-                            <input 
-                              type="date" 
+                            <label className="block text-xs font-bold text-slate-500">
+                              Date of Birth
+                            </label>
+                            <input
+                              type="date"
                               required
                               value={profileData.date_of_birth}
-                              onChange={(e) => setProfileData({ ...profileData, date_of_birth: e.target.value })}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  date_of_birth: e.target.value,
+                                })
+                              }
                               className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                             />
                           </div>
@@ -682,10 +846,17 @@ function PatientDashboard() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">Blood Group</label>
+                            <label className="block text-xs font-bold text-slate-500">
+                              Blood Group
+                            </label>
                             <select
                               value={profileData.blood_group}
-                              onChange={(e) => setProfileData({ ...profileData, blood_group: e.target.value })}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  blood_group: e.target.value,
+                                })
+                              }
                               className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] outline-none transition"
                             >
                               <option value="">Not Specified</option>
@@ -701,35 +872,56 @@ function PatientDashboard() {
                           </div>
 
                           <div className="space-y-2">
-                            <label className="block text-xs font-bold text-slate-500">Emergency Contact Number</label>
-                            <input 
-                              type="tel" 
+                            <label className="block text-xs font-bold text-slate-500">
+                              Emergency Contact Number
+                            </label>
+                            <input
+                              type="tel"
                               placeholder="e.g. 0771234567"
                               value={profileData.emergency_contact}
-                              onChange={(e) => setProfileData({ ...profileData, emergency_contact: e.target.value })}
+                              onChange={(e) =>
+                                setProfileData({
+                                  ...profileData,
+                                  emergency_contact: e.target.value,
+                                })
+                              }
                               className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                             />
                           </div>
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-xs font-bold text-slate-500">Allergies Description</label>
+                          <label className="block text-xs font-bold text-slate-500">
+                            Allergies Description
+                          </label>
                           <textarea
                             rows={2}
                             placeholder="Detail all known drug, food or environmental allergies..."
                             value={profileData.allergies}
-                            onChange={(e) => setProfileData({ ...profileData, allergies: e.target.value })}
+                            onChange={(e) =>
+                              setProfileData({
+                                ...profileData,
+                                allergies: e.target.value,
+                              })
+                            }
                             className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <label className="block text-xs font-bold text-slate-500">Medical History Summary</label>
+                          <label className="block text-xs font-bold text-slate-500">
+                            Medical History Summary
+                          </label>
                           <textarea
                             rows={3}
                             placeholder="Detail chronic illnesses, surgeries, regular medications, past treatments..."
                             value={profileData.medical_history}
-                            onChange={(e) => setProfileData({ ...profileData, medical_history: e.target.value })}
+                            onChange={(e) =>
+                              setProfileData({
+                                ...profileData,
+                                medical_history: e.target.value,
+                              })
+                            }
                             className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                           />
                         </div>
@@ -742,10 +934,11 @@ function PatientDashboard() {
                           disabled={profileSaving}
                           className="rounded-xl bg-[#1A73E8] text-white px-6 py-2.5 font-bold text-sm hover:bg-[#1557B0] transition disabled:opacity-60 shadow-lg shadow-blue-500/10"
                         >
-                          {profileSaving ? "Saving changes..." : "Save Profile Details"}
+                          {profileSaving
+                            ? "Saving changes..."
+                            : "Save Profile Details"}
                         </button>
                       </div>
-
                     </form>
                   </div>
 
@@ -758,37 +951,59 @@ function PatientDashboard() {
 
                     <form onSubmit={handleChangePassword} className="space-y-4">
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold text-slate-500">Current Password</label>
+                        <label className="block text-xs font-bold text-slate-500">
+                          Current Password
+                        </label>
                         <input
                           type="password"
                           required
                           value={passwordData.old_password}
-                          onChange={(e) => setPasswordData({ ...passwordData, old_password: e.target.value })}
+                          onChange={(e) =>
+                            setPasswordData({
+                              ...passwordData,
+                              old_password: e.target.value,
+                            })
+                          }
                           className="w-full rounded-xl border border-slate-250 px-4 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                         />
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold text-slate-500">New Password</label>
+                        <label className="block text-xs font-bold text-slate-500">
+                          New Password
+                        </label>
                         <input
                           type="password"
                           required
                           value={passwordData.new_password}
-                          onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
+                          onChange={(e) =>
+                            setPasswordData({
+                              ...passwordData,
+                              new_password: e.target.value,
+                            })
+                          }
                           className="w-full rounded-xl border border-slate-250 px-4 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                         />
                         <span className="block text-[10px] text-slate-400 leading-normal">
-                          Requires min 8 characters, uppercase, lowercase, numbers, and symbols.
+                          Requires min 8 characters, uppercase, lowercase,
+                          numbers, and symbols.
                         </span>
                       </div>
 
                       <div className="space-y-1.5">
-                        <label className="block text-xs font-bold text-slate-500">Confirm New Password</label>
+                        <label className="block text-xs font-bold text-slate-500">
+                          Confirm New Password
+                        </label>
                         <input
                           type="password"
                           required
                           value={passwordData.confirm_password}
-                          onChange={(e) => setPasswordData({ ...passwordData, confirm_password: e.target.value })}
+                          onChange={(e) =>
+                            setPasswordData({
+                              ...passwordData,
+                              confirm_password: e.target.value,
+                            })
+                          }
                           className="w-full rounded-xl border border-slate-250 px-4 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
                         />
                       </div>
@@ -798,11 +1013,12 @@ function PatientDashboard() {
                         disabled={passwordSaving}
                         className="w-full rounded-xl bg-slate-800 text-white py-2.5 text-xs font-bold hover:bg-slate-900 transition disabled:opacity-60"
                       >
-                        {passwordSaving ? "Updating password..." : "Update Password"}
+                        {passwordSaving
+                          ? "Updating password..."
+                          : "Update Password"}
                       </button>
                     </form>
                   </div>
-
                 </div>
               )}
             </>

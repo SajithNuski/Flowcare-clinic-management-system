@@ -22,6 +22,10 @@ import PatientDashboard from "./pages/PatientDashboard";
 import ManageUsers from "./pages/ManageUsers";
 import ManagePatients from "./pages/ManagePatients";
 import AdminAppointments from "./pages/AdminAppointments";
+import ClinicSettings from "./pages/ClinicSettings";
+import Announcements from "./pages/Announcements";
+
+
 
 function PageStub({ title }) {
   return (
@@ -176,7 +180,7 @@ function App() {
             path="/admin/settings"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Settings" />
+                <ClinicSettings />
               </ProtectedRoute>
             }
           />
@@ -192,7 +196,7 @@ function App() {
             path="/admin/announcements"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Announcements" />
+                <Announcements />
               </ProtectedRoute>
             }
           />
