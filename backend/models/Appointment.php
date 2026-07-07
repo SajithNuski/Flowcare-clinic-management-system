@@ -102,7 +102,7 @@ class Appointment {
 
 		mysqli_stmt_bind_param(
 			$stmt,
-			"isiisss",
+			"isissss",
 			$patient_id,
 			$patient_name,
 			$doctor_id,
