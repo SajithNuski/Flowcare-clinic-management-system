@@ -58,7 +58,7 @@ function Sidebar({ role, activePage }) {
       },
       {
         label: "All Patients",
-        to: "/doctor/consultations",
+        to: "/doctor/patients",
         icon: "ti ti-users",
       },
       {

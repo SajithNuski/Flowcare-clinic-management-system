@@ -1811,3 +1811,276 @@ RAW_BODY:'full_name=fthima+Amra&nic=662631809v&date_of_birth=2003-12-09&gender=f
 JSON_ERROR:'Syntax error'
 DECODED:NULL
 
+2026-07-07T14:40:52+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '154',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=nnihevavht5uu0sh02tomehv2q',
+)
+CONTENT_LENGTH:154
+RAW_BODY:'full_name=Sajith+Nuski&nic=200333013230&date_of_birth=2003-01-07&gender=male&phone=0771084999&email=sajithnuski878%40gmail.com&password=Sajithnuski%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T15:37:45+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '148',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=sl322atb8bhqmdgt1bb38nboh1',
+)
+CONTENT_LENGTH:148
+RAW_BODY:'full_name=doncy+gunaa&nic=200333013250&date_of_birth=2001-11-03&gender=female&phone=070259545y&email=sajithnuski878%40gmail.com&password=Doncy123%40'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T15:37:54+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '147',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=sl322atb8bhqmdgt1bb38nboh1',
+)
+CONTENT_LENGTH:147
+RAW_BODY:'full_name=doncy+gunaa&nic=200333013250&date_of_birth=2001-11-03&gender=female&phone=070259545&email=sajithnuski878%40gmail.com&password=Doncy123%40'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T15:38:00+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '148',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=sl322atb8bhqmdgt1bb38nboh1',
+)
+CONTENT_LENGTH:148
+RAW_BODY:'full_name=doncy+gunaa&nic=200333013250&date_of_birth=2001-11-03&gender=female&phone=0702595451&email=sajithnuski878%40gmail.com&password=Doncy123%40'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T15:38:10+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '148',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=sl322atb8bhqmdgt1bb38nboh1',
+)
+CONTENT_LENGTH:148
+RAW_BODY:'full_name=doncy+gunaa&nic=200333013250&date_of_birth=2001-11-03&gender=female&phone=0702595451&email=sajithnuski789%40gmail.com&password=Doncy123%40'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-07T15:58:04+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '138',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+)
+CONTENT_LENGTH:138
+RAW_BODY:'full_name=G.D.Lambert&nic=200180801348&date_of_birth=2001-11-03&gender=female&phone=0702594456&email=doncyguna%40gmail&password=Doncy%4003'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-08T07:50:33+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '140',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+)
+CONTENT_LENGTH:140
+RAW_BODY:'full_name=GDLambert&nic=200180801348&date_of_birth=2001-11-03&gender=female&phone=0702594456&email=doncyguna%40gmail.com&password=Doncy%4003'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-08T11:30:54+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '152',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=qnjboee5utco617675e2s3llsc',
+)
+CONTENT_LENGTH:152
+RAW_BODY:'full_name=MNMS+NUSKY&nic=200333013280&date_of_birth=2000-11-25&gender=male&phone=0771084960&email=sajithnuski878%40gmail.com&password=Sajithnuski%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-08T11:31:10+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '152',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=qnjboee5utco617675e2s3llsc',
+)
+CONTENT_LENGTH:152
+RAW_BODY:'full_name=MNMS+NUSKY&nic=200333013280&date_of_birth=2000-11-25&gender=male&phone=0771084960&email=sajithnuski565%40gmail.com&password=Sajithnuski%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-08T11:55:07+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '140',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=782fash8i79abfruthglaf4h3g',
+)
+CONTENT_LENGTH:140
+RAW_BODY:'full_name=GDLambert&nic=200180801348&date_of_birth=2001-11-03&gender=female&phone=0702594456&email=doncyguna%40gmail.com&password=Doncy%4003'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-07-08T13:09:59+02:00
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '141',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=t7frv0enm13h00ajjn5mtle7le',
+)
+CONTENT_LENGTH:141
+RAW_BODY:'full_name=sajith&nic=851420594v&date_of_birth=2000-11-20&gender=male&phone=0771084960&email=sajithnuski111%40gmail.com&password=Sajith%401125'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+

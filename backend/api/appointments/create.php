@@ -16,7 +16,7 @@ require_once __DIR__ . '/../../models/Appointment.php';
 
 $data = get_request_body();
 
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['patient', 'receptionist'], true)) {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['patient', 'receptionist', 'admin'], true)) {
 	respond_json(["success" => false, "error" => "Access denied"], 403);
 }
 
@@ -48,7 +48,7 @@ $appointment = new Appointment($conn);
 $patient_id = 0;
 $patient_name = isset($data['patient_name']) ? trim($data['patient_name']) : '';
 
-if ($_SESSION['role'] === 'receptionist') {
+if ($_SESSION['role'] === 'receptionist' || $_SESSION['role'] === 'admin') {
 	$patient_email = isset($data['email']) ? trim($data['email']) : '';
 	$patient_phone = isset($data['phone']) ? trim($data['phone']) : '';
 

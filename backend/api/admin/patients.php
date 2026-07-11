@@ -10,7 +10,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 	session_start();
 }
 
-require_role('admin');
+require_any_role(['admin', 'doctor']);
 
 $user_model = new User($conn);
 
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			respond_json(["success" => false, "error" => "Could not update status"], 400);
 		}
 
-		log_activity($conn, (int) $_SESSION['user_id'], 'admin_toggle_patient_status', 'Toggled status for patient #' . $patient_id . ' to ' . $new_status);
+		log_activity($conn, (int) $_SESSION['user_id'], $_SESSION['role'] . '_toggle_patient_status', 'Toggled status for patient #' . $patient_id . ' to ' . $new_status);
 
 		respond_json(["success" => true, "message" => "Patient status updated", "status" => $new_status]);
 	}

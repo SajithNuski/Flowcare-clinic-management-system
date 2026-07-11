@@ -190,7 +190,7 @@ function ManagePatients() {
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
       {/* Sidebar Navigation */}
-      <Sidebar role="admin" activePage="Patients" />
+      <Sidebar role={currentUser?.role || "admin"} activePage={currentUser?.role === "doctor" ? "All Patients" : "Patients"} />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
