@@ -166,14 +166,13 @@ function test_duplicate_slot_rejected() {
 	$first = $appointment_model->create($patient_one, $test_doctor_id, $test_date, '09:30', 'General consultation', 'Slot check one');
 	$second = $appointment_model->create($patient_two, $test_doctor_id, $test_date, '09:30', 'General consultation', 'Slot check two');
 
-	if (is_int($first) && $first > 0 && is_int($second) && $second > 0) {
+	if (is_int($first) && $first > 0 && $second === false) {
 		remember_appointment_id($first);
-		remember_appointment_id($second);
 		print_pass();
 		return true;
 	}
 
-	print_fail('Expected both bookings for the same day/working hours to succeed.');
+	print_fail('Expected the second booking for the same slot to be rejected.');
 	return false;
 }
 

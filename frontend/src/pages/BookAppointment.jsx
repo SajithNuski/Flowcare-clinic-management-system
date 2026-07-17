@@ -620,10 +620,28 @@ function BookAppointment() {
                             <span className="text-xs text-slate-400">Loading session timeline...</span>
                           </div>
                         ) : slots.length > 0 ? (
-                          <div className="text-center py-6 animate-fadeIn">
-                            <i className="ti ti-clock text-4xl text-[#1A73E8] block mb-2.5 opacity-85" />
-                            <div className="text-2xl font-black text-slate-800 tracking-tight">
-                              {slots[0]}
+                          <div className="space-y-3">
+                            <div className="text-xs text-slate-500 mb-1">
+                              Select an available session slot:
+                            </div>
+                            <div className="grid grid-cols-3 gap-2 max-h-[220px] overflow-y-auto pr-1">
+                              {slots.map((slot) => {
+                                const isSel = selectedSlot === slot;
+                                return (
+                                  <button
+                                    key={slot}
+                                    type="button"
+                                    onClick={() => setSelectedSlot(slot)}
+                                    className={`py-2 px-3 text-xs font-bold rounded-xl border text-center transition-all duration-200 cursor-pointer ${
+                                      isSel
+                                        ? "bg-[#1A73E8] text-white border-[#1A73E8] shadow-md shadow-blue-500/10 scale-[1.03]"
+                                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300"
+                                    }`}
+                                  >
+                                    {formatTime(slot)}
+                                  </button>
+                                );
+                              })}
                             </div>
                           </div>
                         ) : (

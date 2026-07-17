@@ -83,7 +83,19 @@ class Appointment {
 	}
 
 	public function check_slot_available($doctor_id, $appointment_date, $appointment_time) {
-		return true;
+		$stmt = mysqli_prepare(
+			$this->conn,
+			"SELECT COUNT(*) as count FROM appointments WHERE doctor_id = ? AND appointment_date = ? AND appointment_time = ? AND status IN ('confirmed', 'rescheduled', 'completed')"
+		);
+		if (!$stmt) {
+			return false;
+		}
+		mysqli_stmt_bind_param($stmt, "iss", $doctor_id, $appointment_date, $appointment_time);
+		mysqli_stmt_execute($stmt);
+		$result = mysqli_stmt_get_result($stmt);
+		$row = $result ? mysqli_fetch_assoc($result) : null;
+		mysqli_stmt_close($stmt);
+		return ($row && (int)$row['count'] === 0);
 	}
 
 	public function create($patient_id, $doctor_id, $appointment_date, $appointment_time, $visit_reason, $notes = '', $patient_name = null) {

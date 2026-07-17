@@ -17,7 +17,9 @@ $queue_model = new Queue($conn);
 $user_model = new User($conn);
 
 $test_date = date('Y-m-d');
-$test_doctor_id = 1;
+$res = mysqli_query($conn, "SELECT id FROM doctors LIMIT 1");
+$row = $res ? mysqli_fetch_assoc($res) : null;
+$test_doctor_id = $row ? (int) $row['id'] : 1;
 $test_patients = [];
 $test_queue_ids = [];
 

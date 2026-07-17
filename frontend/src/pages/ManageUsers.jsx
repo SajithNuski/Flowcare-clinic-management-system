@@ -29,6 +29,8 @@ function ManageUsers() {
     working_days: [],
     working_time: ''
   })
+  const [startTime, setStartTime] = useState('09:00')
+  const [endTime, setEndTime] = useState('17:00')
 
   // This useEffect fetches staff users once when the component mounts.
   useEffect(() => {
@@ -113,8 +115,8 @@ function ManageUsers() {
       setError('Doctor specialisation is required.')
       return
     }
-    if (newUser.role === 'doctor' && !newUser.working_time) {
-      setError('Doctor working time / hours is required.')
+    if (newUser.role === 'doctor' && (!startTime || !endTime)) {
+      setError('Doctor start and end working times are required.')
       return
     }
 
@@ -130,7 +132,7 @@ function ManageUsers() {
         role: newUser.role,
         specialisation: newUser.role === 'doctor' ? newUser.specialisation : '',
         working_days: newUser.role === 'doctor' ? newUser.working_days.join(',') : '',
-        working_time: newUser.role === 'doctor' ? newUser.working_time : ''
+        working_time: newUser.role === 'doctor' ? `${startTime}-${endTime}` : ''
       }
 
       const response = await fetch('/api/admin/users.php', {
@@ -148,6 +150,8 @@ function ManageUsers() {
         fetchStaff()
         setShowAddForm(false)
         setShowNewUserPassword(false)
+        setStartTime('09:00')
+        setEndTime('17:00')
         setNewUser({
           full_name: '',
           email: '',
@@ -375,16 +379,27 @@ function ManageUsers() {
                             required
                           />
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Working Time / Hours</label>
-                          <input
-                            type="text"
-                            value={newUser.working_time}
-                            onChange={(e) => setNewUser({ ...newUser, working_time: e.target.value })}
-                            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
-                            placeholder="e.g. 08:00 AM - 04:00 PM, or Morning Shift"
-                            required
-                          />
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
+                            <input
+                              type="time"
+                              value={startTime}
+                              onChange={(e) => setStartTime(e.target.value)}
+                              className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 bg-white"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">End Time</label>
+                            <input
+                              type="time"
+                              value={endTime}
+                              onChange={(e) => setEndTime(e.target.value)}
+                              className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 bg-white"
+                              required
+                            />
+                          </div>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">Working Days</label>
