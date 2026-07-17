@@ -98,7 +98,7 @@ function get_appointment_row($appointment_id) {
 
 	$stmt = mysqli_prepare(
 		$conn,
-		"SELECT id, patient_id, doctor_id, appointment_date, appointment_time, appointment_time AS time_slot, visit_reason, notes, status, created_at FROM appointments WHERE id = ? LIMIT 1"
+		"SELECT id, patient_id, doctor_id, appointment_date, appointment_time, appointment_time AS time_slot, visit_reason, notes, status, cancelled_at, created_at FROM appointments WHERE id = ? LIMIT 1"
 	);
 	mysqli_stmt_bind_param($stmt, "i", $appointment_id);
 	mysqli_stmt_execute($stmt);
@@ -200,12 +200,12 @@ function test_can_cancel() {
 	$cancelled = $appointment_model->cancel($appointment_id);
 	$row = get_appointment_row($appointment_id);
 
-	if ($cancelled && is_array($row) && $row['status'] === 'cancelled') {
+	if ($cancelled && is_array($row) && $row['status'] === 'cancelled' && !empty($row['cancelled_at'])) {
 		print_pass();
 		return true;
 	}
 
-	print_fail('Expected status = cancelled.');
+	print_fail('Expected status = cancelled and cancelled_at is populated.');
 	return false;
 }
 

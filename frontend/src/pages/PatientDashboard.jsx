@@ -241,18 +241,18 @@ function PatientDashboard() {
     return "Good evening";
   };
 
-  // Next upcoming active appointment
-  const nextAppointment = appointments
+  // Upcoming active appointments
+  const upcomingAppointments = appointments
     .filter(
       (a) =>
-        a.status === "confirmed" &&
+        ["confirmed", "rescheduled"].includes(a.status) &&
         new Date(a.appointment_date) >= new Date().setHours(0, 0, 0, 0),
     )
     .sort(
       (a, b) =>
         new Date(`${a.appointment_date} ${a.time_slot}`) -
         new Date(`${b.appointment_date} ${b.time_slot}`),
-    )[0];
+    );
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#F8FAFC]">
@@ -420,40 +420,55 @@ function PatientDashboard() {
                       )}
                     </div>
 
-                    {/* Next Appointment Card */}
+                    {/* Upcoming Appointments Card */}
                     <div className="lg:col-span-5 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 flex flex-col justify-between min-h-[220px]">
                       <div>
-                        <div className="pb-3 border-b border-slate-50">
+                        <div className="pb-3 border-b border-slate-50 flex justify-between items-center">
                           <h3 className="text-sm font-bold text-slate-700 flex items-center gap-1.5">
                             <i className="ti ti-calendar text-base text-[#1A73E8]"></i>
-                            Next Appointment
+                            Upcoming Appointments
                           </h3>
+                          {upcomingAppointments.length > 0 && (
+                            <span className="bg-blue-50 text-[#1A73E8] px-2 py-0.5 rounded-full text-[10px] font-bold">
+                              {upcomingAppointments.length}
+                            </span>
+                          )}
                         </div>
 
-                        {nextAppointment ? (
-                          <div className="mt-4 space-y-3">
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <h4 className="text-sm font-bold text-slate-800">
-                                  {nextAppointment.doctor_name}
-                                </h4>
-                                <span className="text-[11px] font-semibold text-slate-400">
-                                  {nextAppointment.specialisation}
-                                </span>
+                        {upcomingAppointments.length > 0 ? (
+                          <div className="mt-4 space-y-4 max-h-[240px] overflow-y-auto pr-1">
+                            {upcomingAppointments.map((appt) => (
+                              <div key={appt.id} className="pb-3 border-b border-slate-50 last:border-b-0 last:pb-0 flex justify-between items-start gap-4">
+                                <div className="space-y-1">
+                                  <h4 className="text-sm font-bold text-slate-800 leading-tight">
+                                    {appt.doctor_name}
+                                  </h4>
+                                  <div className="text-[11px] font-semibold text-slate-400">
+                                    {appt.specialisation}
+                                  </div>
+                                  <div className="text-[11px] text-slate-500 flex items-center gap-1">
+                                    <i className="ti ti-calendar-time"></i>
+                                    <span>
+                                      {appt.appointment_date}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex flex-col items-end gap-2 shrink-0">
+                                  <span className="bg-[#E8F0FE] text-[#1A73E8] px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase">
+                                    {formatTime(appt.time_slot)}
+                                  </span>
+                                  {["confirmed", "rescheduled"].includes(appt.status) && (
+                                    <button
+                                      onClick={() => handleCancelAppointment(appt.id)}
+                                      className="text-[11px] font-bold text-[#DC2626] hover:text-[#B91C1C] transition flex items-center gap-0.5"
+                                      title="Cancel Appointment"
+                                    >
+                                      <i className="ti ti-trash"></i> Cancel
+                                    </button>
+                                  )}
+                                </div>
                               </div>
-                              <span className="bg-[#E8F0FE] text-[#1A73E8] px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase">
-                                {formatTime(nextAppointment.time_slot)}
-                              </span>
-                            </div>
-                            <div className="text-xs text-slate-500 flex items-center gap-1">
-                              <i className="ti ti-calendar-time"></i>
-                              <span>
-                                Scheduled for:{" "}
-                                <strong>
-                                  {nextAppointment.appointment_date}
-                                </strong>
-                              </span>
-                            </div>
+                            ))}
                           </div>
                         ) : (
                           <div className="mt-6 text-center py-4">
@@ -469,19 +484,6 @@ function PatientDashboard() {
                           </div>
                         )}
                       </div>
-
-                      {nextAppointment && (
-                        <div className="mt-4 pt-3 border-t border-slate-50 flex justify-end">
-                          <button
-                            onClick={() =>
-                              handleCancelAppointment(nextAppointment.id)
-                            }
-                            className="text-xs font-bold text-[#DC2626] hover:text-[#B91C1C] transition flex items-center gap-1"
-                          >
-                            <i className="ti ti-trash"></i> Cancel Booking
-                          </button>
-                        </div>
-                      )}
                     </div>
                   </div>
 

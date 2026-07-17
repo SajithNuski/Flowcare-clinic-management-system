@@ -98,6 +98,14 @@ class Appointment {
 		return ($row && (int)$row['count'] === 0);
 	}
 
+	public function get_by_id($id) {
+		return $this->fetchOne(
+			"SELECT id, patient_id, doctor_id, appointment_date, appointment_time, visit_reason, notes, status, created_at, cancelled_at FROM appointments WHERE id = ? LIMIT 1",
+			"i",
+			[$id]
+		);
+	}
+
 	public function create($patient_id, $doctor_id, $appointment_date, $appointment_time, $visit_reason, $notes = '', $patient_name = null) {
 		if (!$this->check_slot_available($doctor_id, $appointment_date, $appointment_time)) {
 			return false;
@@ -163,7 +171,7 @@ class Appointment {
 
 	public function cancel($id) {
 		return $this->executeQuery(
-			"UPDATE appointments SET status = 'cancelled' WHERE id = ?",
+			"UPDATE appointments SET status = 'cancelled', cancelled_at = NOW() WHERE id = ?",
 			"i",
 			[$id]
 		);

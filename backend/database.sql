@@ -80,6 +80,7 @@ CREATE TABLE appointments (
 	visit_reason VARCHAR(100) DEFAULT 'General consultation',
 	notes TEXT,
 	status ENUM('confirmed','cancelled','rescheduled','no_show','completed') DEFAULT 'confirmed',
+	cancelled_at TIMESTAMP NULL DEFAULT NULL,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
 	FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE CASCADE
