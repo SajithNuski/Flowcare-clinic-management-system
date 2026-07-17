@@ -52,3 +52,22 @@ export async function updatePatientProfile(profileData) {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Registers a new patient with basic details by a receptionist.
+ * @param {object} patientData
+ */
+export async function registerPatientByReceptionist(patientData) {
+  try {
+    const response = await axios.post(`${API_BASE}/patients/register.php`, patientData);
+    return response.data;
+  } catch (error) {
+    return {
+      success: false,
+      error: error.response?.data?.error || error.message,
+      exists: error.response?.data?.exists || false,
+      patient: error.response?.data?.patient || null,
+    };
+  }
+}
+

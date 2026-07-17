@@ -45,6 +45,13 @@ We have established the core database architecture, set up the API endpoints, co
 *   **Announcements Board:** Allows admins to create and publish clinic announcements that propagate instantly to the patient dashboards.
 *   **Clinic Settings:** Dynamic configuration editor allowing admins to update details like the clinic name, address, phone number, hours of operation, and working days directly into the database.
 
+### 5. Receptionist-led Registration & Duplicate Prevention (Implemented)
+*   **Database nullable password**: Modified `patients` table schema to support NULL passwords, enabling receptionist-created profiles without app credentials.
+*   **Duplicate NIC existence check**: Created dedicated `backend/api/patients/register.php` endpoint to verify if an NIC already exists before attempting registration.
+*   **Seamless Receptionist Workflow**: Redesigned the "Register Patient" modal on the Receptionist Dashboard to capture only basic demographics (Name, NIC, Phone, DOB, Gender).
+*   **Dynamic Results & Quick Actions**: Shows clear alert feedback upon registration submission (whether new or existing matching profile), offering direct pathways to check them in to the live queue or proceed to schedule an appointment.
+*   **Integrated Booking Flow**: Updated backend appointment creation to accept `patient_id` directly, carrying the selected patient seamlessly into the slot booking wizard.
+
 ---
 
 ## 📋 What still needs to be done (Next Steps)

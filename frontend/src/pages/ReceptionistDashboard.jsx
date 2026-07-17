@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/StatCard";
 import QueueRow from "../components/QueueRow";
@@ -10,12 +10,12 @@ import { getLiveQueue, checkinPatient } from "../api/queue";
 import { getTodayAppointments, markNoShow } from "../api/appointments";
 import { getDoctors } from "../api/doctors";
 import { getReceptionistStats } from "../api/receptionist";
-import { searchPatientByNic, searchPatients } from "../api/patients";
-import { registerUser } from "../api/auth";
+import { searchPatientByNic, searchPatients, registerPatientByReceptionist } from "../api/patients";
 import { getAnnouncements } from "../api/admin";
 
 
 function ReceptionistDashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     inQueue: 0,
     checkedInToday: 0,
@@ -60,11 +60,12 @@ function ReceptionistDashboard() {
     dob: "",
     gender: "",
     phone: "",
-    email: "",
-    password: "Password@123",
-    confirm: "Password@123",
   });
   const [registeringPatient, setRegisteringPatient] = useState(false);
+  const [registeredPatientResult, setRegisteredPatientResult] = useState(null);
+  const [isDuplicate, setIsDuplicate] = useState(false);
+  const [registerCheckinDoctorId, setRegisterCheckinDoctorId] = useState("");
+  const [checkingInFromRegister, setCheckingInFromRegister] = useState(false);
 
   // Toast notification state
   const [toast, setToast] = useState({ message: "", type: "success" });
@@ -300,8 +301,7 @@ function ReceptionistDashboard() {
       !registerForm.nic ||
       !registerForm.dob ||
       !registerForm.gender ||
-      !registerForm.phone ||
-      !registerForm.email
+      !registerForm.phone
     ) {
       showToast("Please fill all required fields.", "error");
       return;
@@ -313,51 +313,26 @@ function ReceptionistDashboard() {
     }
 
     setRegisteringPatient(true);
+    setRegisteredPatientResult(null);
+    setIsDuplicate(false);
+
     try {
-      const res = await registerUser({
+      const res = await registerPatientByReceptionist({
         full_name: registerForm.full_name,
         nic: registerForm.nic,
         date_of_birth: registerForm.dob,
         gender: registerForm.gender,
         phone: registerForm.phone,
-        email: registerForm.email,
-        password: registerForm.password,
       });
 
       if (res?.success) {
         showToast("Patient registered successfully!", "success");
-        setShowRegisterModal(false);
-        
-        // Auto check-in the registered patient
-        const newPatientId = res.id || res.patient_id;
-        
-        // Pre-fill NIC and open walk-in check-in modal
-        setWalkinSearch(registerForm.nic);
-        setShowWalkinModal(true);
-        setSearchingPatient(true);
-        const searchRes = await searchPatientByNic(registerForm.nic);
-        if (searchRes?.success && searchRes.patient) {
-          setWalkinResult(searchRes.patient);
-        } else if (newPatientId) {
-          setWalkinResult({
-            id: newPatientId,
-            full_name: registerForm.full_name,
-            nic: registerForm.nic,
-          });
-        }
-        setSearchingPatient(false);
-        
-        // Reset register form
-        setRegisterForm({
-          full_name: "",
-          nic: "",
-          dob: "",
-          gender: "",
-          phone: "",
-          email: "",
-          password: "Password@123",
-          confirm: "Password@123",
-        });
+        setRegisteredPatientResult(res.patient);
+        setIsDuplicate(false);
+      } else if (res?.exists) {
+        showToast("Patient already exists in the system.", "amber");
+        setRegisteredPatientResult(res.patient);
+        setIsDuplicate(true);
       } else {
         showToast(res?.error || "Registration failed.", "error");
       }
@@ -365,6 +340,40 @@ function ReceptionistDashboard() {
       showToast(err.message || "An error occurred during registration.", "error");
     } finally {
       setRegisteringPatient(false);
+    }
+  };
+
+  // Handle checking in from register modal result view
+  const handleCheckinFromRegister = async (patientId) => {
+    if (!registerCheckinDoctorId) {
+      showToast("Please select a doctor for check-in.", "error");
+      return;
+    }
+    setCheckingInFromRegister(true);
+    try {
+      const res = await checkinPatient(patientId, parseInt(registerCheckinDoctorId), 0);
+      if (res?.success) {
+        showToast("Patient checked in successfully!", "success");
+        // Reset and close modal
+        setShowRegisterModal(false);
+        setRegisterForm({
+          full_name: "",
+          nic: "",
+          dob: "",
+          gender: "",
+          phone: "",
+        });
+        setRegisteredPatientResult(null);
+        setIsDuplicate(false);
+        setRegisterCheckinDoctorId("");
+        fetchDashboardData(false);
+      } else {
+        showToast(res?.error || "Failed to check in patient.", "error");
+      }
+    } catch (err) {
+      showToast("An error occurred during check-in.", "error");
+    } finally {
+      setCheckingInFromRegister(false);
     }
   };
 
@@ -422,7 +431,7 @@ function ReceptionistDashboard() {
 
         {/* Toast Alert overlay */}
         {toast.message && (
-          <div className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white transition-all duration-300 ${toast.type === "error" ? "bg-red-500 animate-bounce" : "bg-green-500 animate-pulse"}`}>
+          <div className={`fixed top-4 right-4 z-[9999] flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white transition-all duration-300 ${toast.type === "error" ? "bg-red-500 animate-bounce" : "bg-green-500 animate-pulse"}`}>
             <i className={toast.type === "error" ? "ti ti-alert-circle text-lg" : "ti ti-circle-check text-lg"} />
             <span className="font-semibold">{toast.message}</span>
           </div>
@@ -816,153 +825,265 @@ function ReceptionistDashboard() {
             dob: "",
             gender: "",
             phone: "",
-            email: "",
-            password: "Password@123",
-            confirm: "Password@123",
           });
+          setRegisteredPatientResult(null);
+          setIsDuplicate(false);
+          setRegisterCheckinDoctorId("");
         }}
-        title="Register New Patient"
+        title={registeredPatientResult ? "Registration Status" : "Register New Patient"}
       >
-        <form onSubmit={handleRegisterPatient} className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Full Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={registerForm.full_name}
-              onChange={(e) => setRegisterForm(prev => ({ ...prev, full_name: e.target.value }))}
-              placeholder="Enter full legal name"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
-            />
-          </div>
+        {registeredPatientResult ? (
+          <div className="space-y-6">
+            {/* Status Alert */}
+            {isDuplicate ? (
+              <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-sm font-semibold flex items-start gap-2.5">
+                <i className="ti ti-alert-triangle text-lg mt-0.5 text-amber-600 animate-pulse" />
+                <div>
+                  <span className="font-bold text-amber-900">Patient Already Exists</span>
+                  <p className="text-xs text-amber-700 font-medium mt-0.5">
+                    A patient with NIC <strong>{registeredPatientResult.nic}</strong> is already registered.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-sm font-semibold flex items-start gap-2.5">
+                <i className="ti ti-circle-check text-lg mt-0.5 text-emerald-600" />
+                <div>
+                  <span className="font-bold text-emerald-900">Registration Successful</span>
+                  <p className="text-xs text-emerald-700 font-medium mt-0.5">
+                    Basic patient profile has been created in the database.
+                  </p>
+                </div>
+              </div>
+            )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                NIC Number *
-              </label>
-              <input
-                type="text"
-                required
-                value={registerForm.nic}
-                onChange={(e) => setRegisterForm(prev => ({ ...prev, nic: e.target.value }))}
-                placeholder="e.g. 199512345678 or 951234567V"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
-              />
+            {/* Patient Profile Box */}
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Patient Profile
+              </h4>
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                <div>
+                  <span className="text-slate-400 font-medium">Name</span>
+                  <p className="font-semibold text-slate-800 mt-0.5">{registeredPatientResult.full_name}</p>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-medium">NIC</span>
+                  <p className="font-semibold text-slate-800 mt-0.5">{registeredPatientResult.nic}</p>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-medium">Phone</span>
+                  <p className="font-semibold text-slate-800 mt-0.5">{registeredPatientResult.phone || "N/A"}</p>
+                </div>
+                <div>
+                  <span className="text-slate-400 font-medium">Date of Birth</span>
+                  <p className="font-semibold text-slate-800 mt-0.5">{registeredPatientResult.date_of_birth || "N/A"}</p>
+                </div>
+                <div className="col-span-2">
+                  <span className="text-slate-400 font-medium">Gender</span>
+                  <p className="font-semibold text-slate-800 mt-0.5 capitalize">{registeredPatientResult.gender || "N/A"}</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Date of Birth *
-              </label>
-              <input
-                type="date"
-                required
-                value={registerForm.dob}
-                max={todayStr}
-                onChange={(e) => setRegisterForm(prev => ({ ...prev, dob: e.target.value }))}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
-              />
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Gender *
-              </label>
-              <select
-                required
-                value={registerForm.gender}
-                onChange={(e) => setRegisterForm(prev => ({ ...prev, gender: e.target.value }))}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
+            {/* Actions Grid */}
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              {/* Option A: Check-in */}
+              <div className="space-y-2">
+                <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Option 1: Check-in to Live Queue
+                </h5>
+                <div className="flex flex-col sm:flex-row items-end gap-2.5">
+                  <div className="flex-1 w-full">
+                    <select
+                      value={registerCheckinDoctorId}
+                      onChange={(e) => setRegisterCheckinDoctorId(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-slate-800"
+                    >
+                      <option value="">-- Select Doctor --</option>
+                      {doctors.map((doc) => (
+                        <option key={doc.doctor_id} value={doc.doctor_id}>
+                          {doc.full_name} ({doc.specialisation || "General"})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <button
+                    onClick={() => handleCheckinFromRegister(registeredPatientResult.id)}
+                    disabled={checkingInFromRegister}
+                    className="w-full sm:w-auto px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-colors disabled:bg-blue-400 shrink-0 cursor-pointer"
+                  >
+                    {checkingInFromRegister ? "Checking in..." : "Check-in Patient"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Option B: Book Appointment */}
+              <div className="space-y-2 pt-2">
+                <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Option 2: Schedule Appointment
+                </h5>
+                <button
+                  onClick={() => {
+                    setShowRegisterModal(false);
+                    const patient = {
+                      id: registeredPatientResult.id,
+                      full_name: registeredPatientResult.full_name,
+                      nic: registeredPatientResult.nic,
+                      phone: registeredPatientResult.phone || "",
+                      email: registeredPatientResult.email || "",
+                    };
+                    // Reset registration state
+                    setRegisterForm({
+                      full_name: "",
+                      nic: "",
+                      dob: "",
+                      gender: "",
+                      phone: "",
+                    });
+                    setRegisteredPatientResult(null);
+                    setIsDuplicate(false);
+                    setRegisterCheckinDoctorId("");
+                    // Navigate with state
+                    navigate("/receptionist/appointments", { state: { selectPatient: patient } });
+                  }}
+                  className="w-full py-2.5 border border-blue-600 hover:bg-blue-50 text-blue-600 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                >
+                  <i className="ti ti-calendar-plus text-base" />
+                  Proceed to Book Appointment
+                </button>
+              </div>
+            </div>
+
+            {/* Close button */}
+            <div className="flex justify-end pt-4 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowRegisterModal(false);
+                  setRegisterForm({
+                    full_name: "",
+                    nic: "",
+                    dob: "",
+                    gender: "",
+                    phone: "",
+                  });
+                  setRegisteredPatientResult(null);
+                  setIsDuplicate(false);
+                  setRegisterCheckinDoctorId("");
+                }}
+                className="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer"
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-              </select>
+                Close
+              </button>
             </div>
+          </div>
+        ) : (
+          <form onSubmit={handleRegisterPatient} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Phone Number *
+              <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
+                Full Name *
               </label>
               <input
                 type="text"
                 required
-                value={registerForm.phone}
-                onChange={(e) => setRegisterForm(prev => ({ ...prev, phone: e.target.value }))}
-                placeholder="e.g. 0771234567"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
+                value={registerForm.full_name}
+                onChange={(e) => setRegisterForm(prev => ({ ...prev, full_name: e.target.value }))}
+                placeholder="Enter full legal name"
+                className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 text-slate-800"
               />
             </div>
-          </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">
-              Email Address *
-            </label>
-            <input
-              type="email"
-              required
-              value={registerForm.email}
-              onChange={(e) => setRegisterForm(prev => ({ ...prev, email: e.target.value }))}
-              placeholder="name@example.com"
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Password *
-              </label>
-              <input
-                type="text"
-                required
-                value={registerForm.password}
-                onChange={(e) => setRegisterForm(prev => ({ ...prev, password: e.target.value }))}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50 text-slate-800"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
+                  NIC Number *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={registerForm.nic}
+                  onChange={(e) => setRegisterForm(prev => ({ ...prev, nic: e.target.value }))}
+                  placeholder="e.g. 199512345678"
+                  className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 text-slate-800"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
+                  Date of Birth *
+                </label>
+                <input
+                  type="date"
+                  required
+                  value={registerForm.dob}
+                  max={todayStr}
+                  onChange={(e) => setRegisterForm(prev => ({ ...prev, dob: e.target.value }))}
+                  className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 text-slate-800"
+                />
+              </div>
             </div>
-            <div className="flex items-end">
-              <p className="text-[11px] text-slate-500 leading-normal mb-1">
-                A default password is pre-filled for convenience. The patient can change it later.
-              </p>
-            </div>
-          </div>
 
-          <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-6">
-            <button
-              type="button"
-              onClick={() => {
-                setShowRegisterModal(false);
-                setRegisterForm({
-                  full_name: "",
-                  nic: "",
-                  dob: "",
-                  gender: "",
-                  phone: "",
-                  email: "",
-                  password: "Password@123",
-                  confirm: "Password@123",
-                });
-              }}
-              className="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50 text-sm font-semibold text-slate-700 cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={registeringPatient}
-              className="px-4 py-2 bg-[#10B981] hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold disabled:bg-emerald-400 cursor-pointer"
-            >
-              {registeringPatient ? "Registering..." : "Register & Check-in"}
-            </button>
-          </div>
-        </form>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
+                  Gender *
+                </label>
+                <select
+                  required
+                  value={registerForm.gender}
+                  onChange={(e) => setRegisterForm(prev => ({ ...prev, gender: e.target.value }))}
+                  className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 text-slate-800"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
+                  Phone Number *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={registerForm.phone}
+                  onChange={(e) => setRegisterForm(prev => ({ ...prev, phone: e.target.value }))}
+                  placeholder="e.g. 0771234567"
+                  className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 text-slate-800"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 border-t border-slate-100 pt-4 mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowRegisterModal(false);
+                  setRegisterForm({
+                    full_name: "",
+                    nic: "",
+                    dob: "",
+                    gender: "",
+                    phone: "",
+                  });
+                }}
+                className="cursor-pointer px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-[#4B5563] transition-all hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={registeringPatient}
+                className="cursor-pointer px-5 py-2.5 rounded-xl bg-[#1A73E8] text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.5)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:pointer-events-none"
+              >
+                {registeringPatient ? "Registering..." : "Submit"}
+              </button>
+            </div>
+          </form>
+        )}
       </Modal>
+
     </div>
   );
 }

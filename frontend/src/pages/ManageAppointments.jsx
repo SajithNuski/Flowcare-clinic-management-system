@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import StatCard from "../components/StatCard";
 import Modal from "../components/Modal";
@@ -20,6 +21,7 @@ import { VISIT_REASONS } from "../utils/constants";
 import { formatDate, formatTime } from "../utils/helpers";
 
 function ManageAppointments() {
+  const location = useLocation();
   const todayStr = (() => {
     const today = new Date();
     const offset = today.getTimezoneOffset();
@@ -113,6 +115,24 @@ function ManageAppointments() {
   useEffect(() => {
     fetchAppointments(true);
   }, [selectedDate]);
+
+  useEffect(() => {
+    if (location.state?.selectPatient) {
+      const pat = location.state.selectPatient;
+      setSelectedPatient(pat);
+      setBookingForm((prev) => ({
+        ...prev,
+        patient_name: pat.full_name,
+        phone: pat.phone || "",
+        email: pat.email || "",
+      }));
+      setIsNewPatient(false);
+      setShowBookModal(true);
+      
+      // Clear location state from history so it doesn't reopen on manual page refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   // Adjust date: previous/next/today
   const changeDateByDays = (days) => {
@@ -341,6 +361,7 @@ function ManageAppointments() {
     setBookingSubmitting(true);
     try {
       const payload = {
+        patient_id: selectedPatient ? selectedPatient.id : undefined,
         doctor_id: Number(doctor_id),
         appointment_date,
         time_slot,
@@ -429,7 +450,7 @@ function ManageAppointments() {
         {/* Toast Alerts */}
         {toast.message && (
           <div
-            className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white transition-all duration-300 ${
+            className={`fixed top-4 right-4 z-[9999] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white transition-all duration-300 ${
               toast.type === "error" ? "bg-red-500 animate-bounce" : "bg-green-500 animate-pulse"
             }`}
           >

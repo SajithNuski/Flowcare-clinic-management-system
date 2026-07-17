@@ -264,7 +264,7 @@ function PatientDashboard() {
         {/* Floating Toast Notification */}
         {toast.message && (
           <div
-            className={`fixed top-5 right-5 z-50 flex items-center gap-2 rounded-2xl border px-4 py-3.5 shadow-xl transition-all duration-300 animate-slideIn ${
+            className={`fixed top-5 right-5 z-[9999] flex items-center gap-2 rounded-2xl border px-4 py-3.5 shadow-xl transition-all duration-300 animate-slideIn ${
               toast.type === "success"
                 ? "border-[#B7E4C7] bg-[#F1FBF5] text-[#166534]"
                 : "border-[#F5C2C7] bg-[#FDEDED] text-[#991B1B]"

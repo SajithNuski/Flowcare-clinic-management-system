@@ -45,7 +45,7 @@ if ($date_object < $today) {
 
 $appointment = new Appointment($conn);
 
-$patient_id = 0;
+$patient_id = isset($data['patient_id']) ? (int) $data['patient_id'] : 0;
 $patient_name = isset($data['patient_name']) ? trim($data['patient_name']) : '';
 
 if ($_SESSION['role'] === 'receptionist') {
