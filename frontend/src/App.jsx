@@ -24,6 +24,7 @@ import ManagePatients from "./pages/ManagePatients";
 import AdminAppointments from "./pages/AdminAppointments";
 import ClinicSettings from "./pages/ClinicSettings";
 import Announcements from "./pages/Announcements";
+import Payments from "./pages/Payments";
 
 
 
@@ -120,7 +121,7 @@ function App() {
             path="/receptionist/payments"
             element={
               <ProtectedRoute allowedRole="receptionist">
-                <PageStub title="Payments" />
+                <Payments />
               </ProtectedRoute>
             }
           />

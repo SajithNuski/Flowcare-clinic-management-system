@@ -120,11 +120,17 @@ CREATE TABLE payments (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	patient_id INT NOT NULL,
 	queue_id INT NOT NULL,
+	appointment_id INT DEFAULT NULL,
+	doctor_id INT DEFAULT NULL,
 	amount DECIMAL(10,2) NOT NULL,
+	payment_method VARCHAR(50) NOT NULL DEFAULT 'cash',
 	payment_date DATE NOT NULL,
 	notes TEXT,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (patient_id) REFERENCES patients(id) ON DELETE CASCADE,
-	FOREIGN KEY (queue_id) REFERENCES queue(id) ON DELETE CASCADE
+	FOREIGN KEY (queue_id) REFERENCES queue(id) ON DELETE CASCADE,
+	FOREIGN KEY (appointment_id) REFERENCES appointments(id) ON DELETE SET NULL,
+	FOREIGN KEY (doctor_id) REFERENCES doctors(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 -- Announcements table

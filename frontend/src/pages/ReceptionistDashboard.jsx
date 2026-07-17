@@ -5,6 +5,9 @@ import StatCard from "../components/StatCard";
 import QueueRow from "../components/QueueRow";
 import Modal from "../components/Modal";
 import Badge from "../components/Badge";
+import PaymentModal from "../components/PaymentModal";
+import { formatTime } from "../utils/helpers";
+
 
 import { getLiveQueue, checkinPatient } from "../api/queue";
 import { getTodayAppointments, markNoShow } from "../api/appointments";
@@ -69,6 +72,12 @@ function ReceptionistDashboard() {
 
   // Toast notification state
   const [toast, setToast] = useState({ message: "", type: "success" });
+
+  // Payment Modal States
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentData, setPaymentData] = useState(null);
+  const [submittingPayment, setSubmittingPayment] = useState(false);
+
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -145,20 +154,65 @@ function ReceptionistDashboard() {
     return () => clearInterval(interval);
   }, [selectedDate]);
 
-  // Handle appointment check-in action
-  const handleCheckin = async (patientId, doctorId, appointmentId) => {
+  const startPaymentAndCheckin = (details) => {
+    setPaymentData({
+      patientId: details.patientId,
+      patientName: details.patientName,
+      patientNic: details.patientNic || "N/A",
+      doctorId: details.doctorId,
+      doctorName: details.doctorName,
+      appointmentId: details.appointmentId || 0,
+      timeSlot: details.timeSlot || "Walk-in",
+      onSuccess: details.onSuccess,
+    });
+    setShowPaymentModal(true);
+  };
+
+  const handleConfirmPayment = async (amount, method) => {
+    if (!paymentData) return;
+    setSubmittingPayment(true);
     try {
-      const res = await checkinPatient(patientId, doctorId, appointmentId);
+      const res = await checkinPatient(
+        paymentData.patientId,
+        paymentData.doctorId,
+        paymentData.appointmentId,
+        amount,
+        method
+      );
       if (res?.success) {
-        showToast("Patient checked in successfully!", "success");
+        showToast("Patient checked in and payment recorded!", "success");
+        setShowPaymentModal(false);
+        if (paymentData.onSuccess) {
+          paymentData.onSuccess();
+        }
+        setPaymentData(null);
         fetchDashboardData(false);
       } else {
-        showToast(res?.error || "Failed to check-in patient.", "error");
+        showToast(res?.error || "Check-in failed.", "error");
       }
     } catch (err) {
       showToast("An error occurred during check-in.", "error");
+    } finally {
+      setSubmittingPayment(false);
     }
   };
+
+  // Handle appointment check-in action
+  const handleCheckin = (patientId, doctorId, appointmentId) => {
+    const app = todayAppointments.find((a) => a.id === appointmentId);
+    const doctor = doctors.find((d) => d.id === doctorId || d.doctor_id === doctorId);
+    startPaymentAndCheckin({
+      patientId,
+      patientName: app?.patient_name || "Unknown Patient",
+      patientNic: app?.patient_nic || "N/A",
+      doctorId,
+      doctorName: doctor?.full_name || app?.doctor_name || "Unknown Doctor",
+      appointmentId,
+      timeSlot: app?.time_slot ? formatTime(app.time_slot) : "Today's Appointment",
+      onSuccess: () => {},
+    });
+  };
+
 
   // Handle appointment no-show action
   const handleNoShow = async (appointmentId) => {
@@ -204,7 +258,7 @@ function ReceptionistDashboard() {
   };
 
   // Add walk-in patient to queue
-  const handleAddWalkinToQueue = async (e) => {
+  const handleAddWalkinToQueue = (e) => {
     e.preventDefault();
     if (!walkinResult || walkinResult.notFound) {
       showToast("No valid patient selected.", "error");
@@ -215,27 +269,24 @@ function ReceptionistDashboard() {
       return;
     }
 
-    setSubmittingWalkin(true);
-    try {
-      const res = await checkinPatient(walkinResult.id, parseInt(selectedDoctorId), 0);
-      if (res?.success) {
-        showToast("Walk-in patient checked in successfully!", "success");
-        // Reset and close modal
+    const doctor = doctors.find((d) => d.id === parseInt(selectedDoctorId) || d.doctor_id === parseInt(selectedDoctorId));
+    startPaymentAndCheckin({
+      patientId: walkinResult.id,
+      patientName: walkinResult.full_name,
+      patientNic: walkinResult.nic,
+      doctorId: parseInt(selectedDoctorId),
+      doctorName: doctor?.full_name || "Doctor",
+      appointmentId: 0,
+      timeSlot: "Walk-in",
+      onSuccess: () => {
         setShowWalkinModal(false);
         setWalkinSearch("");
         setWalkinResult(null);
         setSelectedDoctorId("");
-        // Refresh dashboard
-        fetchDashboardData(false);
-      } else {
-        showToast(res?.error || "Failed to add walk-in to queue.", "error");
       }
-    } catch (err) {
-      showToast("An error occurred during queue check-in.", "error");
-    } finally {
-      setSubmittingWalkin(false);
-    }
+    });
   };
+
 
   // Handle General Patient Search (top bar)
   const handleSearchGeneral = async (e) => {
@@ -267,31 +318,31 @@ function ReceptionistDashboard() {
   };
 
   // Handle checking in a patient from the search results modal
-  const handleSearchCheckIn = async (patientId) => {
+  const handleSearchCheckIn = (patientId) => {
     const docId = searchDoctorIdMap[patientId];
     if (!docId) {
       showToast("Please select a doctor.", "error");
       return;
     }
 
-    setCheckingInPatientId(patientId);
-    try {
-      const res = await checkinPatient(patientId, parseInt(docId), 0);
-      if (res?.success) {
-        showToast("Patient checked in successfully!", "success");
+    const patient = searchResults.find((p) => p.id === patientId);
+    const doctor = doctors.find((d) => d.id === parseInt(docId) || d.doctor_id === parseInt(docId));
+    startPaymentAndCheckin({
+      patientId,
+      patientName: patient?.full_name || "Patient",
+      patientNic: patient?.nic || "N/A",
+      doctorId: parseInt(docId),
+      doctorName: doctor?.full_name || "Doctor",
+      appointmentId: 0,
+      timeSlot: "Walk-in",
+      onSuccess: () => {
         setSearchDoctorIdMap((prev) => ({ ...prev, [patientId]: "" }));
         setShowSearchModal(false);
         setGeneralSearch("");
-        fetchDashboardData(false);
-      } else {
-        showToast(res?.error || "Failed to check in patient.", "error");
       }
-    } catch (err) {
-      showToast("An error occurred during check-in.", "error");
-    } finally {
-      setCheckingInPatientId(null);
-    }
+    });
   };
+
 
   // Handle registering new patient from modal
   const handleRegisterPatient = async (e) => {
@@ -344,17 +395,21 @@ function ReceptionistDashboard() {
   };
 
   // Handle checking in from register modal result view
-  const handleCheckinFromRegister = async (patientId) => {
+  const handleCheckinFromRegister = (patientId) => {
     if (!registerCheckinDoctorId) {
       showToast("Please select a doctor for check-in.", "error");
       return;
     }
-    setCheckingInFromRegister(true);
-    try {
-      const res = await checkinPatient(patientId, parseInt(registerCheckinDoctorId), 0);
-      if (res?.success) {
-        showToast("Patient checked in successfully!", "success");
-        // Reset and close modal
+    const doctor = doctors.find((d) => d.id === parseInt(registerCheckinDoctorId) || d.doctor_id === parseInt(registerCheckinDoctorId));
+    startPaymentAndCheckin({
+      patientId,
+      patientName: registeredPatientResult?.full_name || registerForm.full_name,
+      patientNic: registeredPatientResult?.nic || registerForm.nic || "N/A",
+      doctorId: parseInt(registerCheckinDoctorId),
+      doctorName: doctor?.full_name || "Doctor",
+      appointmentId: 0,
+      timeSlot: "Walk-in",
+      onSuccess: () => {
         setShowRegisterModal(false);
         setRegisterForm({
           full_name: "",
@@ -366,16 +421,10 @@ function ReceptionistDashboard() {
         setRegisteredPatientResult(null);
         setIsDuplicate(false);
         setRegisterCheckinDoctorId("");
-        fetchDashboardData(false);
-      } else {
-        showToast(res?.error || "Failed to check in patient.", "error");
       }
-    } catch (err) {
-      showToast("An error occurred during check-in.", "error");
-    } finally {
-      setCheckingInFromRegister(false);
-    }
+    });
   };
+
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-slate-50">
@@ -1084,6 +1133,17 @@ function ReceptionistDashboard() {
         )}
       </Modal>
 
+      {/* Payment Confirmation Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setPaymentData(null);
+        }}
+        paymentData={paymentData}
+        onConfirm={handleConfirmPayment}
+        isSubmitting={submittingPayment}
+      />
     </div>
   );
 }

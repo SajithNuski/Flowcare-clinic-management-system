@@ -5,6 +5,8 @@ import StatCard from "../components/StatCard";
 import Modal from "../components/Modal";
 import Badge from "../components/Badge";
 import AppointmentRow from "../components/AppointmentRow";
+import PaymentModal from "../components/PaymentModal";
+
 
 import {
   getTodayAppointments,
@@ -38,6 +40,12 @@ function ManageAppointments() {
   const [selectedDoctorFilter, setSelectedDoctorFilter] = useState("");
   const [selectedStatusFilter, setSelectedStatusFilter] = useState("");
   const [toast, setToast] = useState({ message: "", type: "success" });
+
+  // Payment Modal States
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentData, setPaymentData] = useState(null);
+  const [submittingPayment, setSubmittingPayment] = useState(false);
+
 
   // Reschedule Modal States
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
@@ -144,19 +152,48 @@ function ManageAppointments() {
   };
 
   // 3. Actions on Appointments
-  const handleCheckin = async (patientId, doctorId, appointmentId) => {
+  const handleCheckin = (patientId, doctorId, appointmentId) => {
+    const app = appointments.find((a) => a.id === appointmentId);
+    if (!app) return;
+
+    setPaymentData({
+      patientId,
+      patientName: app.patient_name,
+      patientNic: app.patient_nic || "N/A",
+      doctorId,
+      doctorName: app.doctor_name,
+      appointmentId,
+      timeSlot: formatTime(app.time_slot),
+    });
+    setShowPaymentModal(true);
+  };
+
+  const handleConfirmPayment = async (amount, method) => {
+    if (!paymentData) return;
+    setSubmittingPayment(true);
     try {
-      const res = await checkinPatient(patientId, doctorId, appointmentId);
+      const res = await checkinPatient(
+        paymentData.patientId,
+        paymentData.doctorId,
+        paymentData.appointmentId,
+        amount,
+        method
+      );
       if (res?.success) {
-        showToast("Patient checked in and added to wait queue!", "success");
+        showToast("Patient checked in and payment recorded!", "success");
+        setShowPaymentModal(false);
+        setPaymentData(null);
         fetchAppointments(false);
       } else {
         showToast(res?.error || "Check-in failed.", "error");
       }
     } catch (err) {
       showToast("An error occurred during check-in.", "error");
+    } finally {
+      setSubmittingPayment(false);
     }
   };
+
 
   const handleNoShow = async (appointmentId) => {
     try {
@@ -420,6 +457,15 @@ function ManageAppointments() {
     });
   }, [appointments, searchTerm, selectedDoctorFilter, selectedStatusFilter]);
 
+  const actionableAppointments = useMemo(() => {
+    return filteredAppointments.filter((app) => app.status === "confirmed" || app.status === "rescheduled");
+  }, [filteredAppointments]);
+
+  const inactiveAppointments = useMemo(() => {
+    return filteredAppointments.filter((app) => app.status === "completed" || app.status === "no_show" || app.status === "cancelled");
+  }, [filteredAppointments]);
+
+
   // Stats Counters
   const stats = useMemo(() => {
     let pending = 0;
@@ -619,43 +665,130 @@ function ManageAppointments() {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                 <span className="text-slate-500 text-xs font-semibold">Loading appointments list...</span>
               </div>
-            ) : filteredAppointments.length === 0 ? (
-              <div className="text-center py-20">
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 mb-3 text-lg">
-                  <i className="ti ti-calendar-off" />
+            ) : selectedStatusFilter ? (
+              // Status filter is active - render a single list
+              filteredAppointments.length === 0 ? (
+                <div className="text-center py-20">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 mb-3 text-lg">
+                    <i className="ti ti-calendar-off" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-slate-800">No Matching Appointments</h3>
+                  <p className="text-slate-400 text-xs mt-1 max-w-xs mx-auto">
+                    No appointments matched status "{selectedStatusFilter}".
+                  </p>
                 </div>
-                <h3 className="text-sm font-semibold text-slate-800">No Appointments Found</h3>
-                <p className="text-slate-400 text-xs mt-1 max-w-xs mx-auto">
-                  {appointments.length === 0
-                    ? `No appointments scheduled for ${formatDate(selectedDate)}.`
-                    : "No appointments match your search or filter settings."}
-                </p>
-              </div>
+              ) : (
+                <table className="min-w-full divide-y divide-slate-100">
+                  <thead>
+                    <tr className="bg-slate-50/50">
+                      <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Patient</th>
+                      <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Doctor</th>
+                      <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Time Slot</th>
+                      <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Visit Reason</th>
+                      <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                      <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-slate-100">
+                    {filteredAppointments.map((app) => (
+                      <AppointmentRow
+                        key={app.id}
+                        appointment={app}
+                        onCheckin={handleCheckin}
+                        onNoShow={handleNoShow}
+                        onCancel={handleCancel}
+                        onReschedule={handleOpenReschedule}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              )
             ) : (
-              <table className="min-w-full divide-y divide-slate-100">
-                <thead>
-                  <tr className="bg-slate-50/50">
-                    <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Patient</th>
-                    <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Doctor</th>
-                    <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Time Slot</th>
-                    <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Visit Reason</th>
-                    <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                    <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-slate-100">
-                  {filteredAppointments.map((app) => (
-                    <AppointmentRow
-                      key={app.id}
-                      appointment={app}
-                      onCheckin={handleCheckin}
-                      onNoShow={handleNoShow}
-                      onCancel={handleCancel}
-                      onReschedule={handleOpenReschedule}
-                    />
-                  ))}
-                </tbody>
-              </table>
+              // Status filter is NOT active - separate active/actionable and processed/completed
+              <div className="space-y-8 p-1">
+                {/* 1. Actionable Appointments */}
+                <div>
+                  <h3 className="text-xs font-bold text-blue-700 bg-blue-50 px-5 py-2.5 rounded-lg flex items-center gap-2 mb-3">
+                    <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+                    Actionable Appointments ({actionableAppointments.length})
+                  </h3>
+                  {actionableAppointments.length === 0 ? (
+                    <div className="text-center py-10 bg-white border border-dashed border-slate-200 rounded-xl">
+                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-50 text-slate-400 mb-2 text-base">
+                        <i className="ti ti-calendar-check" />
+                      </div>
+                      <p className="text-slate-400 text-xs font-semibold">No actionable appointments remaining today.</p>
+                    </div>
+                  ) : (
+                    <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm">
+                      <table className="min-w-full divide-y divide-slate-100">
+                        <thead>
+                          <tr className="bg-slate-50/50">
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Patient</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Doctor</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Time Slot</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Visit Reason</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                            <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-slate-100">
+                          {actionableAppointments.map((app) => (
+                            <AppointmentRow
+                              key={app.id}
+                              appointment={app}
+                              onCheckin={handleCheckin}
+                              onNoShow={handleNoShow}
+                              onCancel={handleCancel}
+                              onReschedule={handleOpenReschedule}
+                            />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+
+                {/* 2. Processed Appointments */}
+                <div>
+                  <h3 className="text-xs font-bold text-slate-500 bg-slate-100 px-5 py-2.5 rounded-lg flex items-center gap-2 mb-3">
+                    <span className="h-2 w-2 rounded-full bg-slate-400" />
+                    Processed / Completed Today ({inactiveAppointments.length})
+                  </h3>
+                  {inactiveAppointments.length === 0 ? (
+                    <div className="text-center py-10 bg-white border border-dashed border-slate-200 rounded-xl">
+                      <p className="text-slate-400 text-xs font-semibold">No appointments processed yet.</p>
+                    </div>
+                  ) : (
+                    <div className="border border-slate-100 rounded-xl overflow-hidden shadow-sm opacity-80 hover:opacity-100 transition-opacity duration-200">
+                      <table className="min-w-full divide-y divide-slate-100">
+                        <thead>
+                          <tr className="bg-slate-50/50">
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Patient</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Assigned Doctor</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Time Slot</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Visit Reason</th>
+                            <th className="px-5 py-3.5 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                            <th className="px-5 py-3.5 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-slate-100">
+                          {inactiveAppointments.map((app) => (
+                            <AppointmentRow
+                              key={app.id}
+                              appointment={app}
+                              onCheckin={handleCheckin}
+                              onNoShow={handleNoShow}
+                              onCancel={handleCancel}
+                              onReschedule={handleOpenReschedule}
+                            />
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -1057,6 +1190,18 @@ function ManageAppointments() {
           )}
         </div>
       </Modal>
+
+      {/* Payment Confirmation Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setPaymentData(null);
+        }}
+        paymentData={paymentData}
+        onConfirm={handleConfirmPayment}
+        isSubmitting={submittingPayment}
+      />
     </div>
   );
 }

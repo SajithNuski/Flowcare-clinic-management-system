@@ -60,9 +60,20 @@ function AppointmentRow({ appointment, onCheckin, onReschedule, onCancel, onNoSh
             <div className="text-sm font-semibold text-slate-900">
               {appointment.patient_name}
             </div>
-            <div className="text-xs text-slate-500 font-medium mt-0.5">
-              <i className="ti ti-phone text-slate-400 mr-1" />
-              {appointment.patient_phone || "No phone"}
+            <div className="text-xs text-slate-500 font-medium mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5">
+              <span className="flex items-center gap-1">
+                <i className="ti ti-phone text-slate-400" />
+                {appointment.patient_phone || "No phone"}
+              </span>
+              {appointment.patient_nic && (
+                <>
+                  <span className="text-slate-300">|</span>
+                  <span className="flex items-center gap-1">
+                    <i className="ti ti-id text-slate-400" />
+                    NIC: {appointment.patient_nic}
+                  </span>
+                </>
+              )}
             </div>
           </div>
         </div>

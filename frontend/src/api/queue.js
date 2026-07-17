@@ -35,13 +35,15 @@ export async function getLiveQueue() {
  * @param {number} doctorId
  * @param {number} appointmentId
  */
-export async function checkinPatient(patientId, doctorId, appointmentId) {
+export async function checkinPatient(patientId, doctorId, appointmentId, amount = 0, paymentMethod = "") {
   try {
     // We use try/catch so network or server errors turn into a clean response for the UI.
     const response = await axios.post(`${API_BASE}/queue/checkin.php`, {
       patient_id: patientId,
       doctor_id: doctorId,
       appointment_id: appointmentId,
+      amount: amount,
+      payment_method: paymentMethod,
     });
     return response.data;
   } catch (error) {
