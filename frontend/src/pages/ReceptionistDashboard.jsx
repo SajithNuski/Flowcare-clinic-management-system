@@ -35,6 +35,7 @@ function ReceptionistDashboard() {
   })();
 
   const [selectedDate, setSelectedDate] = useState(todayStr);
+  const [selectedQueueDoctor, setSelectedQueueDoctor] = useState("all");
   const [doctors, setDoctors] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -526,8 +527,36 @@ function ReceptionistDashboard() {
               
               {/* LEFT — Live Queue card */}
               <div className="lg:col-span-5 bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-slate-900">Live queue</h2>
+                <div className="flex flex-col mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-base font-bold text-slate-900">Live queue</h2>
+                  </div>
+                  {/* Visual Doctor Filters/Tabs */}
+                  <div className="flex flex-wrap gap-1.5 border-b border-slate-100 pb-3">
+                    <button
+                      onClick={() => setSelectedQueueDoctor("all")}
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                        selectedQueueDoctor === "all"
+                          ? "bg-blue-600 text-white shadow-sm"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      All Doctors
+                    </button>
+                    {doctors.map((doc) => (
+                      <button
+                        key={doc.doctor_id}
+                        onClick={() => setSelectedQueueDoctor(String(doc.doctor_id))}
+                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                          selectedQueueDoctor === String(doc.doctor_id)
+                            ? "bg-blue-600 text-white shadow-sm"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        }`}
+                      >
+                        {doc.full_name.replace("Dr. ", "")}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="overflow-x-auto">
@@ -536,21 +565,30 @@ function ReceptionistDashboard() {
                       <tr className="bg-slate-50">
                         <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Queue#</th>
                         <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Patient</th>
+                        {selectedQueueDoctor === "all" && (
+                          <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Doctor</th>
+                        )}
                         <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Check-in</th>
                         <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {liveQueue.length === 0 ? (
+                      {liveQueue.filter(entry => selectedQueueDoctor === "all" || String(entry.doctor_id) === selectedQueueDoctor).length === 0 ? (
                         <tr>
-                          <td colSpan="4" className="text-center py-8 text-slate-400 text-sm font-medium">
+                          <td colSpan={selectedQueueDoctor === "all" ? 5 : 4} className="text-center py-8 text-slate-400 text-sm font-medium">
                             No patients in queue currently.
                           </td>
                         </tr>
                       ) : (
-                        liveQueue.map((entry) => (
-                          <QueueRow key={entry.queue_id} entry={entry} />
-                        ))
+                        liveQueue
+                          .filter(entry => selectedQueueDoctor === "all" || String(entry.doctor_id) === selectedQueueDoctor)
+                          .map((entry) => (
+                            <QueueRow 
+                              key={entry.queue_id} 
+                              entry={entry} 
+                              showDoctor={selectedQueueDoctor === "all"} 
+                            />
+                          ))
                       )}
                     </tbody>
                   </table>

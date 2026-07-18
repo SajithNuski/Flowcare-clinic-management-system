@@ -154,6 +154,16 @@ class Queue {
 		);
 	}
 
+	// This method gets the full queue (all statuses) for all doctors on a given date
+	// It joins the patients table, doctors table, and LEFT JOINs payments and appointments to get appointment slot time
+	public function get_full_queue_all($date) {
+		return $this->fetchAll(
+			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, q.completed_time, u.full_name AS patient_name, u.phone AS patient_phone, d.full_name AS doctor_name, d.specialisation, a.appointment_time FROM queue q INNER JOIN patients u ON q.patient_id = u.id INNER JOIN doctors d ON q.doctor_id = d.id LEFT JOIN payments p ON q.id = p.queue_id LEFT JOIN appointments a ON p.appointment_id = a.id WHERE q.date = ? ORDER BY q.doctor_id ASC, q.queue_number ASC",
+			"s",
+			[$date]
+		);
+	}
+
 	// This method gets one patient's queue entry for today and also calculates their position
 	// Position means how many waiting patients are still ahead of them
 	public function get_my_queue_status($patient_id, $date) {

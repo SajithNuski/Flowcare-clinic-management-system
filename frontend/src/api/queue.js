@@ -19,10 +19,12 @@ export async function getQueueStatus() {
 /**
  * Gets the live queue for doctors or receptionists.
  */
-export async function getLiveQueue() {
+export async function getLiveQueue(all = false) {
   try {
     // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/queue/status.php`);
+    const response = await axios.get(`${API_BASE}/queue/status.php`, {
+      params: all ? { all: "true" } : {}
+    });
     return response.data;
   } catch (error) {
     return { success: false, error: error.message };

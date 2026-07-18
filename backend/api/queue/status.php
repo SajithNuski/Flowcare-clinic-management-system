@@ -102,7 +102,12 @@ if ($role === 'doctor') {
 }
 
 if ($role === 'receptionist') {
-	$live_queue = $queue->get_live_queue_all($today);
+	$all = isset($_GET['all']) && $_GET['all'] === 'true';
+	if ($all) {
+		$live_queue = $queue->get_full_queue_all($today);
+	} else {
+		$live_queue = $queue->get_live_queue_all($today);
+	}
 	respond_json($live_queue ?: []);
 }
 

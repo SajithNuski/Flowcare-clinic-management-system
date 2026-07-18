@@ -25,6 +25,7 @@ import AdminAppointments from "./pages/AdminAppointments";
 import ClinicSettings from "./pages/ClinicSettings";
 import Announcements from "./pages/Announcements";
 import Payments from "./pages/Payments";
+import ManageQueue from "./pages/ManageQueue";
 
 
 
@@ -105,7 +106,7 @@ function App() {
             path="/receptionist/queue"
             element={
               <ProtectedRoute allowedRole="receptionist">
-                <PageStub title="Manage Queue" />
+                <ManageQueue />
               </ProtectedRoute>
             }
           />
