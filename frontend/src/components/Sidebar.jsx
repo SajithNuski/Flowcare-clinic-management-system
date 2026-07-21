@@ -53,7 +53,7 @@ function Sidebar({ role, activePage }) {
       },
       {
         label: "My Queue",
-        to: "/doctor/consultations",
+        to: "/doctor/queue",
         icon: "ti ti-list-numbers",
       },
       {
@@ -86,7 +86,8 @@ function Sidebar({ role, activePage }) {
     ],
   };
 
-  const items = menuByRole[role] || [];
+  const effectiveRole = role || user?.role || "patient";
+  const items = menuByRole[effectiveRole] || [];
   const isActive = (item) => {
     if (activePage) {
       return activePage === item.label;

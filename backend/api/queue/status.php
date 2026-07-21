@@ -86,7 +86,7 @@ if ($role === 'patient') {
 }
 
 if ($role === 'doctor') {
-	$doctor_stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE user_id = ? LIMIT 1");
+	$doctor_stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE id = ? LIMIT 1");
 	mysqli_stmt_bind_param($doctor_stmt, "i", $_SESSION['user_id']);
 	mysqli_stmt_execute($doctor_stmt);
 	$doctor_result = mysqli_stmt_get_result($doctor_stmt);
@@ -97,7 +97,8 @@ if ($role === 'doctor') {
 		respond_json(["error" => "Doctor record not found"], 404);
 	}
 
-	$live_queue = $queue->get_live_queue((int) $doctor_row['id'], $today);
+	$all = isset($_GET['all']) && $_GET['all'] === 'true';
+	$live_queue = $queue->get_doctor_queue((int) $doctor_row['id'], $today, $all);
 	respond_json($live_queue ?: []);
 }
 

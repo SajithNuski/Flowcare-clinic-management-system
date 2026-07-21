@@ -53,7 +53,7 @@ if ($role === 'doctor') {
 		respond_json(["success" => false, "error" => "Invalid date"], 400);
 	}
 
-	$stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE user_id = ? LIMIT 1");
+	$stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE id = ? LIMIT 1");
 	mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
 	mysqli_stmt_execute($stmt);
 	$result = mysqli_stmt_get_result($stmt);

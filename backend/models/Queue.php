@@ -144,6 +144,13 @@ class Queue {
 		);
 	}
 
+	// This method gets doctor queue with patient info and appointment times
+	public function get_doctor_queue($doctor_id, $date, $all = false) {
+		$status_clause = $all ? "" : "AND q.status IN ('waiting', 'in_consultation')";
+		$sql = "SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, q.status, q.check_in_time, q.completed_time, u.full_name AS patient_name, u.phone AS patient_phone, u.nic AS patient_nic, u.date_of_birth, u.gender, a.appointment_time, p.appointment_id FROM queue q INNER JOIN patients u ON q.patient_id = u.id LEFT JOIN payments p ON q.id = p.queue_id LEFT JOIN appointments a ON p.appointment_id = a.id WHERE q.doctor_id = ? AND q.date = ? {$status_clause} GROUP BY q.id ORDER BY q.queue_number ASC";
+		return $this->fetchAll($sql, "is", [$doctor_id, $date]);
+	}
+
 	// This method gets the live waiting queue for all doctors on a given date
 	// It joins the patients table and the doctors table so the receptionist can see doctor and patient details together
 	public function get_live_queue_all($date) {
@@ -196,7 +203,17 @@ class Queue {
 		$today = date('Y-m-d');
 
 		$next_patient = $this->fetchOne(
-			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, u.full_name AS patient_name, u.phone AS patient_phone FROM queue q INNER JOIN patients u ON q.patient_id = u.id WHERE q.doctor_id = ? AND q.date = ? AND q.status = 'waiting' ORDER BY q.queue_number ASC LIMIT 1",
+			"SELECT q.id AS queue_id, q.patient_id, q.doctor_id, q.queue_number, q.date, u.full_name AS patient_name, u.phone AS patient_phone 
+			 FROM queue q 
+			 INNER JOIN patients u ON q.patient_id = u.id 
+			 LEFT JOIN payments p ON q.id = p.queue_id 
+			 LEFT JOIN appointments a ON p.appointment_id = a.id 
+			 WHERE q.doctor_id = ? AND q.date = ? AND q.status = 'waiting' 
+			 ORDER BY 
+			   CASE WHEN a.appointment_time IS NOT NULL AND a.appointment_time != '' THEN 0 ELSE 1 END ASC,
+			   a.appointment_time ASC,
+			   q.queue_number ASC 
+			 LIMIT 1",
 			"is",
 			[$doctor_id, $today]
 		);

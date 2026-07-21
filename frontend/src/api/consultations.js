@@ -31,3 +31,18 @@ export async function getDoctorConsultations(date) {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Returns consultation history for a specific patient.
+ * @param {number} patientId
+ */
+export async function getPatientMedicalHistory(patientId) {
+  try {
+    const response = await axios.get(`${API_BASE}/consultations/list.php`, {
+      params: { patient_id: patientId },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}

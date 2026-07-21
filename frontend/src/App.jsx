@@ -29,6 +29,8 @@ import ManageQueue from "./pages/ManageQueue";
 
 
 
+import DoctorQueue from "./pages/DoctorQueue";
+
 function PageStub({ title }) {
   return (
     <div className="min-h-screen bg-white px-7 py-16 text-gray-900">
@@ -137,10 +139,18 @@ function App() {
             }
           />
           <Route
+            path="/doctor/queue"
+            element={
+              <ProtectedRoute allowedRole="doctor">
+                <DoctorQueue />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/doctor/consultations"
             element={
               <ProtectedRoute allowedRole="doctor">
-                <PageStub title="Doctor Consultations" />
+                <DoctorQueue />
               </ProtectedRoute>
             }
           />

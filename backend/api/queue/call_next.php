@@ -19,7 +19,7 @@ if (!isset($_SESSION['user_id'], $_SESSION['role']) || $_SESSION['role'] !== 'do
 
 require_once __DIR__ . '/../../models/Queue.php';
 
-$doctor_stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE user_id = ? LIMIT 1");
+$doctor_stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE id = ? LIMIT 1");
 mysqli_stmt_bind_param($doctor_stmt, "i", $_SESSION['user_id']);
 mysqli_stmt_execute($doctor_stmt);
 $doctor_result = mysqli_stmt_get_result($doctor_stmt);

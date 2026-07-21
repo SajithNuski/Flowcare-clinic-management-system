@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	respond_json(["success" => false, "error" => "Method not allowed"], 405);
 }
 
-if (!isset($_SESSION['user_id'], $_SESSION['role']) || $_SESSION['role'] !== 'receptionist') {
+if (!isset($_SESSION['user_id'], $_SESSION['role']) || !in_array($_SESSION['role'], ['receptionist', 'doctor'])) {
 	respond_json(["success" => false, "error" => "Access denied"], 403);
 }
 
@@ -44,6 +44,23 @@ if (!$updated) {
 	respond_json(["success" => false, "error" => "Could not mark no-show"], 400);
 }
 
-log_activity($conn, (int) $_SESSION['user_id'], 'mark_no_show', 'Marked a patient as no-show');
+$next_patient = null;
+if ($_SESSION['role'] === 'doctor') {
+	$user_id = (int) $_SESSION['user_id'];
+	$doc_stmt = mysqli_prepare($conn, "SELECT id FROM doctors WHERE id = ? LIMIT 1");
+	if ($doc_stmt) {
+		mysqli_stmt_bind_param($doc_stmt, "i", $user_id);
+		mysqli_stmt_execute($doc_stmt);
+		$doc_res = mysqli_stmt_get_result($doc_stmt);
+		if ($doc_row = mysqli_fetch_assoc($doc_res)) {
+			$doctor_id = (int)$doc_row['id'];
+			$next_patient = $queue->call_next($doctor_id);
+		}
+		mysqli_stmt_close($doc_stmt);
+	}
+}
 
-respond_json(["success" => true, "message" => "Marked as no-show"]);
+log_activity($conn, (int) $_SESSION['user_id'], 'mark_no_show', 'Marked a patient as skipped/no-show');
+
+respond_json(["success" => true, "message" => "Marked as skipped / no-show", "next_patient" => $next_patient ?: null]);
+?>

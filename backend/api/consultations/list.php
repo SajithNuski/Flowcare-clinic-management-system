@@ -29,6 +29,11 @@ if ($role === 'patient') {
 }
 
 if ($role === 'doctor') {
+	if (isset($_GET['patient_id']) && (int)$_GET['patient_id'] > 0) {
+		$p_id = (int)$_GET['patient_id'];
+		$list = $consultation->get_by_patient($p_id);
+		respond_json(["success" => true, "consultations" => $list ?: []]);
+	}
 	$date = isset($_GET['date']) ? trim($_GET['date']) : null;
 	if ($date !== null && $date !== '') {
 		$date_object = DateTime::createFromFormat('Y-m-d', $date);
