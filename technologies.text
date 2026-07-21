@@ -1,0 +1,110 @@
+===============================================================================
+FLOWCARE - CLINIC MANAGEMENT SYSTEM
+Project Technologies, Frameworks, Libraries & Architectural Details
+===============================================================================
+
+1. OVERVIEW & SYSTEM ARCHITECTURE
+-------------------------------------------------------------------------------
+System Type      : Full-Stack Web Application (SPA + RESTful JSON API)
+Architecture     : Decoupled Architecture (React Single Page Application Frontend
+                   communicating with a PHP REST API Backend)
+Role Access      : Multi-Role Access Control (Admin, Doctor, Receptionist, Patient)
+Database Pattern : Split Domain Database Model with Relational Integrity
+
+
+2. FRONTEND TECHNOLOGIES & LIBRARIES
+-------------------------------------------------------------------------------
+Core Library     : React.js (v18.2.0)
+                   - Component-based UI Architecture
+                   - Hooks (useState, useEffect, useMemo, useContext)
+                   - Custom Context API for Auth Management (AuthContext)
+
+Build Tool & Dev : Vite (v5.0.0)
+                   - High-performance ES module bundler & HMR server
+                   - @vitejs/plugin-react (v4.2.0)
+
+Routing          : React Router DOM (v6.21.0)
+                   - Client-side Single Page Application (SPA) Routing
+                   - Protected Routes based on Role Authentication (ProtectedRoute)
+
+HTTP Client      : Axios (v1.6.0)
+                   - Asynchronous RESTful API requests
+                   - Configured with credentials support for PHP session sync
+
+Styling & UI     : Tailwind CSS (v3.4.0)
+                   - Utility-first responsive CSS framework
+                   - Custom glassmorphism, gradient accents, and dark/light modes
+                   - PostCSS (v8.4.0) & Autoprefixer (v10.4.0)
+
+Data Visuals     : Recharts (v2.10.0)
+                   - Interactive clinic analytics, patient trends & queue volume charts
+
+Icons & Assets   : Tabler Icons (@tabler/icons-webfont)
+                   - Clean medical and dashboard vector icon set
+
+
+3. BACKEND TECHNOLOGIES & ARCHITECTURE
+-------------------------------------------------------------------------------
+Server Runtime   : PHP (v8.x)
+                   - Native Object-Oriented PHP (OOP) for models & business logic
+                   - Structured REST-like JSON Endpoints
+
+Database Driver  : MySQLi (MySQL Improved Extension)
+                   - Prepared Statements with parameterized binding for SQL injection protection
+                   - Transaction management and safe row mapping
+
+Authentication   : Native PHP Session Management (session_start)
+                   - Role-Based Access Control (RBAC)
+                   - Session token storage & cross-origin session handling
+
+CORS Management  : Custom CORS Middleware (`backend/config/cors.php`)
+                   - Dynamic header reflection for secure frontend-backend communication
+
+Core Backend Modules:
+  - User.php           : Authentication, user creation, password hashing & profile updates
+  - Doctor.php         : Doctor profile details, working days, and time slot configuration
+  - Queue.php          : Real-time patient queue, position calculation, & status promotion
+  - Appointment.php    : Dynamic slot allocation, booking conflict prevention, & rescheduling
+  - Consultation.php   : Medical record logging, clinical notes, diagnosis & patient history
+  - Payment.php        : Invoice calculation, receipt generation, and transaction tracking
+
+
+4. DATABASE & DATA STORAGE
+-------------------------------------------------------------------------------
+Database Engine  : MariaDB / MySQL (v10.x / 8.x)
+RDBMS Platform   : Relational Database Management System (XAMPP Environment)
+
+Primary Tables   :
+  1. `admin`           : Administrator credentials and system settings permissions
+  2. `doctors`         : Doctor accounts, specialization, working days & hours
+  3. `receptionist`    : Front-desk staff user accounts
+  4. `patients`        : Registered patient records, contact, NIC, and emergency info
+  5. `appointments`    : Scheduled appointment slots, dates, doctor associations & status
+  6. `queue`           : Real-time daily patient queue, ticket numbers, and check-in times
+  7. `payments`        : Consultation fees, payment method records, and receipt links
+  8. `consultations`   : Post-visit medical notes, diagnoses, prescriptions, and referrals
+  9. `clinic_settings` : Global clinic operating hours, slot intervals, and contact info
+ 10. `announcements`   : Clinic-wide notices for patients and staff
+ 11. `activity_log`    : System action logs for security auditing
+
+
+5. DEVELOPMENT ENVIRONMENT & TOOLING
+-------------------------------------------------------------------------------
+Development Stack: XAMPP (Apache HTTP Server + MariaDB SQL + PHP 8.x)
+Package Manager  : npm (Node Package Manager)
+Version Control  : Git & GitHub
+Local Server Port: Vite Dev Server (http://localhost:5173 / configured port)
+Backend Base URL : Apache Localhost (http://localhost/flowcare/backend)
+
+
+6. SECURITY & DESIGN HIGHLIGHTS
+-------------------------------------------------------------------------------
+Password Security: Blowfish Hashing (`password_hash` with `PASSWORD_DEFAULT`)
+SQL Security     : 100% Prepared Statements (`mysqli_prepare`) across all database queries
+XSS Prevention   : Sanitized inputs and automated React DOM escaping
+Queue Logic      : Dynamic effective-time sorting (Appointment slot vs Walk-in check-in time)
+Auto-Promotion   : Automated queue promotion upon consultation completion or no-show skip
+
+===============================================================================
+Report Generated for Supervisor Review — FlowCare Clinic Management System
+===============================================================================
