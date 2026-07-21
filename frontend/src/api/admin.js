@@ -51,16 +51,19 @@ export async function toggleUserStatus(userId) {
 }
 
 /**
- * Returns admin report data for a date range.
- * @param {string} dateFrom
- * @param {string} dateTo
+ * Returns admin report data for a date range and optional filters.
+ * @param {object|string} paramsObj
+ * @param {string} [dateTo]
  */
-export async function getReports(dateFrom, dateTo) {
+export async function getReports(paramsObj, dateTo) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/admin/reports.php`, {
-      params: { date_from: dateFrom, date_to: dateTo },
-    });
+    let params = {};
+    if (typeof paramsObj === "object" && paramsObj !== null) {
+      params = paramsObj;
+    } else {
+      params = { date_from: paramsObj, date_to: dateTo };
+    }
+    const response = await axios.get(`${API_BASE}/admin/reports.php`, { params });
     return response.data;
   } catch (error) {
     return { success: false, error: error.message };

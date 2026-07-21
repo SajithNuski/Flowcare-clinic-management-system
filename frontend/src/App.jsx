@@ -31,6 +31,7 @@ import ManageQueue from "./pages/ManageQueue";
 
 import DoctorQueue from "./pages/DoctorQueue";
 import DoctorConsultations from "./pages/DoctorConsultations";
+import Reports from "./pages/Reports";
 
 function PageStub({ title }) {
   return (
@@ -209,7 +210,7 @@ function App() {
             path="/admin/reports"
             element={
               <ProtectedRoute allowedRole="admin">
-                <PageStub title="Report" />
+                <Reports />
               </ProtectedRoute>
             }
           />
