@@ -138,14 +138,14 @@ class Consultation {
 	public function get_by_doctor($doctor_id, $date = null) {
 		if ($date === null) {
 			return $this->fetchAll(
-				"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM consultations c INNER JOIN patients u ON c.patient_id = u.id WHERE c.doctor_id = ? ORDER BY c.created_at DESC, c.id DESC",
+				"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone, u.nic AS patient_nic, u.gender, u.date_of_birth FROM consultations c INNER JOIN patients u ON c.patient_id = u.id WHERE c.doctor_id = ? ORDER BY c.created_at DESC, c.id DESC",
 				"i",
 				[$doctor_id]
 			);
 		}
 
 		return $this->fetchAll(
-			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone FROM consultations c INNER JOIN patients u ON c.patient_id = u.id WHERE c.doctor_id = ? AND DATE(c.created_at) = ? ORDER BY c.created_at DESC, c.id DESC",
+			"SELECT c.id, c.queue_id, c.patient_id, c.doctor_id, c.notes, c.diagnosis, c.referral, c.created_at, u.full_name AS patient_name, u.phone AS patient_phone, u.nic AS patient_nic, u.gender, u.date_of_birth FROM consultations c INNER JOIN patients u ON c.patient_id = u.id WHERE c.doctor_id = ? AND DATE(c.created_at) = ? ORDER BY c.created_at DESC, c.id DESC",
 			"is",
 			[$doctor_id, $date]
 		);
