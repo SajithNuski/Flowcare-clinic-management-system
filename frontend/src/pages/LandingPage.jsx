@@ -12,6 +12,7 @@ import bookImg from "../assets/images/book.png";
 import walkingImg from "../assets/images/walking.png";
 import consultImg from "../assets/images/cunsult.png";
 import ashiniLogo from "../assets/images/Ashini logo.png";
+import clinicImage from "../assets/images/clinic image.png";
 
 const featureItems = [
   {
@@ -468,52 +469,89 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* Why Choose Us Section */}
-        <section className="bg-transparent px-4 py-24 sm:px-8 border-y border-blue-100/20 relative overflow-hidden">
+        {/* Why Choose Us Section - Redesigned Asymmetric Layout */}
+        <section className="bg-[#F3F7FC] px-4 py-24 sm:px-8 border-y border-blue-100/30 relative overflow-hidden">
           {/* Ambient Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.03)_0%,_transparent_65%)] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.025)_0%,_transparent_70%)] pointer-events-none" />
 
-          <div className="relative mx-auto max-w-7xl text-center">
-            <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
-              Why Choose Us
-            </div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[#0F172A] sm:text-4xl">
-              What Makes Us Different
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-[#4B5563]">
-              We combine experienced medical care with a modern digital system
-            </p>
-          </div>
-
-          <div className="relative mx-auto mt-14 grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featureItems.map((item) => (
-              <div
-                key={item.title}
-                className="group premium-card border border-slate-200/50 bg-white p-8 hover:border-[#1A73E8]/30 hover:shadow-[0_20px_40px_rgba(26,115,232,0.06)] relative overflow-hidden flex flex-col items-start"
-              >
-                {/* Accent glow on hover */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-blue-500/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-                <div
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl text-2xl transition-transform duration-300 group-hover:scale-110 shadow-sm border"
-                  style={{
-                    backgroundColor: item.color === "#1A73E8" ? "rgba(26,115,232,0.06)" : "rgba(239,68,68,0.06)",
-                    color: item.color,
-                    borderColor: item.color === "#1A73E8" ? "rgba(26,115,232,0.12)" : "rgba(239,68,68,0.12)",
-                  }}
-                >
-                  <i className={`ti ${item.icon}`} />
+          <div className="relative mx-auto max-w-7xl">
+            <div className="grid gap-12 lg:grid-cols-12 items-center">
+              
+              {/* Left Column: Image (40% width -> 5/12 columns) */}
+              <div className="lg:col-span-5 relative group">
+                {/* Decorative background shape */}
+                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-[#1A73E8]/10 to-[#1A73E8]/5 -rotate-1 scale-[1.02] group-hover:rotate-0 transition-transform duration-500" />
+                
+                <div className="relative h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px] rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                  <img
+                    src={clinicImage}
+                    alt="ASHINI Family Clinic Center reception and queue management system"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
                 </div>
-                <h3 className="mt-6 text-base font-bold text-[#0F172A]">
-                  {item.title}
-                </h3>
-                <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
-                  {item.text}
-                </p>
+                
+                {/* Tiny Floating badge for premium feel */}
+                <div className="absolute -bottom-6 -right-4 bg-white border border-slate-100 p-4 rounded-2xl shadow-xl flex items-center gap-3 hidden sm:flex animate-pulse">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-[#1A73E8]">
+                    <i className="ti ti-clock text-lg" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-extrabold text-slate-800">Zero Wait Time</div>
+                    <div className="text-[10px] text-slate-400 font-bold">Track from your phone</div>
+                  </div>
+                </div>
               </div>
-            ))}
+
+              {/* Right Column: Clean Editorial List (60% width -> 7/12 columns) */}
+              <div className="lg:col-span-7 flex flex-col justify-center">
+                <div className="text-left mb-10">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A73E8]">
+                    <i className="ti ti-circle-half-2" />
+                    Why Choose Us
+                  </div>
+                  <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0F172A] sm:text-4xl">
+                    What Makes Us Different
+                  </h2>
+                  <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#4B5563]">
+                    We combine experienced medical care with a modern digital system, designed to respect your time and health.
+                  </p>
+                </div>
+
+                <div className="space-y-0">
+                  {featureItems.map((item, index) => (
+                    <div
+                      key={item.title}
+                      className="group flex gap-5 py-6 border-b border-slate-200 last:border-b-0 items-start hover:bg-white/30 rounded-xl px-4 -mx-4 transition-colors duration-200 animate-slide-in-up"
+                      style={{ animationDelay: `${index * 150}ms` }}
+                    >
+                      <div
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white text-base shadow-sm transition-transform duration-300 group-hover:scale-110"
+                        style={{
+                          backgroundColor: "#1A73E8",
+                        }}
+                      >
+                        <i className={`ti ${item.icon}`} />
+                      </div>
+                      
+                      <div className="space-y-1 flex-1">
+                        <h3 className="text-base font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-150">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs sm:text-sm leading-relaxed text-[#4B5563]">
+                          {item.text}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
           </div>
         </section>
+
 
         {/* Our Services Section */}
         <section className="bg-transparent px-4 py-24 sm:px-8">
