@@ -299,20 +299,20 @@ function LandingPage() {
 
           <div className="relative mx-auto max-w-7xl rounded-[28px] bg-gradient-to-br from-white via-slate-50/50 to-blue-50/20 px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.03)] border border-blue-100/60 sm:px-8 lg:px-12 lg:py-20">
             {/* Corner Dotted Design Accents */}
-            <div 
+            <div
               className="absolute -top-6 -right-6 w-24 h-24 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl hidden md:block"
             />
-            <div 
+            <div
               className="absolute -bottom-6 -left-6 w-24 h-24 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl hidden md:block"
             />
-            
+
             <div className="relative mx-auto max-w-3xl text-center">
               {/* Dotted pattern accent positioned behind/beside the section heading */}
-              <div 
+              <div
                 className="absolute -top-6 left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 w-20 h-20 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none"
                 style={{ width: "80px", height: "80px" }}
               />
-              
+
               <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A73E8] relative z-10">
                 <i className="ti ti-shield-check" />
                 Trusted Healthcare
@@ -388,7 +388,7 @@ function LandingPage() {
                       const name = doc.name || doc.full_name;
                       const specialty = doc.specialty || doc.specialisation || "General Practitioner";
                       const photoUrl = doc.photo_url || "";
-                      
+
                       // Process qualification and experience
                       let qualification = doc.qualification || "";
                       let experience = doc.experience_years ? `${doc.experience_years} Years Experience` : "";
@@ -419,7 +419,7 @@ function LandingPage() {
                                 </div>
                               )}
                             </div>
-                            
+
                             {/* Specialty badge: overlapping the bottom edge of the photo */}
                             <span className="absolute bottom-0 left-4 translate-y-1/2 z-20 rounded-full bg-[#1A73E8] px-3 py-1 text-[9px] font-extrabold uppercase tracking-wider text-white shadow-md whitespace-nowrap">
                               {specialty}
@@ -456,9 +456,8 @@ function LandingPage() {
                           key={idx}
                           onClick={() => scrollTo(idx)}
                           aria-label={`Go to slide ${idx + 1}`}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
-                            scrollIndex === idx ? "w-4 bg-[#1A73E8]" : "w-1.5 bg-slate-300 hover:bg-slate-400"
-                          }`}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${scrollIndex === idx ? "w-4 bg-[#1A73E8]" : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                            }`}
                         />
                       ))}
                     </div>
@@ -476,12 +475,12 @@ function LandingPage() {
 
           <div className="relative mx-auto max-w-7xl">
             <div className="grid gap-12 lg:grid-cols-12 items-center">
-              
+
               {/* Left Column: Image (40% width -> 5/12 columns) */}
               <div className="lg:col-span-5 relative group">
                 {/* Decorative background shape */}
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-[#1A73E8]/10 to-[#1A73E8]/5 -rotate-1 scale-[1.02] group-hover:rotate-0 transition-transform duration-500" />
-                
+
                 <div className="relative h-[300px] sm:h-[400px] md:h-[450px] lg:h-[500px] rounded-2xl overflow-hidden shadow-lg border border-slate-200">
                   <img
                     src={clinicImage}
@@ -491,7 +490,7 @@ function LandingPage() {
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
                 </div>
-                
+
                 {/* Tiny Floating badge for premium feel */}
                 <div className="absolute -bottom-6 -right-4 bg-white border border-slate-100 p-4 rounded-2xl shadow-xl flex items-center gap-3 hidden sm:flex animate-pulse">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-[#1A73E8]">
@@ -534,7 +533,7 @@ function LandingPage() {
                       >
                         <i className={`ti ${item.icon}`} />
                       </div>
-                      
+
                       <div className="space-y-1 flex-1">
                         <h3 className="text-base font-bold text-[#0F172A] group-hover:text-[#1A73E8] transition-colors duration-150">
                           {item.title}
@@ -595,8 +594,8 @@ function LandingPage() {
                 </Link>
                 {/* Decorative govt. registered info badge */}
                 <div className="flex items-center gap-3 bg-[#E8F0FE]/50 rounded-2xl p-3 border border-blue-50/85">
-                  
-                  
+
+
                 </div>
               </div>
             </div>
@@ -606,7 +605,7 @@ function LandingPage() {
               <div className="relative rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-10 text-white shadow-[0_20px_50px_rgba(15,23,42,0.12)] overflow-hidden border border-slate-800/80">
                 {/* Soft Radial Glow positioned top-right corner behind the "15+" stat */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.22)_0%,_transparent_70%)] pointer-events-none" />
-                
+
                 {/* Decorative Glowing Blurs */}
                 <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#EF4444]/8 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/8 pointer-events-none" />
@@ -617,7 +616,7 @@ function LandingPage() {
                 <h3 className="relative z-10 text-xl font-bold tracking-tight text-white mb-8">
                   Trusted by the Badulla Community
                 </h3>
-                
+
                 {/* Stats stacked with more generous vertical spacing */}
                 <div className="relative z-10 space-y-8">
                   {[
@@ -661,27 +660,31 @@ function LandingPage() {
           </div>
 
           <div className="mx-auto mt-14 grid max-w-5xl gap-8 md:grid-cols-3 relative">
-            {/* Process connector line for large screens */}
-            <div className="absolute top-1/3 left-1/6 right-1/6 h-[2px] bg-slate-200/50 hidden md:block -z-10" />
+            {/* Process connector dashed line for large screens */}
+            <div className="absolute top-[22%] left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-blue-200/50 hidden md:block -z-10" />
 
             {stepItems.map((step) => (
               <article
                 key={step.title}
-                className="group relative bg-white premium-card border border-slate-200/50 p-6 flex flex-col items-center text-center shadow-[0_8px_30px_rgba(15,23,42,0.02)]"
+                className="group relative bg-white rounded-2xl border border-slate-200/50 p-6 flex flex-col items-center text-center shadow-[0_8px_30px_rgba(15,23,42,0.02)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(26,115,232,0.06)]"
               >
                 <div className="relative mb-6 w-full">
-                  <div className="overflow-hidden rounded-[20px] bg-slate-50 w-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-slate-100 aspect-[16/10]">
+                  <div className="relative overflow-hidden rounded-2xl bg-slate-50 w-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-slate-100 aspect-[16/10]">
                     <img
                       src={step.image}
                       alt={step.alt}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                     />
+                    {/* Subtle blue-tinted overlay gradient at the bottom third */}
+                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#1A73E8]/15 to-transparent pointer-events-none" />
                   </div>
-                  {/* Overlapping Numbered Gradient Badge */}
-                  <div className={`absolute -top-3 -left-3 z-10 flex h-9 w-9 items-center justify-center rounded-xl text-xs font-bold shadow-md font-sans border-0 ${
-                    step.number === "1" ? "bg-gradient-to-br from-[#FF8A8A] to-[#EF4444] text-white shadow-[0_4px_10px_rgba(239,68,68,0.3)]" :
-                    "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white shadow-[0_4px_10px_rgba(26,115,232,0.3)]"
-                  }`}>
+                  {/* Overlapping Numbered Badge with rotate sticker feel */}
+                  <div
+                    className={`absolute -top-3 -left-3 z-20 flex h-9 w-9 items-center justify-center rounded-xl text-xs font-black shadow-[0_4px_10px_rgba(0,0,0,0.12)] border-2 border-white ${step.number === "1" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
+                        "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white"
+                      }`}
+                    style={{ transform: "rotate(-5deg)" }}
+                  >
                     {step.number}
                   </div>
                 </div>
@@ -702,7 +705,7 @@ function LandingPage() {
             <button
               type="button"
               onClick={handleBookAppointment}
-              className="cursor-pointer rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all duration-200 ease-in-out hover:bg-[#1557B0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.5)] hover:-translate-y-0.5 active:translate-y-0"
+              className="cursor-pointer rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.25)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_8px_24px_rgba(26,115,232,0.45)] hover:scale-[1.03] active:scale-95"
             >
               Get Started Free →
             </button>
