@@ -33,6 +33,9 @@ CREATE TABLE doctors (
 	working_days VARCHAR(50) DEFAULT 'Mon,Tue,Wed,Thu,Fri',
 	working_time VARCHAR(100) DEFAULT NULL,
 	bio TEXT,
+	photo_url VARCHAR(255) DEFAULT NULL,
+	qualification VARCHAR(255) DEFAULT NULL,
+	experience_years INT DEFAULT 0,
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
@@ -167,13 +170,13 @@ VALUES ('Admin', '000000000V', '1990-01-01', 'male', '0771234567', 'admin@flowca
 '$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C');
 
 -- Insert doctors
-INSERT INTO doctors (full_name, nic, date_of_birth, gender, phone, email, password, specialisation, working_days, bio)
+INSERT INTO doctors (full_name, nic, date_of_birth, gender, phone, email, password, specialisation, working_days, bio, qualification, experience_years)
 VALUES ('Dr. K. Ranasinghe', '123456789V', '1980-03-15', 'male', '0712345678', 'ranasinghe@flowcare.lk',
-'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'General Physician', 'Mon,Tue,Wed,Thu,Fri', 'MBBS Colombo, 14 years experience');
+'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'General Physician', 'Mon,Tue,Wed,Thu,Fri', 'MBBS Colombo, 14 years experience', 'MBBS Colombo', 14);
 
-INSERT INTO doctors (full_name, nic, date_of_birth, gender, phone, email, password, specialisation, working_days, bio)
+INSERT INTO doctors (full_name, nic, date_of_birth, gender, phone, email, password, specialisation, working_days, bio, qualification, experience_years)
 VALUES ('Dr. S. Perera', '987654321V', '1985-07-22', 'female', '0723456789', 'perera@flowcare.lk',
-'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'Paediatrician', 'Mon,Wed,Fri', 'MBBS DCH Sri Lanka, 9 years experience');
+'$2y$10$HI9QuD1N2ugR7NkB07wnMeUuNsW1RjzVXhA8EB67N39saRgIQRe6C', 'Paediatrician', 'Mon,Wed,Fri', 'MBBS DCH Sri Lanka, 9 years experience', 'MBBS DCH Sri Lanka', 9);
 
 -- Insert receptionist
 INSERT INTO receptionist (full_name, nic, date_of_birth, gender, phone, email, password)

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
@@ -11,51 +11,38 @@ import { getDoctors } from "../api/doctors";
 import bookImg from "../assets/images/book.png";
 import walkingImg from "../assets/images/walking.png";
 import consultImg from "../assets/images/cunsult.png";
-import doctorOneImg from "../assets/images/doctor1.png";
-import doctorTwoImg from "../assets/images/doctor2.png";
-import doctorThreeImg from "../assets/images/doctor3.png";
 import ashiniLogo from "../assets/images/Ashini logo.png";
 
 const featureItems = [
   {
     icon: "ti-device-mobile",
-    accent: "rgba(26,115,232,0.06)",
     color: "#1A73E8",
     title: "Book From Your Phone",
     text: "Register once and book from mobile browser, no calls needed",
-    hoverBorder: "hover:border-[#1A73E8]/30 hover:shadow-[0_15px_30px_rgba(26,115,232,0.08)]",
   },
   {
     icon: "ti-list-numbers",
-    accent: "rgba(16,185,129,0.06)",
-    color: "#10B981",
+    color: "#1A73E8",
     title: "Live Queue Tracking",
     text: "Watch your queue position update in real time from anywhere",
-    hoverBorder: "hover:border-[#10B981]/30 hover:shadow-[0_15px_30px_rgba(16,185,129,0.08)]",
   },
   {
     icon: "ti-notes",
-    accent: "rgba(26,115,232,0.06)",
     color: "#1A73E8",
     title: "Digital Consultation Records",
     text: "Every diagnosis and doctor note saved and accessible forever",
-    hoverBorder: "hover:border-[#1A73E8]/30 hover:shadow-[0_15px_30px_rgba(26,115,232,0.08)]",
   },
   {
     icon: "ti-user-check",
-    accent: "rgba(239,68,68,0.06)",
     color: "#EF4444",
     title: "Walk-ins Always Welcome",
     text: "No appointment needed — just arrive and we add you to queue",
-    hoverBorder: "hover:border-[#EF4444]/30 hover:shadow-[0_15px_30px_rgba(239,68,68,0.08)]",
   },
   {
     icon: "ti-heart-rate-monitor",
-    accent: "rgba(239,68,68,0.06)",
     color: "#EF4444",
     title: "Experienced Specialists",
     text: "Qualified MBBS doctors with years of Uva Province experience",
-    hoverBorder: "hover:border-[#EF4444]/30 hover:shadow-[0_15px_30px_rgba(239,68,68,0.08)]",
   },
 ];
 
@@ -75,8 +62,6 @@ const stepItems = [
     text: "Create your free patient account in under 2 minutes",
     image: bookImg,
     alt: "Register",
-    badgeClass: "bg-[#FEF2F2] border-[#EF4444]/20 text-[#EF4444]",
-    hoverClass: "hover:border-[#EF4444]/20 hover:shadow-[0_15px_30px_rgba(239,68,68,0.06)]",
   },
   {
     number: "2",
@@ -84,8 +69,6 @@ const stepItems = [
     text: "Choose your doctor and time slot online, or just arrive",
     image: walkingImg,
     alt: "Book or Walk In",
-    badgeClass: "bg-[#EBF7ED] border-[#16A34A]/20 text-[#16A34A]",
-    hoverClass: "hover:border-[#16A34A]/20 hover:shadow-[0_15px_30px_rgba(22,163,74,0.06)]",
   },
   {
     number: "3",
@@ -93,49 +76,9 @@ const stepItems = [
     text: "Track your queue live and see the doctor when called",
     image: consultImg,
     alt: "Track and Consult",
-    badgeClass: "bg-[#E8F0FE] border-[#1A73E8]/20 text-[#1A73E8]",
-    hoverClass: "hover:border-[#1A73E8]/20 hover:shadow-[0_15px_30px_rgba(26,115,232,0.06)]",
   },
 ];
 
-const doctorShowcaseItems = [
-  {
-    specialty: "Cardiology",
-    badgeClass: "bg-[#FEF2F2] text-[#EF4444] border border-[#EF4444]/10",
-    image: doctorOneImg,
-    name: "Dr. Prasanna Perera",
-    title: "Senior Cardiologist",
-    credentials: "MD, FRCP Cardiology (Oxford)",
-    experience: "15+ Years Experience",
-    hoverClass: "hover:border-[#EF4444]/30 hover:shadow-[0_20px_45px_rgba(239,68,68,0.08)]",
-    titleHoverClass: "group-hover:text-[#EF4444]",
-    subtitleColorClass: "text-[#EF4444]",
-  },
-  {
-    specialty: "Pediatrics",
-    badgeClass: "bg-[#EBF7ED] text-[#16A34A] border border-[#16A34A]/10",
-    image: doctorTwoImg,
-    name: "Dr. Sarah Wijesinghe",
-    title: "Pediatric Specialist",
-    credentials: "MBBS, DCH, MD (Colombo)",
-    experience: "12+ Years Experience",
-    hoverClass: "hover:border-[#16A34A]/30 hover:shadow-[0_20px_45px_rgba(22,163,74,0.08)]",
-    titleHoverClass: "group-hover:text-[#16A34A]",
-    subtitleColorClass: "text-[#16A34A]",
-  },
-  {
-    specialty: "Surgery",
-    badgeClass: "bg-[#FEF2F2] text-[#EF4444] border border-[#EF4444]/10",
-    image: doctorThreeImg,
-    name: "Dr. Aruna Perera",
-    title: "General Surgeon",
-    credentials: "MS, FRCS (Edinburgh)",
-    experience: "20+ Years Experience",
-    hoverClass: "hover:border-[#EF4444]/30 hover:shadow-[0_20px_45px_rgba(239,68,68,0.08)]",
-    titleHoverClass: "group-hover:text-[#EF4444]",
-    subtitleColorClass: "text-[#EF4444]",
-  },
-];
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -143,6 +86,50 @@ function LandingPage() {
   const [doctors, setDoctors] = useState([]);
   const [doctorsLoading, setDoctorsLoading] = useState(true);
   const [doctorsError, setDoctorsError] = useState("");
+  const [scrollIndex, setScrollIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const carouselRef = useRef(null);
+
+  const scrollPrev = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -244, behavior: "smooth" });
+    }
+  };
+
+  const scrollNext = () => {
+    if (carouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      if (scrollLeft + clientWidth >= scrollWidth - 15) {
+        carouselRef.current.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        carouselRef.current.scrollBy({ left: 244, behavior: "smooth" });
+      }
+    }
+  };
+
+  const scrollTo = (index) => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollTo({ left: index * 244, behavior: "smooth" });
+    }
+  };
+
+  const handleScroll = () => {
+    if (carouselRef.current) {
+      const scrollLeft = carouselRef.current.scrollLeft;
+      const index = Math.round(scrollLeft / 244);
+      setScrollIndex(index);
+    }
+  };
+
+  useEffect(() => {
+    if (doctors.length <= 1 || isPaused) return;
+
+    const interval = setInterval(() => {
+      scrollNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [doctors, isPaused]);
 
   useEffect(() => {
     let active = true;
@@ -305,69 +292,188 @@ function LandingPage() {
         </section>
 
         {/* Doctor Showcase Section */}
-        <section className="bg-transparent px-4 py-20 sm:px-8">
-          <div className="mx-auto max-w-7xl rounded-[24px] bg-white px-6 py-14 shadow-[0_15px_30px_rgba(26,115,232,0.05)] border border-blue-100/60 sm:px-8 lg:px-12 lg:py-16">
-            <div className="mx-auto max-w-3xl text-center">
-              <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A73E8]">
+        <section className="bg-transparent px-4 py-24 sm:px-8 relative overflow-hidden">
+          {/* Accent Ambient Glow behind doctor cards */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.03)_0%,_transparent_70%)] pointer-events-none" />
+
+          <div className="relative mx-auto max-w-7xl rounded-[28px] bg-gradient-to-br from-white via-slate-50/50 to-blue-50/20 px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.03)] border border-blue-100/60 sm:px-8 lg:px-12 lg:py-20">
+            {/* Corner Dotted Design Accents */}
+            <div 
+              className="absolute -top-6 -right-6 w-24 h-24 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl hidden md:block"
+            />
+            <div 
+              className="absolute -bottom-6 -left-6 w-24 h-24 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl hidden md:block"
+            />
+            
+            <div className="relative mx-auto max-w-3xl text-center">
+              {/* Dotted pattern accent positioned behind/beside the section heading */}
+              <div 
+                className="absolute -top-6 left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 w-20 h-20 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none"
+                style={{ width: "80px", height: "80px" }}
+              />
+              
+              <div className="inline-flex items-center gap-2 rounded-full bg-[#E8F0FE] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#1A73E8] relative z-10">
                 <i className="ti ti-shield-check" />
                 Trusted Healthcare
               </div>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0F172A] sm:text-4xl">
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-[#0F172A] sm:text-4xl relative z-10">
                 Meet Our Qualified Doctors
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-[#4B5563]">
+              <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-[#4B5563] relative z-10">
                 At ASHINI Family Clinic Center, our specialists bring decades of clinical precision and compassionate care.
                 From complex surgical interventions to routine family wellness, we are committed to your health journey.
               </p>
             </div>
 
-            <div className="mx-auto mt-12 grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3 justify-center">
-              {doctorShowcaseItems.map((doctor) => (
-                <article
-                  key={doctor.name}
-                  className={`group overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 ${doctor.hoverClass}`}
-                >
-                  <div className="relative overflow-hidden bg-slate-100">
-                    <img
-                      src={doctor.image}
-                      alt={doctor.name}
-                      className="h-72 w-full object-cover object-top sm:h-80 transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <span
-                      className={`absolute left-4 top-4 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider shadow-sm backdrop-blur-md ${doctor.badgeClass}`}
-                    >
-                      {doctor.specialty}
-                    </span>
-                  </div>
+            {/* Carousel Container */}
+            <div className="relative mx-auto mt-16 max-w-6xl px-12 group/carousel">
+              {/* Navigation Arrows */}
+              {doctors.length > 0 && (
+                <>
+                  <button
+                    onClick={scrollPrev}
+                    aria-label="Previous Doctor"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1A73E8] shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-slate-100 hover:bg-[#F8FAFC] transition-all hover:scale-105 duration-200 cursor-pointer opacity-70 group-hover/carousel:opacity-100"
+                  >
+                    <i className="ti ti-chevron-left text-lg font-bold" />
+                  </button>
+                  <button
+                    onClick={scrollNext}
+                    aria-label="Next Doctor"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1A73E8] shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-slate-100 hover:bg-[#F8FAFC] transition-all hover:scale-105 duration-200 cursor-pointer opacity-70 group-hover/carousel:opacity-100"
+                  >
+                    <i className="ti ti-chevron-right text-lg font-bold" />
+                  </button>
+                </>
+              )}
 
-                  <div className="p-6">
-                    <h3 className={`text-lg font-bold text-[#0F172A] transition-colors duration-200 ${doctor.titleHoverClass}`}>
-                      {doctor.name}
-                    </h3>
-                    <p className={`mt-0.5 text-xs font-semibold uppercase tracking-wider ${doctor.subtitleColorClass}`}>
-                      {doctor.title}
-                    </p>
-
-                    <div className="mt-5 space-y-2.5 text-sm text-[#4B5563] border-t border-slate-100 pt-4">
-                      <div className="flex items-start gap-2.5">
-                        <i className="ti ti-school text-[#9CA3AF] text-lg mt-0.5" />
-                        <span className="text-xs leading-relaxed">{doctor.credentials}</span>
-                      </div>
-                      <div className="flex items-start gap-2.5">
-                        <i className="ti ti-briefcase text-[#9CA3AF] text-lg mt-0.5" />
-                        <span className="text-xs font-medium">{doctor.experience}</span>
-                      </div>
+              {/* Scrollable track */}
+              {doctorsLoading ? (
+                <div className="flex gap-6 overflow-x-hidden py-4 justify-center">
+                  {[1, 2, 3].map((n) => (
+                    <div key={n} className="w-[220px] shrink-0 bg-white rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] animate-pulse space-y-4">
+                      <div className="aspect-[4/5] w-full bg-slate-200 rounded-xl" />
+                      <div className="h-4 bg-slate-200 rounded w-3/4" />
+                      <div className="h-3 bg-slate-200 rounded w-1/2" />
+                      <div className="h-3 bg-slate-200 rounded w-5/6" />
                     </div>
+                  ))}
+                </div>
+              ) : doctorsError ? (
+                <div className="text-center py-12 text-[#E53935] font-medium text-sm">
+                  {doctorsError}
+                </div>
+              ) : doctors.length === 0 ? (
+                <div className="w-full text-center py-12 text-[#4B5563]">
+                  <div className="text-4xl mb-2 text-slate-300"><i className="ti ti-stethoscope" /></div>
+                  <p className="text-sm font-semibold">No qualified doctors added yet.</p>
+                  <p className="text-xs text-slate-400">Doctors will appear here once they are registered by the administration.</p>
+                </div>
+              ) : (
+                <>
+                  <div
+                    ref={carouselRef}
+                    onScroll={handleScroll}
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
+                    className="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-6 px-1 scrollbar-hide"
+                    style={{
+                      scrollbarWidth: "none",
+                      msOverflowStyle: "none",
+                    }}
+                  >
+                    {doctors.map((doc, idx) => {
+                      const id = doc.id || doc.doctor_id;
+                      const name = doc.name || doc.full_name;
+                      const specialty = doc.specialty || doc.specialisation || "General Practitioner";
+                      const photoUrl = doc.photo_url || "";
+                      
+                      // Process qualification and experience
+                      let qualification = doc.qualification || "";
+                      let experience = doc.experience_years ? `${doc.experience_years} Years Experience` : "";
+                      if (doc.bio && (!qualification || !experience)) {
+                        const parts = doc.bio.split(',');
+                        if (parts.length > 0 && !qualification) qualification = parts[0].trim();
+                        if (parts.length > 1 && !experience) experience = parts[1].trim();
+                      }
+                      if (!qualification) qualification = doc.bio || "Medical Officer";
+                      if (!experience) experience = "Experienced Consultant";
+
+                      return (
+                        <article
+                          key={id || idx}
+                          className="group w-[80%] sm:w-[45%] md:w-[45%] lg:w-[220px] shrink-0 snap-start bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_24px_rgba(26,115,232,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col relative"
+                        >
+                          <div className="relative">
+                            <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-50 rounded-t-2xl">
+                              {photoUrl ? (
+                                <img
+                                  src={photoUrl}
+                                  alt={name}
+                                  className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1A73E8] to-[#1557B0] text-white text-3xl font-extrabold select-none">
+                                  {getInitials(name)}
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* Specialty badge: overlapping the bottom edge of the photo */}
+                            <span className="absolute bottom-0 left-4 translate-y-1/2 z-20 rounded-full bg-[#1A73E8] px-3 py-1 text-[9px] font-extrabold uppercase tracking-wider text-white shadow-md whitespace-nowrap">
+                              {specialty}
+                            </span>
+                          </div>
+
+                          <div className="p-4 pt-5 flex-1 flex flex-col justify-between">
+                            <div>
+                              <h3 className="text-sm font-extrabold text-[#0F172A] line-clamp-1 group-hover:text-[#1A73E8] transition-colors duration-200">
+                                {name}
+                              </h3>
+                              <p className="mt-1.5 text-[11px] font-semibold text-[#4B5563] line-clamp-1">
+                                {qualification}
+                              </p>
+                            </div>
+
+                            <div className="mt-4 flex items-center gap-2 text-[11px] text-[#4B5563] border-t border-slate-100 pt-3">
+                              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#1A73E8]">
+                                <i className="ti ti-briefcase text-[9px]" />
+                              </div>
+                              <span className="font-semibold text-slate-700">{experience}</span>
+                            </div>
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
-                </article>
-              ))}
+
+                  {/* Dot Indicators */}
+                  {doctors.length > 1 && (
+                    <div className="mt-4 flex justify-center gap-1.5">
+                      {doctors.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => scrollTo(idx)}
+                          aria-label={`Go to slide ${idx + 1}`}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            scrollIndex === idx ? "w-4 bg-[#1A73E8]" : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </section>
 
         {/* Why Choose Us Section */}
-        <section className="bg-transparent px-4 py-20 sm:px-8 border-y border-blue-100/20">
-          <div className="mx-auto max-w-7xl text-center">
+        <section className="bg-transparent px-4 py-24 sm:px-8 border-y border-blue-100/20 relative overflow-hidden">
+          {/* Ambient Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.03)_0%,_transparent_65%)] pointer-events-none" />
+
+          <div className="relative mx-auto max-w-7xl text-center">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Why Choose Us
             </div>
@@ -379,22 +485,29 @@ function LandingPage() {
             </p>
           </div>
 
-          <div className="mx-auto mt-12 grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="relative mx-auto mt-14 grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featureItems.map((item) => (
               <div
                 key={item.title}
-                className={`group rounded-2xl border border-slate-200/50 bg-white p-6 transition-all duration-300 ${item.hoverBorder}`}
+                className="group premium-card border border-slate-200/50 bg-white p-8 hover:border-[#1A73E8]/30 hover:shadow-[0_20px_40px_rgba(26,115,232,0.06)] relative overflow-hidden flex flex-col items-start"
               >
+                {/* Accent glow on hover */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-blue-500/5 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
                 <div
-                  className="flex h-11 w-11 items-center justify-center rounded-xl text-xl transition-transform duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: item.accent, color: item.color }}
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl text-2xl transition-transform duration-300 group-hover:scale-110 shadow-sm border"
+                  style={{
+                    backgroundColor: item.color === "#1A73E8" ? "rgba(26,115,232,0.06)" : "rgba(239,68,68,0.06)",
+                    color: item.color,
+                    borderColor: item.color === "#1A73E8" ? "rgba(26,115,232,0.12)" : "rgba(239,68,68,0.12)",
+                  }}
                 >
                   <i className={`ti ${item.icon}`} />
                 </div>
-                <h3 className="mt-5 text-base font-bold text-[#0F172A]">
+                <h3 className="mt-6 text-base font-bold text-[#0F172A]">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
+                <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
                   {item.text}
                 </p>
               </div>
@@ -403,7 +516,7 @@ function LandingPage() {
         </section>
 
         {/* Our Services Section */}
-        <section className="bg-transparent px-4 py-20 sm:px-8">
+        <section className="bg-transparent px-4 py-24 sm:px-8">
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-12 lg:items-center">
 
             {/* Left Column: Services */}
@@ -422,9 +535,9 @@ function LandingPage() {
                 {serviceItems.map((service) => (
                   <div
                     key={service}
-                    className="flex items-center gap-3 bg-white rounded-xl border border-blue-100/40 p-3 shadow-sm transition-all duration-200 hover:bg-blue-50/50 hover:border-blue-200/60"
+                    className="flex items-center gap-3 bg-white rounded-xl border border-blue-100/30 p-3 shadow-[0_2px_8px_rgba(0,0,0,0.01)] transition-all duration-200 hover:bg-blue-50/30 hover:border-blue-200/50"
                   >
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#EAFAF1] text-[#2ECC71]">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#E8F0FE] text-[#1A73E8]">
                       <i className="ti ti-check text-xs font-bold" />
                     </div>
                     <span className="text-xs sm:text-sm font-medium text-[#4B5563]">{service}</span>
@@ -445,11 +558,14 @@ function LandingPage() {
 
             {/* Right Column: Stats Card */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl bg-slate-900 p-8 text-white shadow-xl overflow-hidden border border-slate-800">
+              <div className="relative rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0A101D] p-10 text-white shadow-[0_20px_50px_rgba(15,23,42,0.12)] overflow-hidden border border-slate-800/80">
                 {/* Decorative Glowing Blurs */}
-                <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#EF4444]/20 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#10B981]/20 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#EF4444]/12 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#1A73E8]/12 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/12 rounded-full blur-3xl pointer-events-none" />
+
+                {/* Soft Radial Glow behind the stats */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.15)_0%,_transparent_65%)] pointer-events-none" />
 
                 {/* Visual backdrop grid pattern */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.03)_1px,_transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
@@ -463,9 +579,12 @@ function LandingPage() {
                     ["3", "Specialist Doctors"],
                     ["50+", "Patients per day"],
                   ].map(([value, label]) => (
-                    <div key={label} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
-                      <div className="text-4xl font-extrabold text-white font-sans">{value}</div>
-                      <div className="mt-1 text-xs sm:text-sm text-white/70 font-medium">{label}</div>
+                    <div key={label} className="border-b border-white/10 pb-4 last:border-0 last:pb-0 flex flex-col items-start">
+                      <div className="text-4xl font-extrabold font-sans bg-gradient-to-r from-blue-400 via-blue-200 to-white bg-clip-text text-transparent inline-block tracking-tight">
+                        {value}
+                      </div>
+                      <div className="h-[2px] w-8 bg-gradient-to-r from-[#1A73E8] to-transparent mt-1.5 rounded-full" />
+                      <div className="mt-2.5 text-xs sm:text-sm text-white/70 font-medium">{label}</div>
                     </div>
                   ))}
                 </div>
@@ -473,7 +592,7 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={() => navigate("/register")}
-                  className="relative z-10 mt-8 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-slate-900 shadow-md transition-all duration-300 hover:bg-[#F8FAFC] hover:-translate-y-0.5 active:translate-y-0"
+                  className="relative z-10 mt-8 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-slate-900 shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-200 ease-in-out hover:bg-[#F8FAFC] hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(26,115,232,0.2)] active:scale-100"
                 >
                   Register as a Patient
                 </button>
@@ -483,7 +602,7 @@ function LandingPage() {
         </section>
 
         {/* How It Works Section */}
-        <section className="bg-transparent px-4 py-20 sm:px-8 border-t border-blue-100/20">
+        <section className="bg-transparent px-4 py-24 sm:px-8 border-t border-blue-100/20">
           <div className="mx-auto max-w-7xl text-center">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Simple Process
@@ -493,22 +612,28 @@ function LandingPage() {
             </h2>
           </div>
 
-          <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3 relative">
+          <div className="mx-auto mt-14 grid max-w-5xl gap-8 md:grid-cols-3 relative">
             {/* Process connector line for large screens */}
             <div className="absolute top-1/3 left-1/6 right-1/6 h-[2px] bg-slate-200/50 hidden md:block -z-10" />
 
             {stepItems.map((step) => (
               <article
                 key={step.title}
-                className={`group relative bg-white rounded-2xl border border-slate-200/50 p-6 transition-all duration-300 flex flex-col items-center text-center ${step.hoverClass}`}
+                className="group relative bg-white premium-card border border-slate-200/50 p-6 flex flex-col items-center text-center shadow-[0_8px_30px_rgba(15,23,42,0.02)]"
               >
-                <div className="relative mb-6 overflow-hidden rounded-xl bg-slate-50 w-full">
-                  <img
-                    src={step.image}
-                    alt={step.alt}
-                    className="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className={`absolute top-3 left-3 flex h-8 w-8 items-center justify-center rounded-full border text-xs font-bold shadow-md font-sans ${step.badgeClass}`}>
+                <div className="relative mb-6 w-full">
+                  <div className="overflow-hidden rounded-[20px] bg-slate-50 w-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-slate-100 aspect-[16/10]">
+                    <img
+                      src={step.image}
+                      alt={step.alt}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  {/* Overlapping Numbered Gradient Badge */}
+                  <div className={`absolute -top-3 -left-3 z-10 flex h-9 w-9 items-center justify-center rounded-xl text-xs font-bold shadow-md font-sans border-0 ${
+                    step.number === "1" ? "bg-gradient-to-br from-[#FF8A8A] to-[#EF4444] text-white shadow-[0_4px_10px_rgba(239,68,68,0.3)]" :
+                    "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white shadow-[0_4px_10px_rgba(26,115,232,0.3)]"
+                  }`}>
                     {step.number}
                   </div>
                 </div>
@@ -517,7 +642,7 @@ function LandingPage() {
                   <h3 className="text-base font-bold text-[#0F172A]">
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
+                  <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
                     {step.text}
                   </p>
                 </div>
@@ -525,11 +650,11 @@ function LandingPage() {
             ))}
           </div>
 
-          <div className="mt-12 text-center">
+          <div className="mt-14 text-center">
             <button
               type="button"
               onClick={handleBookAppointment}
-              className="cursor-pointer rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.5)] hover:-translate-y-0.5 active:translate-y-0"
+              className="cursor-pointer rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all duration-200 ease-in-out hover:bg-[#1557B0] hover:shadow-[0_6px_20px_rgba(26,115,232,0.5)] hover:-translate-y-0.5 active:translate-y-0"
             >
               Get Started Free →
             </button>

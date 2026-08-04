@@ -27,7 +27,10 @@ function ManageUsers() {
     role: 'doctor',
     specialisation: '',
     working_days: [],
-    working_time: ''
+    working_time: '',
+    qualification: '',
+    experience_years: '',
+    photo_url: ''
   })
   const [startTime, setStartTime] = useState('09:00')
   const [endTime, setEndTime] = useState('17:00')
@@ -132,7 +135,10 @@ function ManageUsers() {
         role: newUser.role,
         specialisation: newUser.role === 'doctor' ? newUser.specialisation : '',
         working_days: newUser.role === 'doctor' ? newUser.working_days.join(',') : '',
-        working_time: newUser.role === 'doctor' ? `${startTime}-${endTime}` : ''
+        working_time: newUser.role === 'doctor' ? `${startTime}-${endTime}` : '',
+        qualification: newUser.role === 'doctor' ? newUser.qualification : '',
+        experience_years: newUser.role === 'doctor' ? newUser.experience_years : '',
+        photo_url: newUser.role === 'doctor' ? newUser.photo_url : ''
       }
 
       const response = await fetch('/api/admin/users.php', {
@@ -162,7 +168,10 @@ function ManageUsers() {
           role: 'doctor',
           specialisation: '',
           working_days: [],
-          working_time: ''
+          working_time: '',
+          qualification: '',
+          experience_years: '',
+          photo_url: ''
         })
       } else {
         setError(data.error || 'Failed to create user.')
@@ -377,6 +386,36 @@ function ManageUsers() {
                             className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
                             placeholder="e.g. Cardiologist, Pediatrician, General Practitioner"
                             required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Qualification</label>
+                          <input
+                            type="text"
+                            value={newUser.qualification}
+                            onChange={(e) => setNewUser({ ...newUser, qualification: e.target.value })}
+                            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                            placeholder="e.g. MBBS, DCH, MD (Colombo)"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Experience (Years)</label>
+                          <input
+                            type="number"
+                            value={newUser.experience_years}
+                            onChange={(e) => setNewUser({ ...newUser, experience_years: e.target.value })}
+                            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                            placeholder="e.g. 12"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Photo URL</label>
+                          <input
+                            type="text"
+                            value={newUser.photo_url}
+                            onChange={(e) => setNewUser({ ...newUser, photo_url: e.target.value })}
+                            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                            placeholder="e.g. https://images.unsplash.com/... or /assets/images/doc.png"
                           />
                         </div>
                         <div className="grid grid-cols-2 gap-4">

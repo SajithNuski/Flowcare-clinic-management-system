@@ -14,9 +14,9 @@ require_role('admin');
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	$stmt = mysqli_prepare(
 		$conn,
-		"SELECT id, full_name, nic, date_of_birth, gender, phone, address, email, 'doctor' AS role, status, created_at, id AS doctor_id, specialisation, working_days, working_time, bio FROM doctors
+		"SELECT id, full_name, nic, date_of_birth, gender, phone, address, email, 'doctor' AS role, status, created_at, id AS doctor_id, specialisation, working_days, working_time, bio, photo_url, qualification, experience_years FROM doctors
 		 UNION ALL
-		 SELECT id, full_name, nic, date_of_birth, gender, phone, address, email, 'receptionist' AS role, status, created_at, NULL AS doctor_id, NULL AS specialisation, NULL AS working_days, NULL AS working_time, NULL AS bio FROM receptionist
+		 SELECT id, full_name, nic, date_of_birth, gender, phone, address, email, 'receptionist' AS role, status, created_at, NULL AS doctor_id, NULL AS specialisation, NULL AS working_days, NULL AS working_time, NULL AS bio, NULL AS photo_url, NULL AS qualification, NULL AS experience_years FROM receptionist
 		 ORDER BY role ASC, full_name ASC"
 	);
 	mysqli_stmt_execute($stmt);
@@ -96,9 +96,12 @@ if ($action === 'create') {
 	}
 
 	if ($role === 'doctor') {
-		$stmt = mysqli_prepare($conn, "UPDATE doctors SET specialisation = ?, working_days = ?, working_time = ?, address = ?, bio = ? WHERE id = ?");
+		$stmt = mysqli_prepare($conn, "UPDATE doctors SET specialisation = ?, working_days = ?, working_time = ?, address = ?, bio = ?, photo_url = ?, qualification = ?, experience_years = ? WHERE id = ?");
 		$bio = trim($data['bio'] ?? '');
-		mysqli_stmt_bind_param($stmt, "sssssi", $specialisation, $working_days, $working_time, $address, $bio, $user_id);
+		$photo_url = trim($data['photo_url'] ?? '');
+		$qualification = trim($data['qualification'] ?? '');
+		$experience_years = isset($data['experience_years']) ? (int)$data['experience_years'] : 0;
+		mysqli_stmt_bind_param($stmt, "sssssssii", $specialisation, $working_days, $working_time, $address, $bio, $photo_url, $qualification, $experience_years, $user_id);
 
 		if (!mysqli_stmt_execute($stmt)) {
 			mysqli_stmt_close($stmt);
