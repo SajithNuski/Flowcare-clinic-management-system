@@ -31,6 +31,7 @@ import ManageQueue from "./pages/ManageQueue";
 
 import DoctorQueue from "./pages/DoctorQueue";
 import DoctorConsultations from "./pages/DoctorConsultations";
+import DoctorProfile from "./pages/DoctorProfile";
 import Reports from "./pages/Reports";
 
 function PageStub({ title }) {
@@ -161,6 +162,14 @@ function App() {
             element={
               <ProtectedRoute allowedRole="doctor">
                 <ManagePatients />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/doctor/profile"
+            element={
+              <ProtectedRoute allowedRole="doctor">
+                <DoctorProfile />
               </ProtectedRoute>
             }
           />

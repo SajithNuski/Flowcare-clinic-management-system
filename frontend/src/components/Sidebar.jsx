@@ -66,6 +66,11 @@ function Sidebar({ role, activePage }) {
         to: "/doctor/consultations",
         icon: "ti ti-notes",
       },
+      {
+        label: "Profile",
+        to: "/doctor/profile",
+        icon: "ti ti-user",
+      },
     ],
     admin: [
       {

@@ -170,6 +170,16 @@ function DoctorDashboard() {
   const queue = dashboardData?.queue || [];
   const recentConsultations = dashboardData?.recent_consultations || [];
   const clinicInsights = dashboardData?.clinic_insights || { clinic_load: 0, patient_satisfaction: 4.8 };
+  
+  const initials = doctorName
+    ? doctorName
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+    : "DR";
 
   // Identify in_consultation entry and the first waiting entry
   const inConsultationEntry = queue.find(q => q.status === "in_consultation");
@@ -199,11 +209,17 @@ function DoctorDashboard() {
                 <div className="text-sm font-bold text-slate-800">{doctorName}</div>
                 <div className="text-xs text-slate-500">{specialisation}</div>
               </div>
-              <img
-                src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=150&h=150&q=80"
-                alt="Doctor Profile"
-                className="w-10 h-10 rounded-full object-cover border border-slate-200"
-              />
+              {dashboardData?.doctor?.photo_url ? (
+                <img
+                  src={dashboardData.doctor.photo_url}
+                  alt="Doctor Profile"
+                  className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                  {initials}
+                </div>
+              )}
             </div>
           </div>
 

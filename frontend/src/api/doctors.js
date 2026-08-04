@@ -27,4 +27,19 @@ export async function getDoctorDashboardData() {
     return { success: false, error: error.message };
   }
 }
-
+/**
+ * Updates the profile of the logged-in doctor.
+ * @param {FormData} formData
+ */
+export async function updateDoctorProfile(formData) {
+  try {
+    const response = await axios.post(`${API_BASE}/doctor/profile/update.php`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}

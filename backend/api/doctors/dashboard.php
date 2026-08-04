@@ -21,7 +21,7 @@ $today = date('Y-m-d');
 $user_id = (int) $_SESSION['user_id'];
 
 // 1. Get doctor details and user details (name)
-$doc_stmt = mysqli_prepare($conn, "SELECT d.id, d.specialisation, d.bio, d.full_name FROM doctors d WHERE d.id = ? LIMIT 1");
+$doc_stmt = mysqli_prepare($conn, "SELECT d.id, d.specialisation, d.bio, d.full_name, d.photo_url, d.qualification, d.experience_years, d.email FROM doctors d WHERE d.id = ? LIMIT 1");
 mysqli_stmt_bind_param($doc_stmt, "i", $user_id);
 mysqli_stmt_execute($doc_stmt);
 $doc_result = mysqli_stmt_get_result($doc_stmt);
@@ -83,7 +83,11 @@ respond_json([
 		"user_id" => $user_id,
 		"full_name" => $full_name,
 		"specialisation" => $specialisation,
-		"bio" => $doc_row['bio']
+		"bio" => $doc_row['bio'],
+		"photo_url" => $doc_row['photo_url'],
+		"qualification" => $doc_row['qualification'],
+		"experience_years" => (int) $doc_row['experience_years'],
+		"email" => $doc_row['email']
 	],
 	"stats" => [
 		"total_patients" => $total_patients,

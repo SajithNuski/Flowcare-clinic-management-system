@@ -13,6 +13,11 @@ export default defineConfig({
         rewrite: (path) => path.replace("/api", "/flowcare/backend/api"),
         changeOrigin: true,
       },
+      "/uploads": {
+        target: "http://127.0.0.1",
+        rewrite: (path) => path.replace("/uploads", "/flowcare/uploads"),
+        changeOrigin: true,
+      },
     },
   },
 });
