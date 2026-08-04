@@ -680,7 +680,14 @@ function LandingPage() {
         </section>
 
         {/* How It Works Section */}
-        <section className="relative bg-gradient-to-b from-white to-[#F0F6FE] px-4 py-24 sm:px-8 border-t border-blue-100/20 overflow-hidden">
+        <section 
+          className="relative bg-gradient-to-b from-white to-[#F0F6FE] px-4 py-32 sm:px-8 border-t border-blue-100/20 overflow-hidden"
+          style={{
+            '--card-radius': '24px',
+            '--card-shadow': '0 4px 6px rgba(0,0,0,0.04), 0 12px 24px rgba(0,0,0,0.08)',
+            '--badge-shadow': '0 4px 12px rgba(0,0,0,0.15)'
+          }}
+        >
           {/* Ambient Blue Glow background div */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.06)_0%,_transparent_70%)] pointer-events-none" />
 
@@ -688,9 +695,9 @@ function LandingPage() {
           <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#1A73E8]/5 blur-2xl pointer-events-none" />
           <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-[#1A73E8]/5 blur-3xl pointer-events-none" />
 
-          
-
-          
+          {/* Subtle Decorative Ambient Background Blobs */}
+          <div className="absolute top-[25%] left-[10%] w-[350px] h-[350px] bg-[#1A73E8]/5 rounded-full blur-[100px] pointer-events-none" />
+          <div className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] bg-[#10B981]/5 rounded-full blur-[120px] pointer-events-none" />
 
           <div className="relative mx-auto max-w-7xl text-center z-20">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
@@ -701,40 +708,60 @@ function LandingPage() {
             </h2>
           </div>
 
-          <div className="mx-auto mt-14 grid max-w-5xl gap-8 md:grid-cols-3 relative z-20">
-            {/* Process connector dashed line for large screens */}
-            <div className="absolute top-[22%] left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-blue-200/50 hidden md:block -z-10" />
+          <div className="mx-auto mt-20 grid max-w-5xl gap-8 md:grid-cols-3 relative z-20">
+            {/* Process connector line for large screens */}
+            <div className="absolute top-[35%] left-[10%] right-[10%] h-[2px] border-t-2 border-dashed border-blue-200/50 hidden md:block -z-10" />
+
+            {/* Chevron arrows indicating progression direction between steps */}
+            <div className="absolute top-[32%] left-[32%] -translate-y-1/2 hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-white border border-blue-100/50 shadow-sm z-10 text-[#1A73E8]">
+              <i className="ti ti-chevron-right text-xs" />
+            </div>
+            <div className="absolute top-[38%] left-[65%] -translate-y-1/2 hidden md:flex items-center justify-center w-8 h-8 rounded-full bg-white border border-blue-100/50 shadow-sm z-10 text-[#1A73E8]">
+              <i className="ti ti-chevron-right text-xs" />
+            </div>
 
             {stepItems.map((step) => (
               <article
                 key={step.title}
-                className="group relative bg-white rounded-2xl border border-slate-200/50 p-6 flex flex-col items-center text-center shadow-[0_8px_30px_rgba(15,23,42,0.02)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_rgba(26,115,232,0.06)]"
+                className={`group relative bg-white border border-slate-200/40 p-6 flex flex-col items-center text-center shadow-[var(--card-shadow)] hover:shadow-[0_20px_40px_rgba(26,115,232,0.1)] transition-all duration-300 ease-in-out hover:-translate-y-2 ${
+                  step.number === "1" ? "md:-translate-y-2 hover:md:-translate-y-4" :
+                  step.number === "2" ? "md:translate-y-4 hover:md:translate-y-2" :
+                  "md:-translate-y-2 hover:md:-translate-y-4"
+                }`}
+                style={{
+                  borderRadius: 'var(--card-radius)'
+                }}
               >
                 <div className="relative mb-6 w-full">
-                  <div className="relative overflow-hidden rounded-2xl bg-slate-50 w-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-slate-100 aspect-[16/10]">
+                  {/* Image wrapper with high rounded corners and overflow hidden */}
+                  <div className="relative overflow-hidden rounded-[20px] bg-slate-50 w-full shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-slate-100 h-56">
                     <img
                       src={step.image}
                       alt={step.alt}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    {/* Subtle blue-tinted overlay gradient at the bottom third */}
-                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#1A73E8]/15 to-transparent pointer-events-none" />
+                    {/* Subtle gradient overlay at the bottom third */}
+                    <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#1A73E8]/20 via-[#1A73E8]/5 to-transparent pointer-events-none" />
                   </div>
-                  {/* Overlapping Numbered Badge with rotate sticker feel */}
+                  {/* Overlapping circular badges with rotate sticker feel and white border */}
                   <div
-                    className={`absolute -top-3 -left-3 z-20 flex h-9 w-9 items-center justify-center rounded-xl text-xs font-black shadow-[0_4px_10px_rgba(0,0,0,0.12)] border-2 border-white ${
-                      step.number === "1" ? "bg-gradient-to-br from-[#FF8A8A] to-[#EF4444] text-white" :
+                    className={`absolute -top-5 -left-5 z-20 flex h-12 w-12 items-center justify-center rounded-full text-sm font-black shadow-[var(--badge-shadow)] border-[3px] border-white ${
+                      step.number === "1" ? "bg-gradient-to-br from-[#FFA0A0] to-[#EF4444] text-white" :
                       step.number === "2" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
-                      "bg-gradient-to-br from-[#00D2FF] to-[#00A3E0] text-white"
+                      "bg-gradient-to-br from-[#00E5FF] to-[#00A3E0] text-white"
                     }`}
-                    style={{ transform: "rotate(-5deg)" }}
+                    style={{ transform: "rotate(-7deg)" }}
                   >
                     {step.number}
                   </div>
                 </div>
 
-                <div className="flex-1">
-                  <h3 className="text-base font-bold text-[#0F172A]">
+                <div className="flex-1 flex flex-col justify-start">
+                  {/* Small step indicator text */}
+                  <span className="text-[10px] font-bold tracking-widest text-[#1A73E8] uppercase block mb-1">
+                    Step 0{step.number}
+                  </span>
+                  <h3 className="text-lg font-extrabold text-[#0F172A]">
                     {step.title}
                   </h3>
                   <p className="mt-2.5 text-xs sm:text-sm leading-relaxed text-[#4B5563]">
@@ -745,13 +772,15 @@ function LandingPage() {
             ))}
           </div>
 
-          <div className="mt-14 text-center">
+          {/* CTA Button with brand-blue tinted shadow and hover scale */}
+          <div className="mt-20 text-center">
             <button
               type="button"
               onClick={handleBookAppointment}
-              className="cursor-pointer rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.25)] transition-all duration-300 hover:bg-[#1557B0] hover:shadow-[0_8px_24px_rgba(26,115,232,0.45)] hover:scale-[1.03] active:scale-95"
+              className="group/btn cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl bg-[#1A73E8] px-8 py-4 text-sm font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.25)] hover:shadow-[0_8px_24px_rgba(26,115,232,0.45)] transition-all duration-300 hover:bg-[#1557B0] hover:scale-[1.02] active:scale-95"
             >
-              Get Started Free →
+              <span>Get Started Free</span>
+              <i className="ti ti-arrow-right text-sm transition-transform duration-300 group-hover/btn:translate-x-1" />
             </button>
           </div>
         </section>
