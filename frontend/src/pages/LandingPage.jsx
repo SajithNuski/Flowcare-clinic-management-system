@@ -478,6 +478,18 @@ function LandingPage() {
 
               {/* Left Column: Image (40% width -> 5/12 columns) */}
               <div className="lg:col-span-5 relative group">
+                {/* Dotted Grid Pattern behind the image (top-left) */}
+                <div className="absolute -top-10 -left-10 w-24 h-48 bg-[radial-gradient(#1A73E8_2px,transparent_2px)] [background-size:12px_12px] opacity-25 pointer-events-none hidden xl:block" />
+                
+                {/* Solid Blue Square overlapping the dotted grid (top-left) */}
+                <div className="absolute -top-4 -left-6 w-16 h-16 bg-[#1A73E8] shadow-md pointer-events-none rounded-sm hidden xl:block z-10" />
+
+                {/* Solid Dark Blue Strip / Rectangle at bottom-left */}
+                <div className="absolute -bottom-8 -left-6 w-16 h-8 bg-[#1557B0] shadow-sm pointer-events-none rounded-sm hidden xl:block z-10" />
+
+                {/* Cyan Quarter-Circle Shape sitting directly above the dark blue rectangle (bottom-left) */}
+                <div className="absolute bottom-0 -left-6 w-16 h-16 bg-[#00D2FF] rounded-tr-full shadow-md pointer-events-none hidden xl:block z-10" />
+
                 {/* Decorative background shape */}
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-[#1A73E8]/10 to-[#1A73E8]/5 -rotate-1 scale-[1.02] group-hover:rotate-0 transition-transform duration-500" />
 
@@ -600,57 +612,87 @@ function LandingPage() {
               </div>
             </div>
 
-            {/* Right Column: Stats Card */}
+            {/* Right Column: Modern Multiple Square Shapes (Stats Cards Grid) */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-10 text-white shadow-[0_20px_50px_rgba(15,23,42,0.12)] overflow-hidden border border-slate-800/80">
-                {/* Soft Radial Glow positioned top-right corner behind the "15+" stat */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.22)_0%,_transparent_70%)] pointer-events-none" />
-
-                {/* Decorative Glowing Blurs */}
-                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#EF4444]/8 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/8 pointer-events-none" />
-
-                {/* Visual backdrop grid pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.02)_1px,_transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
-
-                <h3 className="relative z-10 text-xl font-bold tracking-tight text-white mb-8">
-                  Trusted by the Badulla Community
-                </h3>
-
-                {/* Stats stacked with more generous vertical spacing */}
-                <div className="relative z-10 space-y-8">
-                  {[
-                    ["15+", "Years serving Badulla"],
-                    ["3", "Specialist Doctors"],
-                    ["50+", "Patients per day"],
-                  ].map(([value, label]) => (
-                    <div key={label} className="flex flex-col items-start">
-                      {/* Thin blue accent line above each stat number */}
-                      <div className="w-10 h-[2px] bg-[#1A73E8] rounded-full mb-3.5" />
-                      <div className="text-4xl font-extrabold font-sans bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight leading-none">
-                        {value}
-                      </div>
-                      <div className="mt-2 text-xs sm:text-sm text-slate-400 font-medium">{label}</div>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Stat 1: 15+ Years */}
+                <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-6 text-white border border-slate-800/80 overflow-hidden shadow-md flex flex-col justify-between">
+                  {/* Soft glow & grid pattern */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.15)_0%,_transparent_70%)] pointer-events-none" />
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+                  
+                  <div className="w-8 h-[2px] bg-[#1A73E8] rounded-full" />
+                  <div>
+                    <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight">
+                      15+
                     </div>
-                  ))}
+                    <div className="mt-1 text-xs text-slate-400 font-medium leading-tight">
+                      Years serving Badulla
+                    </div>
+                  </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => navigate("/register")}
-                  className="group relative z-10 mt-10 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-[#0F172A] shadow-md transition-all duration-300 ease-in-out hover:bg-slate-50 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>Register as a Patient</span>
-                  <i className="ti ti-arrow-right text-sm transition-transform duration-300 group-hover:translate-x-1" />
-                </button>
+                {/* Stat 2: 3 Specialist Doctors */}
+                <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-6 text-white border border-slate-800/80 overflow-hidden shadow-md flex flex-col justify-between">
+                  {/* Soft glow & grid pattern */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.15)_0%,_transparent_70%)] pointer-events-none" />
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+
+                  <div className="w-8 h-[2px] bg-[#1A73E8] rounded-full" />
+                  <div>
+                    <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight">
+                      3
+                    </div>
+                    <div className="mt-1 text-xs text-slate-400 font-medium leading-tight">
+                      Specialist Doctors
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stat 3: 50+ Patients per day (Full Width of Grid) */}
+                <div className="col-span-2 relative rounded-2xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-6 text-white border border-slate-800/80 overflow-hidden shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  {/* Soft glow & grid pattern */}
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.15)_0%,_transparent_70%)] pointer-events-none" />
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+
+                  <div className="flex flex-col">
+                    <div className="w-8 h-[2px] bg-[#1A73E8] rounded-full mb-2" />
+                    <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight">
+                      50+
+                    </div>
+                    <div className="mt-1 text-xs text-slate-400 font-medium">
+                      Patients per day
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => navigate("/register")}
+                    className="group relative z-10 w-full sm:w-auto rounded-xl bg-white px-5 py-3.5 text-center text-xs font-bold text-[#0F172A] shadow-md transition-all duration-300 ease-in-out hover:bg-slate-50 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer shrink-0"
+                  >
+                    <span>Register as a Patient</span>
+                    <i className="ti ti-arrow-right text-sm transition-transform duration-300 group-hover:translate-x-1" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* How It Works Section */}
-        <section className="bg-transparent px-4 py-24 sm:px-8 border-t border-blue-100/20">
-          <div className="mx-auto max-w-7xl text-center">
+        <section className="relative bg-gradient-to-b from-white to-[#F0F6FE] px-4 py-24 sm:px-8 border-t border-blue-100/20 overflow-hidden">
+          {/* Ambient Blue Glow background div */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.06)_0%,_transparent_70%)] pointer-events-none" />
+
+          {/* Decorative floating blue shapes */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#1A73E8]/5 blur-2xl pointer-events-none" />
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full bg-[#1A73E8]/5 blur-3xl pointer-events-none" />
+
+          
+
+          
+
+          <div className="relative mx-auto max-w-7xl text-center z-20">
             <div className="text-xs font-semibold uppercase tracking-widest text-[#1A73E8]">
               Simple Process
             </div>
@@ -659,7 +701,7 @@ function LandingPage() {
             </h2>
           </div>
 
-          <div className="mx-auto mt-14 grid max-w-5xl gap-8 md:grid-cols-3 relative">
+          <div className="mx-auto mt-14 grid max-w-5xl gap-8 md:grid-cols-3 relative z-20">
             {/* Process connector dashed line for large screens */}
             <div className="absolute top-[22%] left-[12%] right-[12%] h-[2px] border-t-2 border-dashed border-blue-200/50 hidden md:block -z-10" />
 
@@ -680,9 +722,11 @@ function LandingPage() {
                   </div>
                   {/* Overlapping Numbered Badge with rotate sticker feel */}
                   <div
-                    className={`absolute -top-3 -left-3 z-20 flex h-9 w-9 items-center justify-center rounded-xl text-xs font-black shadow-[0_4px_10px_rgba(0,0,0,0.12)] border-2 border-white ${step.number === "1" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
-                        "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white"
-                      }`}
+                    className={`absolute -top-3 -left-3 z-20 flex h-9 w-9 items-center justify-center rounded-xl text-xs font-black shadow-[0_4px_10px_rgba(0,0,0,0.12)] border-2 border-white ${
+                      step.number === "1" ? "bg-gradient-to-br from-[#FF8A8A] to-[#EF4444] text-white" :
+                      step.number === "2" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
+                      "bg-gradient-to-br from-[#00D2FF] to-[#00A3E0] text-white"
+                    }`}
                     style={{ transform: "rotate(-5deg)" }}
                   >
                     {step.number}
