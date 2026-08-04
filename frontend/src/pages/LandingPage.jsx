@@ -569,60 +569,69 @@ function LandingPage() {
                 Our clinic provides reliable primary care, family support, and referral pathways for the Badulla community.
               </p>
 
-              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <div className="mt-8 grid gap-x-8 gap-y-4 sm:grid-cols-2">
                 {serviceItems.map((service) => (
                   <div
                     key={service}
-                    className="flex items-center gap-3 bg-white rounded-xl border border-blue-100/30 p-3 shadow-[0_2px_8px_rgba(0,0,0,0.01)] transition-all duration-200 hover:bg-blue-50/30 hover:border-blue-200/50"
+                    className="flex items-center gap-3.5 p-2 rounded-xl transition-all duration-200 hover:bg-[#E8F0FE]/40 group/item"
                   >
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#E8F0FE] text-[#1A73E8]">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1A73E8] text-white shadow-sm transition-transform duration-200 group-hover/item:scale-110">
                       <i className="ti ti-check text-xs font-bold" />
                     </div>
-                    <span className="text-xs sm:text-sm font-medium text-[#4B5563]">{service}</span>
+                    <span className="text-xs sm:text-sm font-semibold text-slate-700 leading-normal group-hover/item:text-[#1A73E8] transition-colors duration-150">
+                      {service}
+                    </span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8">
+              <div className="mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t border-slate-100 pt-6">
                 <Link
                   to="/about"
-                  className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1A73E8] hover:text-[#1557B0] transition-colors duration-200"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-[#1A73E8] hover:text-[#1557B0] transition-colors duration-200 group/link"
                 >
                   About Our Clinic
-                  <i className="ti ti-arrow-right text-base" />
+                  <i className="ti ti-arrow-right text-base group-hover/link:translate-x-1 transition-transform" />
                 </Link>
+                {/* Decorative govt. registered info badge */}
+                <div className="flex items-center gap-3 bg-[#E8F0FE]/50 rounded-2xl p-3 border border-blue-50/85">
+                  
+                  
+                </div>
               </div>
             </div>
 
             {/* Right Column: Stats Card */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0A101D] p-10 text-white shadow-[0_20px_50px_rgba(15,23,42,0.12)] overflow-hidden border border-slate-800/80">
+              <div className="relative rounded-3xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-10 text-white shadow-[0_20px_50px_rgba(15,23,42,0.12)] overflow-hidden border border-slate-800/80">
+                {/* Soft Radial Glow positioned top-right corner behind the "15+" stat */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.22)_0%,_transparent_70%)] pointer-events-none" />
+                
                 {/* Decorative Glowing Blurs */}
-                <div className="absolute -top-10 -left-10 w-40 h-40 bg-[#EF4444]/12 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#1A73E8]/12 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/12 rounded-full blur-3xl pointer-events-none" />
-
-                {/* Soft Radial Glow behind the stats */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.15)_0%,_transparent_65%)] pointer-events-none" />
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#EF4444]/8 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#1A73E8]/8 pointer-events-none" />
 
                 {/* Visual backdrop grid pattern */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.03)_1px,_transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.02)_1px,_transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
-                <h3 className="relative z-10 text-xl font-bold tracking-tight text-white mb-6">
+                <h3 className="relative z-10 text-xl font-bold tracking-tight text-white mb-8">
                   Trusted by the Badulla Community
                 </h3>
-                <div className="relative z-10 space-y-6">
+                
+                {/* Stats stacked with more generous vertical spacing */}
+                <div className="relative z-10 space-y-8">
                   {[
                     ["15+", "Years serving Badulla"],
                     ["3", "Specialist Doctors"],
                     ["50+", "Patients per day"],
                   ].map(([value, label]) => (
-                    <div key={label} className="border-b border-white/10 pb-4 last:border-0 last:pb-0 flex flex-col items-start">
-                      <div className="text-4xl font-extrabold font-sans bg-gradient-to-r from-blue-400 via-blue-200 to-white bg-clip-text text-transparent inline-block tracking-tight">
+                    <div key={label} className="flex flex-col items-start">
+                      {/* Thin blue accent line above each stat number */}
+                      <div className="w-10 h-[2px] bg-[#1A73E8] rounded-full mb-3.5" />
+                      <div className="text-4xl font-extrabold font-sans bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight leading-none">
                         {value}
                       </div>
-                      <div className="h-[2px] w-8 bg-gradient-to-r from-[#1A73E8] to-transparent mt-1.5 rounded-full" />
-                      <div className="mt-2.5 text-xs sm:text-sm text-white/70 font-medium">{label}</div>
+                      <div className="mt-2 text-xs sm:text-sm text-slate-400 font-medium">{label}</div>
                     </div>
                   ))}
                 </div>
@@ -630,9 +639,10 @@ function LandingPage() {
                 <button
                   type="button"
                   onClick={() => navigate("/register")}
-                  className="relative z-10 mt-8 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-slate-900 shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-200 ease-in-out hover:bg-[#F8FAFC] hover:scale-[1.02] hover:shadow-[0_8px_20px_rgba(26,115,232,0.2)] active:scale-100"
+                  className="group relative z-10 mt-10 w-full rounded-xl bg-white px-5 py-4 text-center text-xs font-bold text-[#0F172A] shadow-md transition-all duration-300 ease-in-out hover:bg-slate-50 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  Register as a Patient
+                  <span>Register as a Patient</span>
+                  <i className="ti ti-arrow-right text-sm transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
               </div>
             </div>
