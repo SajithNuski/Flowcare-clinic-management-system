@@ -28,6 +28,7 @@ function ReceptionistDashboard() {
   const [liveQueue, setLiveQueue] = useState([]);
   const [todayAppointments, setTodayAppointments] = useState([]);
   const [newBookingsToday, setNewBookingsToday] = useState([]);
+  const [showAllNewBookings, setShowAllNewBookings] = useState(false);
   const [newBookings, setNewBookings] = useState([]);
   const todayStr = (() => {
     const today = new Date();
@@ -659,7 +660,7 @@ function ReceptionistDashboard() {
                     </div>
 
                     <ul className="mt-2 ml-5 space-y-1">
-                      {newBookingsToday.slice(0, 5).map((booking) => (
+                      {(showAllNewBookings ? newBookingsToday : newBookingsToday.slice(0, 5)).map((booking) => (
                         <li key={booking.id} className="text-[11px] text-[#1E8449]">
                           <span className="font-semibold">{booking.patient_name}</span>
                           {" with "}
@@ -668,12 +669,18 @@ function ReceptionistDashboard() {
                           {booking.appointment_date} at {formatTime(booking.time_slot)}
                         </li>
                       ))}
-                      {newBookingsToday.length > 5 && (
-                        <li className="text-[11px] text-[#1E8449] font-semibold">
-                          +{newBookingsToday.length - 5} more
-                        </li>
-                      )}
                     </ul>
+                    {newBookingsToday.length > 5 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllNewBookings((s) => !s)}
+                        className="mt-2 ml-5 text-[11px] font-bold text-[#1E8449] underline hover:text-[#166534] transition-colors"
+                      >
+                        {showAllNewBookings
+                          ? "Show less"
+                          : `+${newBookingsToday.length - 5} more`}
+                      </button>
+                    )}
                   </div>
                 )}
 
