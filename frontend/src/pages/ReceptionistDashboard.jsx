@@ -27,6 +27,8 @@ function ReceptionistDashboard() {
   });
   const [liveQueue, setLiveQueue] = useState([]);
   const [todayAppointments, setTodayAppointments] = useState([]);
+  const [newBookingsToday, setNewBookingsToday] = useState([]);
+  const [newBookings, setNewBookings] = useState([]);
   const todayStr = (() => {
     const today = new Date();
     const offset = today.getTimezoneOffset();
@@ -112,6 +114,11 @@ function ReceptionistDashboard() {
       if (appointmentsRes?.success) {
         console.log("TODAY APPOINTMENTS:", appointmentsRes.appointments);
         setTodayAppointments(appointmentsRes.appointments);
+        setNewBookingsToday(
+          Array.isArray(appointmentsRes.new_bookings_today)
+            ? appointmentsRes.new_bookings_today
+            : []
+        );
       }
 
       if (annRes?.success) {
@@ -426,6 +433,18 @@ function ReceptionistDashboard() {
     });
   };
 
+  // Identify appointments that were booked (created) today, so receptionists
+  // can quickly spot freshly-arrived bookings vs. ones scheduled earlier.
+  // newBookingsToday comes from the backend via new_bookings_today, so it
+  // captures bookings for ANY appointment date, not just today's date.
+  const newBookingIds = new Set(newBookingsToday.map((a) => a.id));
+
+  // Group today's new bookings by doctor for a quick "who got new bookings" summary
+  const newBookingsByDoctor = newBookingsToday.reduce((acc, a) => {
+    const key = a.doctor_name || "Unknown Doctor";
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-slate-50">
@@ -619,6 +638,45 @@ function ReceptionistDashboard() {
                   </Link>
                 </div>
 
+                {newBookingsToday.length > 0 && (
+                  <div className="mb-4 rounded-xl border border-[#2ECC71]/30 bg-[#EAFAF1] px-4 py-3">
+                    <div className="flex items-start gap-3">
+                      <span className="relative flex h-2.5 w-2.5 mt-1.5 shrink-0">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2ECC71] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2ECC71]"></span>
+                      </span>
+                      <div className="text-xs leading-relaxed">
+                        <span className="font-bold text-[#1E8449]">
+                          {newBookingsToday.length} new booking{newBookingsToday.length > 1 ? "s" : ""} came in today
+                        </span>
+                        <span className="text-[#2ECC71]">
+                          {" — "}
+                          {Object.entries(newBookingsByDoctor)
+                            .map(([doctorName, count]) => `${doctorName} (${count})`)
+                            .join(", ")}
+                        </span>
+                      </div>
+                    </div>
+
+                    <ul className="mt-2 ml-5 space-y-1">
+                      {newBookingsToday.slice(0, 5).map((booking) => (
+                        <li key={booking.id} className="text-[11px] text-[#1E8449]">
+                          <span className="font-semibold">{booking.patient_name}</span>
+                          {" with "}
+                          <span className="font-semibold">{booking.doctor_name}</span>
+                          {" — for "}
+                          {booking.appointment_date} at {formatTime(booking.time_slot)}
+                        </li>
+                      ))}
+                      {newBookingsToday.length > 5 && (
+                        <li className="text-[11px] text-[#1E8449] font-semibold">
+                          +{newBookingsToday.length - 5} more
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                )}
+
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-slate-100">
                     <thead>
@@ -652,9 +710,12 @@ function ReceptionistDashboard() {
                           const isCancelled = appointment.status === "cancelled";
 
                           return (
-                            <tr key={appointment.id} className="hover:bg-slate-50">
+                            <tr key={appointment.id} className={`hover:bg-slate-50 ${newBookingIds.has(appointment.id) ? "bg-[#EAFAF1]/40" : ""}`}>
                               <td className="px-4 py-3 text-sm">
-                                <div className="font-semibold text-slate-900">{appointment.patient_name}</div>
+                                <div className="flex items-center gap-2">
+                                  <div className="font-semibold text-slate-900">{appointment.patient_name}</div>
+                                  {newBookingIds.has(appointment.id) && <Badge text="New" color="green" />}
+                                </div>
                                 <div className="text-slate-400 text-xs">{appointment.patient_phone}</div>
                               </td>
                               <td className="px-4 py-3 text-sm text-slate-600 font-semibold">
