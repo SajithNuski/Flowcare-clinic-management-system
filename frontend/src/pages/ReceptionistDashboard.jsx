@@ -209,6 +209,18 @@ function ReceptionistDashboard() {
   // Handle appointment check-in action
   const handleCheckin = (patientId, doctorId, appointmentId) => {
     const app = todayAppointments.find((a) => a.id === appointmentId);
+
+    // Only allow check-in on the actual day of the appointment — otherwise a
+    // future-dated appointment could be checked in early and wrongly appear
+    // in today's live queue.
+    if (app?.appointment_date && app.appointment_date !== todayStr) {
+      showToast(
+        `This appointment is scheduled for ${app.appointment_date}. Check-in is only allowed on the appointment date.`,
+        "error"
+      );
+      return;
+    }
+
     const doctor = doctors.find((d) => d.id === doctorId || d.doctor_id === doctorId);
     startPaymentAndCheckin({
       patientId,
@@ -225,6 +237,18 @@ function ReceptionistDashboard() {
 
   // Handle appointment no-show action
   const handleNoShow = async (appointmentId) => {
+    // No-Show should only be marked on or after the appointment date — you
+    // can't know someone "didn't show up" for an appointment that hasn't
+    // happened yet.
+    const app = todayAppointments.find((a) => a.id === appointmentId);
+    if (app?.appointment_date && app.appointment_date > todayStr) {
+      showToast(
+        `This appointment is scheduled for ${app.appointment_date}. No-Show can only be marked on or after the appointment date.`,
+        "error"
+      );
+      return;
+    }
+
     try {
       const res = await markNoShow(appointmentId);
       if (res?.success) {
@@ -744,7 +768,7 @@ function ReceptionistDashboard() {
                                 )}
                               </td>
                               <td className="px-4 py-3 text-sm">
-                                {isConfirmed && (
+                                {isConfirmed && appointment.appointment_date === todayStr && (
                                   <div className="flex gap-2">
                                     <button
                                       onClick={() => handleCheckin(appointment.patient_id, appointment.doctor_id, appointment.id)}
@@ -765,6 +789,11 @@ function ReceptionistDashboard() {
                                 )}
                                 {isCompleted && (
                                   <span className="text-xs text-slate-400 italic font-medium">No actions</span>
+                                )}
+                                {isConfirmed && appointment.appointment_date !== todayStr && (
+                                  <span className="text-xs text-slate-400 italic font-medium">
+                                    Available on {appointment.appointment_date}
+                                  </span>
                                 )}
                               </td>
                             </tr>
