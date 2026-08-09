@@ -29,6 +29,20 @@ function AppointmentRow({ appointment, onCheckin, onReschedule, onCancel, onNoSh
   const isNoShow = appointment.status === "no_show";
   const isCancelled = appointment.status === "cancelled";
 
+  // Check-in should only be allowed on the actual day of the appointment —
+  // otherwise a future-dated appointment could be checked in early and
+  // wrongly appear in today's live queue.
+  const todayStr = (() => {
+    const today = new Date();
+    const offset = today.getTimezoneOffset();
+    const localDate = new Date(today.getTime() - offset * 60 * 1000);
+    return localDate.toISOString().split("T")[0];
+  })();
+  const isTodaysAppointment = appointment.appointment_date === todayStr;
+  // No-Show can be marked today or any day after the appointment date (i.e.
+  // not in the future), unlike Check-in which only applies exactly today.
+  const canMarkNoShow = appointment.appointment_date <= todayStr;
+
   // Map backend status strings to Badge colors
   const statusColorMap = {
     confirmed: "blue",
@@ -121,13 +135,19 @@ function AppointmentRow({ appointment, onCheckin, onReschedule, onCancel, onNoSh
       <td className="px-5 py-4 whitespace-nowrap text-right text-xs">
         {isPending ? (
           <div className="flex items-center justify-end gap-2.5">
-            <button
-              onClick={() => onCheckin(appointment.patient_id, appointment.doctor_id, appointment.id)}
-              className="px-2.5 py-1.5 bg-[#10B981] hover:bg-emerald-600 text-white rounded-lg font-bold transition-all shadow-sm flex items-center gap-1 cursor-pointer"
-            >
-              <i className="ti ti-user-check text-xs" />
-              Check in
-            </button>
+            {isTodaysAppointment ? (
+              <button
+                onClick={() => onCheckin(appointment.patient_id, appointment.doctor_id, appointment.id)}
+                className="px-2.5 py-1.5 bg-[#10B981] hover:bg-emerald-600 text-white rounded-lg font-bold transition-all shadow-sm flex items-center gap-1 cursor-pointer"
+              >
+                <i className="ti ti-user-check text-xs" />
+                Check in
+              </button>
+            ) : (
+              <span className="px-2.5 py-1.5 text-slate-400 italic font-medium" title="Check-in opens on the appointment date">
+                Available on {appointment.appointment_date}
+              </span>
+            )}
             <button
               onClick={() => onReschedule(appointment)}
               className="px-2.5 py-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg font-bold transition-all flex items-center gap-1 cursor-pointer"
@@ -136,14 +156,18 @@ function AppointmentRow({ appointment, onCheckin, onReschedule, onCancel, onNoSh
               Reschedule
             </button>
             <div className="flex items-center gap-2 border-l border-slate-200 pl-2">
-              <button
-                onClick={() => onNoShow(appointment.id)}
-                className="text-red-500 hover:text-red-700 font-bold transition-colors cursor-pointer"
-                title="Mark as No-Show"
-              >
-                No-Show
-              </button>
-              <span className="text-slate-300">|</span>
+              {canMarkNoShow && (
+                <>
+                  <button
+                    onClick={() => onNoShow(appointment.id)}
+                    className="text-red-500 hover:text-red-700 font-bold transition-colors cursor-pointer"
+                    title="Mark as No-Show"
+                  >
+                    No-Show
+                  </button>
+                  <span className="text-slate-300">|</span>
+                </>
+              )}
               <button
                 onClick={() => onCancel(appointment.id)}
                 className="text-slate-400 hover:text-red-600 font-bold transition-colors cursor-pointer"
