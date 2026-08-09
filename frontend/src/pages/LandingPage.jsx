@@ -297,7 +297,7 @@ function LandingPage() {
           {/* Accent Ambient Glow behind doctor cards */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.03)_0%,_transparent_70%)] pointer-events-none" />
 
-          <div className="relative mx-auto max-w-7xl rounded-[28px] bg-gradient-to-br from-white via-slate-50/50 to-blue-50/20 px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.03)] border border-blue-100/60 sm:px-8 lg:px-12 lg:py-20">
+          <div className="relative mx-auto max-w-7xl rounded-[28px] bg-blue-100 px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.03)] border border-blue-100/60 sm:px-8 lg:px-12 lg:py-20">
             {/* Corner Dotted Design Accents */}
             <div
               className="absolute -top-6 -right-6 w-24 h-24 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl hidden md:block"
@@ -480,7 +480,7 @@ function LandingPage() {
               <div className="lg:col-span-5 relative group">
                 {/* Dotted Grid Pattern behind the image (top-left) */}
                 <div className="absolute -top-10 -left-10 w-24 h-48 bg-[radial-gradient(#1A73E8_2px,transparent_2px)] [background-size:12px_12px] opacity-25 pointer-events-none hidden xl:block" />
-                
+
                 {/* Solid Blue Square overlapping the dotted grid (top-left) */}
                 <div className="absolute -top-4 -left-6 w-16 h-16 bg-[#1A73E8] shadow-md pointer-events-none rounded-sm hidden xl:block z-10" />
 
@@ -620,7 +620,7 @@ function LandingPage() {
                   {/* Soft glow & grid pattern */}
                   <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.15)_0%,_transparent_70%)] pointer-events-none" />
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
-                  
+
                   <div className="w-8 h-[2px] bg-[#1A73E8] rounded-full" />
                   <div>
                     <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight">
@@ -680,7 +680,7 @@ function LandingPage() {
         </section>
 
         {/* How It Works Section */}
-        <section 
+        <section
           className="relative bg-gradient-to-b from-white to-[#F0F6FE] px-4 py-32 sm:px-8 border-t border-blue-100/20 overflow-hidden"
           style={{
             '--card-radius': '24px',
@@ -723,11 +723,10 @@ function LandingPage() {
             {stepItems.map((step) => (
               <article
                 key={step.title}
-                className={`group relative bg-white border border-slate-200/40 p-6 flex flex-col items-center text-center shadow-[var(--card-shadow)] hover:shadow-[0_20px_40px_rgba(26,115,232,0.1)] transition-all duration-300 ease-in-out hover:-translate-y-2 ${
-                  step.number === "1" ? "md:-translate-y-2 hover:md:-translate-y-4" :
-                  step.number === "2" ? "md:translate-y-4 hover:md:translate-y-2" :
-                  "md:-translate-y-2 hover:md:-translate-y-4"
-                }`}
+                className={`group relative bg-white border border-slate-200/40 p-6 flex flex-col items-center text-center shadow-[var(--card-shadow)] hover:shadow-[0_20px_40px_rgba(26,115,232,0.1)] transition-all duration-300 ease-in-out hover:-translate-y-2 ${step.number === "1" ? "md:-translate-y-2 hover:md:-translate-y-4" :
+                    step.number === "2" ? "md:translate-y-4 hover:md:translate-y-2" :
+                      "md:-translate-y-2 hover:md:-translate-y-4"
+                  }`}
                 style={{
                   borderRadius: 'var(--card-radius)'
                 }}
@@ -745,11 +744,10 @@ function LandingPage() {
                   </div>
                   {/* Overlapping circular badges with rotate sticker feel and white border */}
                   <div
-                    className={`absolute -top-5 -left-5 z-20 flex h-12 w-12 items-center justify-center rounded-full text-sm font-black shadow-[var(--badge-shadow)] border-[3px] border-white ${
-                      step.number === "1" ? "bg-gradient-to-br from-[#FFA0A0] to-[#EF4444] text-white" :
-                      step.number === "2" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
-                      "bg-gradient-to-br from-[#00E5FF] to-[#00A3E0] text-white"
-                    }`}
+                    className={`absolute -top-5 -left-5 z-20 flex h-12 w-12 items-center justify-center rounded-full text-sm font-black shadow-[var(--badge-shadow)] border-[3px] border-white ${step.number === "1" ? "bg-gradient-to-br from-[#FFA0A0] to-[#EF4444] text-white" :
+                        step.number === "2" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
+                          "bg-gradient-to-br from-[#00E5FF] to-[#00A3E0] text-white"
+                      }`}
                     style={{ transform: "rotate(-7deg)" }}
                   >
                     {step.number}

@@ -39,11 +39,15 @@ export async function searchPatients(q) {
 
 /**
  * Updates the logged-in patient's profile and medical details.
- * @param {object} profileData
+ * @param {object|FormData} profileData
  */
 export async function updatePatientProfile(profileData) {
   try {
-    const response = await axios.post(`${API_BASE}/patients/update_profile.php`, profileData);
+    const response = await axios.post(`${API_BASE}/patients/update_profile.php`, profileData, {
+      headers: {
+        "Content-Type": profileData instanceof FormData ? "multipart/form-data" : "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     if (error.response && error.response.data) {

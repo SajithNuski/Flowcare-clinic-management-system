@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Sidebar from "../components/Sidebar";
@@ -56,6 +56,42 @@ function PatientDashboard() {
     new_password: "",
     confirm_password: "",
   });
+
+  const fileInputRef = useRef(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [fileError, setFileError] = useState("");
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setFileError("");
+
+    // Validate type (PNG or JPG/JPEG)
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (!allowedTypes.includes(file.type)) {
+      setFileError("Only PNG or JPG images are allowed");
+      return;
+    }
+
+    // Validate size (max 2MB)
+    const maxSize = 2 * 1024 * 1024;
+    if (file.size > maxSize) {
+      setFileError("Only PNG or JPG images are allowed. File exceeds 2MB limit.");
+      return;
+    }
+
+    setSelectedFile(file);
+    // Create live preview
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleTriggerFilePicker = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   // Action feedback states
   const [toast, setToast] = useState({ message: "", type: "success" });
@@ -159,9 +195,28 @@ function PatientDashboard() {
   // Handle Update Profile
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    if (fileError) {
+      showToast("Please correct the errors in the form", "error");
+      return;
+    }
     setProfileSaving(true);
     try {
-      const res = await updatePatientProfile(profileData);
+      const formData = new FormData();
+      formData.append("full_name", profileData.full_name.trim());
+      formData.append("email", profileData.email.trim());
+      formData.append("phone", profileData.phone.trim());
+      formData.append("gender", profileData.gender);
+      formData.append("date_of_birth", profileData.date_of_birth);
+      formData.append("blood_group", profileData.blood_group || "");
+      formData.append("allergies", (profileData.allergies || "").trim());
+      formData.append("medical_history", (profileData.medical_history || "").trim());
+      formData.append("emergency_contact", (profileData.emergency_contact || "").trim());
+
+      if (selectedFile) {
+        formData.append("photo", selectedFile);
+      }
+
+      const res = await updatePatientProfile(formData);
       if (res?.success) {
         showToast(
           "Profile and medical history updated successfully!",
@@ -173,6 +228,8 @@ function PatientDashboard() {
           // Re-update auth context state so navbar displays correct name
           login(meRes.data.user);
         }
+        setSelectedFile(null); // Clear selected file
+        setPreviewUrl(""); // Reset preview url
       } else {
         showToast(res?.error || "Could not update profile details.", "error");
       }
@@ -256,6 +313,17 @@ function PatientDashboard() {
         new Date(`${a.appointment_date} ${a.time_slot}`) -
         new Date(`${b.appointment_date} ${b.time_slot}`),
     );
+
+  // Fallback profile initials
+  const initials = profileData.full_name
+    ? profileData.full_name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+    : "PT";
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#F8FAFC]">
@@ -718,11 +786,52 @@ function PatientDashboard() {
               {activeTab === "Profile" && (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                   {/* Left Column: Demographic & Clinical Profile Editor */}
-                  <div className="lg:col-span-8 space-y-6">
+                  <div className="lg:col-span-8 bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 overflow-hidden">
+                    {/* Header Banner */}
+                    <div className="h-32 bg-gradient-to-r from-[#1A73E8] to-[#115EC3] relative">
+                      <div className="absolute -bottom-16 left-8">
+                        <div className="relative group cursor-pointer" onClick={handleTriggerFilePicker}>
+                          {previewUrl || user?.photo_url ? (
+                            <img
+                              src={previewUrl || user?.photo_url}
+                              alt="Patient Profile"
+                              className="w-[120px] h-[120px] rounded-full object-cover border-4 border-white shadow-md bg-white"
+                            />
+                          ) : (
+                            <div className="w-[120px] h-[120px] rounded-full border-4 border-white shadow-md bg-gradient-to-br from-[#1A73E8] to-[#115EC3] text-white flex items-center justify-center text-4xl font-bold select-none">
+                              {initials}
+                            </div>
+                          )}
+                          
+                          {/* Change photo overlay on hover */}
+                          <div className="absolute inset-0 bg-black/40 rounded-full flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <i className="ti ti-camera text-2xl" />
+                            <span className="text-[11px] font-bold mt-1">Change Photo</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <form
                       onSubmit={handleUpdateProfile}
-                      className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 p-6 sm:p-8 space-y-6"
+                      className="pt-20 px-6 sm:px-8 pb-8 space-y-6"
                     >
+                      {/* Hidden file input */}
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="image/png, image/jpeg"
+                        className="hidden"
+                      />
+
+                      {/* Photo Error Banner */}
+                      {fileError && (
+                        <div className="p-3 bg-red-50 border border-red-100 text-red-600 rounded-lg text-xs font-bold flex items-center gap-2">
+                          <i className="ti ti-alert-circle text-sm" />
+                          {fileError}
+                        </div>
+                      )}
                       {/* section: Demographics */}
                       <div className="space-y-4">
                         <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5 pb-2 border-b border-slate-100">

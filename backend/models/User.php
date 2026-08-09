@@ -390,7 +390,7 @@ class User
 	}
 
 	// This method updates a patient's personal and medical details
-	public function update_patient_profile($id, $full_name, $phone, $email, $gender, $date_of_birth, $medical_history, $allergies, $blood_group, $emergency_contact)
+	public function update_patient_profile($id, $full_name, $phone, $email, $gender, $date_of_birth, $medical_history, $allergies, $blood_group, $emergency_contact, $photo_url = null)
 	{
 		$this->last_error = null;
 
@@ -406,30 +406,59 @@ class User
 			}
 		}
 
-		$sql = "UPDATE patients SET 
-					full_name = ?, 
-					phone = ?, 
-					email = ?, 
-					gender = ?, 
-					date_of_birth = ?, 
-					medical_history = ?, 
-					allergies = ?, 
-					blood_group = ?, 
-					emergency_contact = ? 
-				WHERE id = ?";
-		
-		return $this->executeQuery($sql, "sssssssssi", [
-			$full_name,
-			$phone,
-			$email,
-			$gender,
-			$date_of_birth,
-			$medical_history,
-			$allergies,
-			$blood_group,
-			$emergency_contact,
-			$id
-		]);
+		if ($photo_url !== null) {
+			$sql = "UPDATE patients SET 
+						full_name = ?, 
+						phone = ?, 
+						email = ?, 
+						gender = ?, 
+						date_of_birth = ?, 
+						medical_history = ?, 
+						allergies = ?, 
+						blood_group = ?, 
+						emergency_contact = ?,
+						photo_url = ?
+					WHERE id = ?";
+			
+			return $this->executeQuery($sql, "ssssssssssi", [
+				$full_name,
+				$phone,
+				$email,
+				$gender,
+				$date_of_birth,
+				$medical_history,
+				$allergies,
+				$blood_group,
+				$emergency_contact,
+				$photo_url,
+				$id
+			]);
+		} else {
+			$sql = "UPDATE patients SET 
+						full_name = ?, 
+						phone = ?, 
+						email = ?, 
+						gender = ?, 
+						date_of_birth = ?, 
+						medical_history = ?, 
+						allergies = ?, 
+						blood_group = ?, 
+						emergency_contact = ? 
+					WHERE id = ?";
+			
+			return $this->executeQuery($sql, "sssssssssi", [
+				$full_name,
+				$phone,
+				$email,
+				$gender,
+				$date_of_birth,
+				$medical_history,
+				$allergies,
+				$blood_group,
+				$emergency_contact,
+				$id
+			]);
+		}
 	}
 }
 ?>

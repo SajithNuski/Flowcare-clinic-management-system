@@ -63,6 +63,7 @@ CREATE TABLE patients (
 	gender ENUM('male','female','other') NOT NULL,
 	phone VARCHAR(15) NOT NULL,
 	email VARCHAR(100) UNIQUE,
+	photo_url VARCHAR(255) DEFAULT NULL,
 	password VARCHAR(255) DEFAULT NULL,
 	status ENUM('active','inactive') DEFAULT 'active',
 	medical_history TEXT DEFAULT NULL,
