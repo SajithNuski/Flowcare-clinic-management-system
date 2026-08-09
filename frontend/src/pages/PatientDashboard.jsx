@@ -61,6 +61,9 @@ function PatientDashboard() {
   const [toast, setToast] = useState({ message: "", type: "success" });
   const [profileSaving, setProfileSaving] = useState(false);
   const [passwordSaving, setPasswordSaving] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -956,36 +959,64 @@ function PatientDashboard() {
                         <label className="block text-xs font-bold text-slate-500">
                           Current Password
                         </label>
-                        <input
-                          type="password"
-                          required
-                          value={passwordData.old_password}
-                          onChange={(e) =>
-                            setPasswordData({
-                              ...passwordData,
-                              old_password: e.target.value,
-                            })
-                          }
-                          className="w-full rounded-xl border border-slate-250 px-4 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
-                        />
+                        <div className="relative group">
+                          <input
+                            type={showOldPassword ? "text" : "password"}
+                            required
+                            value={passwordData.old_password}
+                            onChange={(e) =>
+                              setPasswordData({
+                                ...passwordData,
+                                old_password: e.target.value,
+                              })
+                            }
+                            className="w-full rounded-xl border border-slate-250 px-4 pr-10 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowOldPassword((s) => !s)}
+                            aria-label={
+                              showOldPassword ? "Hide password" : "Show password"
+                            }
+                            className="absolute inset-y-0 right-3 flex items-center text-[#9CA3AF] hover:text-[#4B5563] transition-colors"
+                          >
+                            <i
+                              className={showOldPassword ? "ti ti-eye text-base" : "ti ti-eye-off text-base"}
+                            />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-1.5">
                         <label className="block text-xs font-bold text-slate-500">
                           New Password
                         </label>
-                        <input
-                          type="password"
-                          required
-                          value={passwordData.new_password}
-                          onChange={(e) =>
-                            setPasswordData({
-                              ...passwordData,
-                              new_password: e.target.value,
-                            })
-                          }
-                          className="w-full rounded-xl border border-slate-250 px-4 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
-                        />
+                        <div className="relative group">
+                          <input
+                            type={showNewPassword ? "text" : "password"}
+                            required
+                            value={passwordData.new_password}
+                            onChange={(e) =>
+                              setPasswordData({
+                                ...passwordData,
+                                new_password: e.target.value,
+                              })
+                            }
+                            className="w-full rounded-xl border border-slate-250 px-4 pr-10 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowNewPassword((s) => !s)}
+                            aria-label={
+                              showNewPassword ? "Hide password" : "Show password"
+                            }
+                            className="absolute inset-y-0 right-3 flex items-center text-[#9CA3AF] hover:text-[#4B5563] transition-colors"
+                          >
+                            <i
+                              className={showNewPassword ? "ti ti-eye text-base" : "ti ti-eye-off text-base"}
+                            />
+                          </button>
+                        </div>
                         <span className="block text-[10px] text-slate-400 leading-normal">
                           Requires min 8 characters, uppercase, lowercase,
                           numbers, and symbols.
@@ -996,18 +1027,32 @@ function PatientDashboard() {
                         <label className="block text-xs font-bold text-slate-500">
                           Confirm New Password
                         </label>
-                        <input
-                          type="password"
-                          required
-                          value={passwordData.confirm_password}
-                          onChange={(e) =>
-                            setPasswordData({
-                              ...passwordData,
-                              confirm_password: e.target.value,
-                            })
-                          }
-                          className="w-full rounded-xl border border-slate-250 px-4 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
-                        />
+                        <div className="relative group">
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            required
+                            value={passwordData.confirm_password}
+                            onChange={(e) =>
+                              setPasswordData({
+                                ...passwordData,
+                                confirm_password: e.target.value,
+                              })
+                            }
+                            className="w-full rounded-xl border border-slate-250 px-4 pr-10 py-2 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword((s) => !s)}
+                            aria-label={
+                              showConfirmPassword ? "Hide password" : "Show password"
+                            }
+                            className="absolute inset-y-0 right-3 flex items-center text-[#9CA3AF] hover:text-[#4B5563] transition-colors"
+                          >
+                            <i
+                              className={showConfirmPassword ? "ti ti-eye text-base" : "ti ti-eye-off text-base"}
+                            />
+                          </button>
+                        </div>
                       </div>
 
                       <button
