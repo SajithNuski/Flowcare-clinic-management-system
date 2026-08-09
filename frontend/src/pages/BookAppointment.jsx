@@ -171,6 +171,8 @@ function BookAppointment() {
     setAppointmentDate("");
     setDoctorId("");
     setSpecialisation("");
+    setError("");
+    setSuccessMessage("");
     setFormFields({
       patient_name: user?.full_name || "",
       phone: user?.phone || "",
