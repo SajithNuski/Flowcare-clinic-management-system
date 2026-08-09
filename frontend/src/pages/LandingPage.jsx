@@ -93,7 +93,7 @@ function LandingPage() {
 
   const scrollPrev = () => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -244, behavior: "smooth" });
+      carouselRef.current.scrollBy({ left: -284, behavior: "smooth" });
     }
   };
 
@@ -103,21 +103,21 @@ function LandingPage() {
       if (scrollLeft + clientWidth >= scrollWidth - 15) {
         carouselRef.current.scrollTo({ left: 0, behavior: "smooth" });
       } else {
-        carouselRef.current.scrollBy({ left: 244, behavior: "smooth" });
+        carouselRef.current.scrollBy({ left: 284, behavior: "smooth" });
       }
     }
   };
 
   const scrollTo = (index) => {
     if (carouselRef.current) {
-      carouselRef.current.scrollTo({ left: index * 244, behavior: "smooth" });
+      carouselRef.current.scrollTo({ left: index * 284, behavior: "smooth" });
     }
   };
 
   const handleScroll = () => {
     if (carouselRef.current) {
       const scrollLeft = carouselRef.current.scrollLeft;
-      const index = Math.round(scrollLeft / 244);
+      const index = Math.round(scrollLeft / 284);
       setScrollIndex(index);
     }
   };
@@ -297,7 +297,7 @@ function LandingPage() {
           {/* Accent Ambient Glow behind doctor cards */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.03)_0%,_transparent_70%)] pointer-events-none" />
 
-          <div className="relative mx-auto max-w-7xl rounded-[28px] bg-blue-100 px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.03)] border border-blue-100/60 sm:px-8 lg:px-12 lg:py-20">
+          <div className="relative mx-auto max-w-7xl rounded-[32px] bg-gradient-to-br from-white via-[#F8FAFC] to-white px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.025)] border border-slate-200/50 sm:px-8 lg:px-12 lg:py-20">
             {/* Corner Dotted Design Accents */}
             <div
               className="absolute -top-6 -right-6 w-24 h-24 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl hidden md:block"
@@ -309,7 +309,7 @@ function LandingPage() {
             <div className="relative mx-auto max-w-3xl text-center">
               {/* Dotted pattern accent positioned behind/beside the section heading */}
               <div
-                className="absolute -top-6 left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 w-20 h-20 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none"
+                className="absolute -top-6 left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 w-20 h-20 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-10 pointer-events-none"
                 style={{ width: "80px", height: "80px" }}
               />
 
@@ -327,21 +327,21 @@ function LandingPage() {
             </div>
 
             {/* Carousel Container */}
-            <div className="relative mx-auto mt-16 max-w-6xl px-12 group/carousel">
+            <div className="relative mx-auto mt-16 max-w-6xl px-4 group/carousel">
               {/* Navigation Arrows */}
               {doctors.length > 0 && (
                 <>
                   <button
                     onClick={scrollPrev}
                     aria-label="Previous Doctor"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1A73E8] shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-slate-100 hover:bg-[#F8FAFC] transition-all hover:scale-105 duration-200 cursor-pointer opacity-70 group-hover/carousel:opacity-100"
+                    className="absolute -left-6 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-[#1A73E8] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 hover:bg-white hover:text-[#1557B0] hover:shadow-[0_8px_30px_rgba(26,115,232,0.15)] transition-all duration-300 cursor-pointer opacity-0 group-hover/carousel:opacity-100 translate-x-2 group-hover/carousel:translate-x-0"
                   >
                     <i className="ti ti-chevron-left text-lg font-bold" />
                   </button>
                   <button
                     onClick={scrollNext}
                     aria-label="Next Doctor"
-                    className="absolute right-0 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#1A73E8] shadow-[0_4px_12px_rgba(0,0,0,0.1)] border border-slate-100 hover:bg-[#F8FAFC] transition-all hover:scale-105 duration-200 cursor-pointer opacity-70 group-hover/carousel:opacity-100"
+                    className="absolute -right-6 top-1/2 -translate-y-1/2 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-[#1A73E8] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 hover:bg-white hover:text-[#1557B0] hover:shadow-[0_8px_30px_rgba(26,115,232,0.15)] transition-all duration-300 cursor-pointer opacity-0 group-hover/carousel:opacity-100 -translate-x-2 group-hover/carousel:translate-x-0"
                   >
                     <i className="ti ti-chevron-right text-lg font-bold" />
                   </button>
@@ -352,7 +352,7 @@ function LandingPage() {
               {doctorsLoading ? (
                 <div className="flex gap-6 overflow-x-hidden py-4 justify-center">
                   {[1, 2, 3].map((n) => (
-                    <div key={n} className="w-[220px] shrink-0 bg-white rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] animate-pulse space-y-4">
+                    <div key={n} className="w-[260px] shrink-0 bg-white rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] animate-pulse space-y-4">
                       <div className="aspect-[4/5] w-full bg-slate-200 rounded-xl" />
                       <div className="h-4 bg-slate-200 rounded w-3/4" />
                       <div className="h-3 bg-slate-200 rounded w-1/2" />
@@ -400,47 +400,69 @@ function LandingPage() {
                       if (!qualification) qualification = doc.bio || "Medical Officer";
                       if (!experience) experience = "Experienced Consultant";
 
+                      // Parse working days
+                      const daysArr = doc.working_days ? doc.working_days.split(',') : [];
+                      const formattedDays = daysArr.length > 0 ? daysArr.join(', ') : 'Mon - Fri';
+
                       return (
                         <article
                           key={id || idx}
-                          className="group w-[80%] sm:w-[45%] md:w-[45%] lg:w-[220px] shrink-0 snap-start bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_24px_rgba(26,115,232,0.12)] hover:-translate-y-1 transition-all duration-300 flex flex-col relative"
+                          className="group w-[280px] sm:w-[260px] md:w-[260px] lg:w-[260px] shrink-0 snap-start bg-white rounded-3xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(26,115,232,0.1)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col relative overflow-hidden"
                         >
-                          <div className="relative">
-                            <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-50 rounded-t-2xl">
-                              {photoUrl ? (
-                                <img
-                                  src={photoUrl}
-                                  alt={name}
-                                  className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1A73E8] to-[#1557B0] text-white text-3xl font-extrabold select-none">
-                                  {getInitials(name)}
-                                </div>
-                              )}
-                            </div>
+                          {/* Image Container with aspect ratio and slide effect */}
+                          <div className="relative aspect-[4/5] w-full overflow-hidden bg-slate-50">
+                            {photoUrl ? (
+                              <img
+                                src={photoUrl}
+                                alt={name}
+                                className="h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1A73E8] to-[#1557B0] text-white text-4xl font-extrabold select-none">
+                                {getInitials(name)}
+                              </div>
+                            )}
 
-                            {/* Specialty badge: overlapping the bottom edge of the photo */}
-                            <span className="absolute bottom-0 left-4 translate-y-1/2 z-20 rounded-full bg-[#1A73E8] px-3 py-1 text-[9px] font-extrabold uppercase tracking-wider text-white shadow-md whitespace-nowrap">
+                            {/* Elegant gradient overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/70 via-[#0F172A]/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300 pointer-events-none" />
+
+                            {/* Premium floating glassmorphism specialty badge */}
+                            <span className="absolute bottom-4 left-4 z-20 rounded-xl bg-white/95 backdrop-blur-md px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-[#1A73E8] shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-blue-50/50 whitespace-nowrap">
                               {specialty}
                             </span>
                           </div>
 
-                          <div className="p-4 pt-5 flex-1 flex flex-col justify-between">
+                          {/* Content area with refined padding and micro-details */}
+                          <div className="p-5 flex-1 flex flex-col justify-between">
                             <div>
-                              <h3 className="text-sm font-extrabold text-[#0F172A] line-clamp-1 group-hover:text-[#1A73E8] transition-colors duration-200">
+                              <h3 className="text-base font-extrabold text-[#0F172A] tracking-tight line-clamp-1 group-hover:text-[#1A73E8] transition-colors duration-200">
                                 {name}
                               </h3>
-                              <p className="mt-1.5 text-[11px] font-semibold text-[#4B5563] line-clamp-1">
+                              <p className="mt-1 text-xs font-semibold text-slate-400 line-clamp-1">
                                 {qualification}
                               </p>
+
+                              {/* Working days row */}
+                              <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-500">
+                                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#1A73E8]">
+                                  <i className="ti ti-calendar text-[10px]" />
+                                </div>
+                                <span className="font-semibold text-slate-600 line-clamp-1">{formattedDays}</span>
+                              </div>
                             </div>
 
-                            <div className="mt-4 flex items-center gap-2 text-[11px] text-[#4B5563] border-t border-slate-100 pt-3">
-                              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-50 text-[#1A73E8]">
-                                <i className="ti ti-briefcase text-[9px]" />
+                            {/* Footer section with experience and interactive call-to-action */}
+                            <div className="mt-4 flex items-center justify-between border-t border-slate-50 pt-4">
+                              <div className="flex items-center gap-2 text-[11px]">
+                                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-[#10B981]">
+                                  <i className="ti ti-briefcase text-[9px]" />
+                                </div>
+                                <span className="font-semibold text-slate-700">{experience}</span>
                               </div>
-                              <span className="font-semibold text-slate-700">{experience}</span>
+                              <div className="flex items-center gap-1 text-[11px] font-bold text-[#1A73E8] opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-300">
+                                <span>Book</span>
+                                <i className="ti ti-arrow-right text-[10px]" />
+                              </div>
                             </div>
                           </div>
                         </article>
@@ -450,13 +472,13 @@ function LandingPage() {
 
                   {/* Dot Indicators */}
                   {doctors.length > 1 && (
-                    <div className="mt-4 flex justify-center gap-1.5">
+                    <div className="mt-6 flex justify-center gap-2">
                       {doctors.map((_, idx) => (
                         <button
                           key={idx}
                           onClick={() => scrollTo(idx)}
                           aria-label={`Go to slide ${idx + 1}`}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${scrollIndex === idx ? "w-4 bg-[#1A73E8]" : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                          className={`h-1.5 rounded-full transition-all duration-300 ${scrollIndex === idx ? "w-6 bg-[#1A73E8]" : "w-1.5 bg-slate-200 hover:bg-slate-350"
                             }`}
                         />
                       ))}
