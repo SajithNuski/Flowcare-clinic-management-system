@@ -14,6 +14,122 @@ import consultImg from "../assets/images/cunsult.png";
 import ashiniLogo from "../assets/images/Ashini logo.png";
 import clinicImage from "../assets/images/clinic image.png";
 
+const CountUp = ({ end, duration = 1500, suffix = "" }) => {
+  const [count, setCount] = useState(0);
+  const elementRef = useRef(null);
+
+  useEffect(() => {
+    let start = 0;
+    const endVal = parseInt(end, 10);
+    if (isNaN(endVal)) return;
+
+    let observer;
+    let animationFrameId;
+
+    const startAnimation = () => {
+      const startTime = performance.now();
+
+      const animate = (currentTime) => {
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+        
+        // Easing function: easeOutQuad
+        const easeProgress = progress * (2 - progress);
+        
+        const currentCount = Math.floor(easeProgress * endVal);
+        setCount(currentCount);
+
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(animate);
+        } else {
+          setCount(endVal);
+        }
+      };
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          startAnimation();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (elementRef.current) {
+      observer.observe(elementRef.current);
+    }
+
+    return () => {
+      if (observer) observer.disconnect();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
+  }, [end, duration]);
+
+  return <span ref={elementRef}>{count}{suffix}</span>;
+};
+
+const getGradientForDoctor = (name = "") => {
+  const gradients = [
+    "from-[#3B82F6] to-[#06B6D4]", // Blue-Cyan
+    "from-[#10B981] to-[#3B82F6]", // Emerald-Blue
+    "from-[#EC4899] to-[#8B5CF6]", // Pink-Purple
+    "from-[#F59E0B] to-[#EF4444]", // Amber-Red
+    "from-[#6366F1] to-[#D946EF]", // Indigo-Fuchsia
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const idx = Math.abs(hash) % gradients.length;
+  return gradients[idx];
+};
+
+const getSpecialtyStyles = (specialty = "") => {
+  const s = specialty.toLowerCase();
+  if (s.includes("cardio")) {
+    return {
+      badgeBg: "bg-rose-50/95 border-rose-100/60 text-rose-600",
+      hoverBorder: "hover:border-rose-300 hover:shadow-[0_20px_40px_rgba(244,63,94,0.08)]",
+      iconColor: "text-rose-500",
+      bulletBg: "bg-rose-50",
+      calendarColor: "text-rose-500 bg-rose-50",
+      briefcaseColor: "text-rose-500 bg-rose-50"
+    };
+  }
+  if (s.includes("paediat") || s.includes("pediat") || s.includes("child") || s.includes("baby")) {
+    return {
+      badgeBg: "bg-amber-50/95 border-amber-100/60 text-amber-600",
+      hoverBorder: "hover:border-amber-300 hover:shadow-[0_20px_40px_rgba(245,158,11,0.08)]",
+      iconColor: "text-amber-500",
+      bulletBg: "bg-amber-50",
+      calendarColor: "text-amber-500 bg-amber-50",
+      briefcaseColor: "text-amber-500 bg-amber-50"
+    };
+  }
+  if (s.includes("physician") || s.includes("general") || s.includes("practi")) {
+    return {
+      badgeBg: "bg-emerald-50/95 border-emerald-100/60 text-emerald-600",
+      hoverBorder: "hover:border-emerald-300 hover:shadow-[0_20px_40px_rgba(16,185,129,0.08)]",
+      iconColor: "text-emerald-500",
+      bulletBg: "bg-emerald-50",
+      calendarColor: "text-emerald-500 bg-emerald-50",
+      briefcaseColor: "text-emerald-500 bg-emerald-50"
+    };
+  }
+  return {
+    badgeBg: "bg-blue-50/95 border-blue-100/60 text-[#1A73E8]",
+    hoverBorder: "hover:border-blue-300 hover:shadow-[0_20px_40px_rgba(26,115,232,0.08)]",
+    iconColor: "text-[#1A73E8]",
+    bulletBg: "bg-blue-50",
+    calendarColor: "text-[#1A73E8] bg-blue-50",
+    briefcaseColor: "text-[#1A73E8] bg-blue-50"
+  };
+};
+
 const featureItems = [
   {
     icon: "ti-device-mobile",
@@ -637,52 +753,52 @@ function LandingPage() {
             {/* Right Column: Modern Multiple Square Shapes (Stats Cards Grid) */}
             <div className="lg:col-span-5">
               <div className="grid grid-cols-2 gap-4">
-                {/* Stat 1: 15+ Years */}
-                <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-6 text-white border border-slate-800/80 overflow-hidden shadow-md flex flex-col justify-between">
+                {/* Stat 1: 5+ Years */}
+                <div className="relative aspect-square rounded-2xl bg-[#3B151F] p-6 text-white border border-[#4C1D24]/60 overflow-hidden shadow-md flex flex-col justify-between hover:-translate-y-1 transition-all duration-305">
                   {/* Soft glow & grid pattern */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.15)_0%,_transparent_70%)] pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(244,63,94,0.15)_0%,_transparent_70%)] pointer-events-none" />
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 
-                  <div className="w-8 h-[2px] bg-[#1A73E8] rounded-full" />
+                  <div className="w-8 h-[2px] bg-[#F43F5E] rounded-full" />
                   <div>
-                    <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight">
-                      15+
+                    <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-red-200 bg-clip-text text-transparent inline-block tracking-tight">
+                      <CountUp end={5} suffix="+" />
                     </div>
-                    <div className="mt-1 text-xs text-slate-400 font-medium leading-tight">
+                    <div className="mt-1 text-xs text-slate-300 font-medium leading-tight">
                       Years serving Badulla
                     </div>
                   </div>
                 </div>
 
                 {/* Stat 2: 3 Specialist Doctors */}
-                <div className="relative aspect-square rounded-2xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-6 text-white border border-slate-800/80 overflow-hidden shadow-md flex flex-col justify-between">
+                <div className="relative aspect-square rounded-2xl bg-[#0F1D3A] p-6 text-white border border-[#1D2E4D]/60 overflow-hidden shadow-md flex flex-col justify-between hover:-translate-y-1 transition-all duration-305">
                   {/* Soft glow & grid pattern */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.15)_0%,_transparent_70%)] pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.15)_0%,_transparent_70%)] pointer-events-none" />
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 
                   <div className="w-8 h-[2px] bg-[#1A73E8] rounded-full" />
                   <div>
                     <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight">
-                      3
+                      <CountUp end={3} />
                     </div>
-                    <div className="mt-1 text-xs text-slate-400 font-medium leading-tight">
+                    <div className="mt-1 text-xs text-slate-300 font-medium leading-tight">
                       Specialist Doctors
                     </div>
                   </div>
                 </div>
 
-                {/* Stat 3: 50+ Patients per day (Full Width of Grid) */}
-                <div className="col-span-2 relative rounded-2xl bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#122340] p-6 text-white border border-slate-800/80 overflow-hidden shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                {/* Stat 3: 10+ Patients per day (Full Width of Grid) */}
+                <div className="col-span-2 relative rounded-2xl bg-[#0A2C21] p-6 text-white border border-[#143D30]/60 overflow-hidden shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:-translate-y-1 transition-all duration-305">
                   {/* Soft glow & grid pattern */}
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-[radial-gradient(circle_at_top_right,_rgba(26,115,232,0.15)_0%,_transparent_70%)] pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-[radial-gradient(circle_at_top_right,_rgba(16,185,129,0.15)_0%,_transparent_70%)] pointer-events-none" />
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,_transparent_1px),_linear-gradient(90deg,_rgba(255,255,255,0.01)_1px,_transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
 
                   <div className="flex flex-col">
-                    <div className="w-8 h-[2px] bg-[#1A73E8] rounded-full mb-2" />
-                    <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent inline-block tracking-tight">
-                      50+
+                    <div className="w-8 h-[2px] bg-[#10B981] rounded-full mb-2" />
+                    <div className="text-3xl font-extrabold bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent inline-block tracking-tight">
+                      <CountUp end={10} suffix="+" />
                     </div>
-                    <div className="mt-1 text-xs text-slate-400 font-medium">
+                    <div className="mt-1 text-xs text-slate-300 font-medium">
                       Patients per day
                     </div>
                   </div>
@@ -746,8 +862,8 @@ function LandingPage() {
               <article
                 key={step.title}
                 className={`group relative bg-white border border-slate-200/40 p-6 flex flex-col items-center text-center shadow-[var(--card-shadow)] hover:shadow-[0_20px_40px_rgba(26,115,232,0.1)] transition-all duration-300 ease-in-out hover:-translate-y-2 ${step.number === "1" ? "md:-translate-y-2 hover:md:-translate-y-4" :
-                    step.number === "2" ? "md:translate-y-4 hover:md:translate-y-2" :
-                      "md:-translate-y-2 hover:md:-translate-y-4"
+                  step.number === "2" ? "md:translate-y-4 hover:md:translate-y-2" :
+                    "md:-translate-y-2 hover:md:-translate-y-4"
                   }`}
                 style={{
                   borderRadius: 'var(--card-radius)'
@@ -767,8 +883,8 @@ function LandingPage() {
                   {/* Overlapping circular badges with rotate sticker feel and white border */}
                   <div
                     className={`absolute -top-5 -left-5 z-20 flex h-12 w-12 items-center justify-center rounded-full text-sm font-black shadow-[var(--badge-shadow)] border-[3px] border-white ${step.number === "1" ? "bg-gradient-to-br from-[#FFA0A0] to-[#EF4444] text-white" :
-                        step.number === "2" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
-                          "bg-gradient-to-br from-[#00E5FF] to-[#00A3E0] text-white"
+                      step.number === "2" ? "bg-gradient-to-br from-[#60A5FA] to-[#1A73E8] text-white" :
+                        "bg-gradient-to-br from-[#00E5FF] to-[#00A3E0] text-white"
                       }`}
                     style={{ transform: "rotate(-7deg)" }}
                   >
@@ -806,15 +922,15 @@ function LandingPage() {
         </section>
 
         {/* Contact Info Grid */}
-        <section className="bg-transparent border-t border-blue-100/20 px-4 py-16 sm:px-8">
+        <section className="bg-transparent border-t border-slate-100 px-4 py-16 sm:px-8">
           <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Opening Hours */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-blue-100/40 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-200/50">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#EBF7ED] text-[#16A34A] transition-transform duration-300 group-hover:scale-110">
+            <div className="group flex items-start gap-5 rounded-2xl border border-slate-100 border-l-4 border-l-[#10B981] bg-gradient-to-br from-white via-white to-[#ECFDF5]/40 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(16,185,129,0.08)] hover:-translate-y-1">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#10B981] to-[#059669] text-white shadow-[0_4px_12px_rgba(16,185,129,0.25)] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-clock text-lg" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Operational Hours</span>
+                <span className="text-[10px] font-extrabold text-[#059669] uppercase tracking-wider">Operational Hours</span>
                 <h3 className="text-base font-bold text-[#0F172A] mt-0.5">
                   Opening Hours
                 </h3>
@@ -829,12 +945,12 @@ function LandingPage() {
             </div>
 
             {/* Contact Us */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-blue-100/40 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-200/50">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#EF4444] transition-transform duration-300 group-hover:scale-110">
+            <div className="group flex items-start gap-5 rounded-2xl border border-slate-100 border-l-4 border-l-[#F43F5E] bg-gradient-to-br from-white via-white to-[#FFF1F2]/40 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(244,63,94,0.08)] hover:-translate-y-1">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#F43F5E] to-[#E11D48] text-white shadow-[0_4px_12px_rgba(244,63,94,0.25)] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-phone text-lg" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Get in Touch</span>
+                <span className="text-[10px] font-extrabold text-[#E11D48] uppercase tracking-wider">Get in Touch</span>
                 <h3 className="text-base font-bold text-[#0F172A] mt-0.5">
                   Contact Us
                 </h3>
@@ -851,12 +967,12 @@ function LandingPage() {
             </div>
 
             {/* Find Us */}
-            <div className="group flex items-start gap-4 rounded-2xl border border-blue-100/40 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-200/50 col-span-1 sm:col-span-2 lg:col-span-1">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F0FE] text-[#1A73E8] transition-transform duration-300 group-hover:scale-110">
+            <div className="group flex items-start gap-5 rounded-2xl border border-slate-100 border-l-4 border-l-[#1A73E8] bg-gradient-to-br from-white via-white to-[#E8F0FE]/40 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all duration-300 hover:shadow-[0_20px_40px_rgba(26,115,232,0.08)] hover:-translate-y-1 col-span-1 sm:col-span-2 lg:col-span-1">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1A73E8] to-[#1557B0] text-white shadow-[0_4px_12px_rgba(26,115,232,0.25)] transition-transform duration-300 group-hover:scale-110">
                 <i className="ti ti-map-pin text-lg" />
               </div>
               <div>
-                <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Clinic Location</span>
+                <span className="text-[10px] font-extrabold text-[#1557B0] uppercase tracking-wider">Clinic Location</span>
                 <h3 className="text-base font-bold text-[#0F172A] mt-0.5">
                   Find Us
                 </h3>
