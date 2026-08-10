@@ -171,8 +171,6 @@ function BookAppointment() {
     setAppointmentDate("");
     setDoctorId("");
     setSpecialisation("");
-    setError("");
-    setSuccessMessage("");
     setFormFields({
       patient_name: user?.full_name || "",
       phone: user?.phone || "",
@@ -182,6 +180,8 @@ function BookAppointment() {
     });
     setSlots([]);
     setStep(1);
+    setError("");
+    setSuccessMessage("");
   }
 
   // Handle form submission
@@ -193,6 +193,7 @@ function BookAppointment() {
     if (!specialisation) return setError("Please choose a specialization.");
     if (!doctorId) return setError("Please select a doctor.");
     if (!appointmentDate) return setError("Please select a date.");
+    if (!isWorkingDay) return setError(`${selectedDoctor?.full_name || "This doctor"} is not scheduled to consult on this day of the week. Please choose a different date.`);
     if (!selectedSlot) return setError("No available session slots on this date. Please try another date.");
 
     setSubmitLoading(true);
@@ -763,7 +764,7 @@ function BookAppointment() {
                     </button>
                     <button 
                       type="submit" 
-                      disabled={submitLoading} 
+                      disabled={submitLoading || !isWorkingDay} 
                       className="rounded-xl bg-[#1A73E8] text-white px-8 py-3.5 font-bold hover:bg-[#1557B0] transition-colors disabled:opacity-60 shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer"
                     >
                       {submitLoading ? (
