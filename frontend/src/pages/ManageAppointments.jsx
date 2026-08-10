@@ -156,6 +156,17 @@ function ManageAppointments() {
     const app = appointments.find((a) => a.id === appointmentId);
     if (!app) return;
 
+    // Only allow check-in on the actual day of the appointment — otherwise a
+    // future-dated appointment could be checked in early and wrongly appear
+    // in today's live queue.
+    if (app.appointment_date && app.appointment_date !== todayStr) {
+      showToast(
+        `This appointment is scheduled for ${app.appointment_date}. Check-in is only allowed on the appointment date.`,
+        "error"
+      );
+      return;
+    }
+
     setPaymentData({
       patientId,
       patientName: app.patient_name,
@@ -196,6 +207,18 @@ function ManageAppointments() {
 
 
   const handleNoShow = async (appointmentId) => {
+    // No-Show should only be marked on or after the appointment date — you
+    // can't know someone "didn't show up" for an appointment that hasn't
+    // happened yet.
+    const app = appointments.find((a) => a.id === appointmentId);
+    if (app?.appointment_date && app.appointment_date > todayStr) {
+      showToast(
+        `This appointment is scheduled for ${app.appointment_date}. No-Show can only be marked on or after the appointment date.`,
+        "error"
+      );
+      return;
+    }
+
     try {
       const res = await markNoShow(appointmentId);
       if (res?.success) {
