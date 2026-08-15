@@ -86,9 +86,17 @@ $slots = [];
 $start_time = new DateTime($start_str);
 $end_time = new DateTime($end_str);
 
+// If the requested date is today, don't offer time slots that have already
+// passed — a slot earlier than the current time can't realistically be booked.
+$today_str = date('Y-m-d');
+$current_time_str = $date === $today_str ? date('H:i') : null;
+
 while ($start_time < $end_time) {
 	$slot_str = $start_time->format('H:i');
-	if (!in_array($slot_str, $booked_times, true)) {
+	$already_booked = in_array($slot_str, $booked_times, true);
+	$already_passed = $current_time_str !== null && $slot_str <= $current_time_str;
+
+	if (!$already_booked && !$already_passed) {
 		$slots[] = $slot_str;
 	}
 	$start_time->modify('+10 minutes');
