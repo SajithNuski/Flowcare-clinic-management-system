@@ -2,6 +2,12 @@
 // This file connects our PHP code to the MySQL database
 // Every other PHP file will include this file to get the $conn variable
 
+// Set PHP's timezone to match the clinic's local time (Sri Lanka). Without
+// this, PHP defaults to UTC on most XAMPP installs, which throws off every
+// "today"/"current time" comparison used across the backend (e.g. hiding
+// already-passed booking slots, restricting check-in to the appointment date).
+date_default_timezone_set('Asia/Colombo');
+
 $host = "127.0.0.1";       // MySQL runs on localhost in XAMPP
 $user = "root";            // Default XAMPP MySQL username
 $password = "";            // Default XAMPP MySQL password is empty
