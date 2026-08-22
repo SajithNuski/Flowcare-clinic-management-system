@@ -88,6 +88,14 @@ if ($action === 'cancel') {
 		respond_json(["success" => false, "error" => "Invalid new date"], 400);
 	}
 
+	if (!$appointment->is_doctor_working_day((int) $appt_data['doctor_id'], $new_date)) {
+		respond_json(["success" => false, "error" => "This doctor is not scheduled to consult on this day of the week."], 400);
+	}
+
+	if (!$appointment->check_slot_available((int) $appt_data['doctor_id'], $new_date, $new_appointment_time, $appointment_id)) {
+		respond_json(["success" => false, "error" => "This time slot is already booked. Please choose another."], 409);
+	}
+
 	$success = $appointment->reschedule($appointment_id, $new_date, $new_appointment_time);
 	$activity_message = 'Rescheduled appointment #' . $appointment_id . ' to ' . $new_date . ' ' . $new_appointment_time;
 } else {

@@ -45,6 +45,10 @@ if ($date_object < $today) {
 
 $appointment = new Appointment($conn);
 
+if (!$appointment->is_doctor_working_day($doctor_id, $appointment_date)) {
+	respond_json(["success" => false, "error" => "This doctor is not scheduled to consult on this day of the week."], 400);
+}
+
 $patient_id = isset($data['patient_id']) ? (int) $data['patient_id'] : 0;
 $patient_name = isset($data['patient_name']) ? trim($data['patient_name']) : '';
 

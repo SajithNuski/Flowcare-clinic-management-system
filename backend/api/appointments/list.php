@@ -38,7 +38,16 @@ if ($role === 'receptionist' || $role === 'admin') {
 	} else {
 		$appointments = $appointment->get_today_all();
 	}
-	respond_json(["success" => true, "appointments" => $appointments ?: []]);
+
+	// New bookings created today, regardless of which date they were booked FOR,
+	// so receptionists can spot fresh incoming appointments as soon as they log in.
+	$new_bookings_today = $appointment->get_booked_today();
+
+	respond_json([
+		"success" => true,
+		"appointments" => $appointments ?: [],
+		"new_bookings_today" => $new_bookings_today ?: [],
+	]);
 }
 
 if ($role === 'doctor') {
