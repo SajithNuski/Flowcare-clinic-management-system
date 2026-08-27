@@ -173,6 +173,7 @@ function DoctorProfile() {
           login({
             ...user,
             full_name: res.doctor.full_name,
+            photo_url: res.doctor.photo_url,
           });
         }
       } else {
