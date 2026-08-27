@@ -149,6 +149,10 @@ function ManageUsers() {
       setError('Doctor start and end working times are required.')
       return
     }
+    if (newUser.role === 'doctor' && newUser.working_days.length === 0) {
+      setError('At least one working day must be selected.')
+      return
+    }
 
     if (fileError) {
       setError('Please resolve file upload errors first.')
