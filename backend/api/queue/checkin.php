@@ -45,6 +45,17 @@ $appointment = new Appointment($conn);
 $payment = new Payment($conn);
 
 $today = date('Y-m-d');
+
+if ($appointment_id > 0) {
+	$app_data = $appointment->get_by_id($appointment_id);
+	if (!$app_data) {
+		respond_json(["success" => false, "error" => "Appointment not found"], 404);
+	}
+	if ($app_data['appointment_date'] !== $today) {
+		respond_json(["success" => false, "error" => "Can only check-in appointments scheduled for today"], 400);
+	}
+}
+
 $result = $queue->add_to_queue($patient_id, $doctor_id, $today);
 
 if ($result === false) {

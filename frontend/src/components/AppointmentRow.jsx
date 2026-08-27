@@ -24,6 +24,16 @@ import { formatTime } from "../utils/helpers";
  * }} props
  */
 function AppointmentRow({ appointment, onCheckin, onReschedule, onCancel, onNoShow }) {
+  const todayStr = (() => {
+    const today = new Date();
+    const offset = today.getTimezoneOffset();
+    const localDate = new Date(today.getTime() - (offset * 60 * 1000));
+    return localDate.toISOString().split("T")[0];
+  })();
+
+  const isToday = appointment.appointment_date === todayStr;
+  const isFuture = appointment.appointment_date > todayStr;
+
   const isPending = appointment.status === "confirmed" || appointment.status === "rescheduled";
   const isCompleted = appointment.status === "completed";
   const isNoShow = appointment.status === "no_show";
@@ -119,15 +129,17 @@ function AppointmentRow({ appointment, onCheckin, onReschedule, onCancel, onNoSh
 
       {/* Action buttons */}
       <td className="px-5 py-4 whitespace-nowrap text-right text-xs">
-        {isPending ? (
+        {isPending && (isToday || isFuture) ? (
           <div className="flex items-center justify-end gap-2.5">
-            <button
-              onClick={() => onCheckin(appointment.patient_id, appointment.doctor_id, appointment.id)}
-              className="px-2.5 py-1.5 bg-[#10B981] hover:bg-emerald-600 text-white rounded-lg font-bold transition-all shadow-sm flex items-center gap-1 cursor-pointer"
-            >
-              <i className="ti ti-user-check text-xs" />
-              Check in
-            </button>
+            {isToday && (
+              <button
+                onClick={() => onCheckin(appointment.patient_id, appointment.doctor_id, appointment.id)}
+                className="px-2.5 py-1.5 bg-[#10B981] hover:bg-emerald-600 text-white rounded-lg font-bold transition-all shadow-sm flex items-center gap-1 cursor-pointer"
+              >
+                <i className="ti ti-user-check text-xs" />
+                Check in
+              </button>
+            )}
             <button
               onClick={() => onReschedule(appointment)}
               className="px-2.5 py-1.5 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg font-bold transition-all flex items-center gap-1 cursor-pointer"
@@ -136,14 +148,18 @@ function AppointmentRow({ appointment, onCheckin, onReschedule, onCancel, onNoSh
               Reschedule
             </button>
             <div className="flex items-center gap-2 border-l border-slate-200 pl-2">
-              <button
-                onClick={() => onNoShow(appointment.id)}
-                className="text-red-500 hover:text-red-700 font-bold transition-colors cursor-pointer"
-                title="Mark as No-Show"
-              >
-                No-Show
-              </button>
-              <span className="text-slate-300">|</span>
+              {isToday && (
+                <>
+                  <button
+                    onClick={() => onNoShow(appointment.id)}
+                    className="text-red-500 hover:text-red-700 font-bold transition-colors cursor-pointer"
+                    title="Mark as No-Show"
+                  >
+                    No-Show
+                  </button>
+                  <span className="text-slate-300">|</span>
+                </>
+              )}
               <button
                 onClick={() => onCancel(appointment.id)}
                 className="text-slate-400 hover:text-red-600 font-bold transition-colors cursor-pointer"

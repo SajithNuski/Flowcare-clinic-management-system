@@ -744,7 +744,7 @@ function ReceptionistDashboard() {
                                 )}
                               </td>
                               <td className="px-4 py-3 text-sm">
-                                {isConfirmed && (
+                                {isConfirmed && selectedDate === todayStr ? (
                                   <div className="flex gap-2">
                                     <button
                                       onClick={() => handleCheckin(appointment.patient_id, appointment.doctor_id, appointment.id)}
@@ -759,11 +759,7 @@ function ReceptionistDashboard() {
                                       No-show
                                     </button>
                                   </div>
-                                )}
-                                {(isNoShow || isCancelled) && (
-                                  <span className="text-xs text-slate-400 italic font-medium">No actions</span>
-                                )}
-                                {isCompleted && (
+                                ) : (
                                   <span className="text-xs text-slate-400 italic font-medium">No actions</span>
                                 )}
                               </td>

@@ -32,10 +32,10 @@ const CountUp = ({ end, duration = 1500, suffix = "" }) => {
       const animate = (currentTime) => {
         const elapsedTime = currentTime - startTime;
         const progress = Math.min(elapsedTime / duration, 1);
-        
+
         // Easing function: easeOutQuad
         const easeProgress = progress * (2 - progress);
-        
+
         const currentCount = Math.floor(easeProgress * endVal);
         setCount(currentCount);
 
@@ -70,64 +70,6 @@ const CountUp = ({ end, duration = 1500, suffix = "" }) => {
   }, [end, duration]);
 
   return <span ref={elementRef}>{count}{suffix}</span>;
-};
-
-const getGradientForDoctor = (name = "") => {
-  const gradients = [
-    "from-[#3B82F6] to-[#06B6D4]", // Blue-Cyan
-    "from-[#10B981] to-[#3B82F6]", // Emerald-Blue
-    "from-[#EC4899] to-[#8B5CF6]", // Pink-Purple
-    "from-[#F59E0B] to-[#EF4444]", // Amber-Red
-    "from-[#6366F1] to-[#D946EF]", // Indigo-Fuchsia
-  ];
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  const idx = Math.abs(hash) % gradients.length;
-  return gradients[idx];
-};
-
-const getSpecialtyStyles = (specialty = "") => {
-  const s = specialty.toLowerCase();
-  if (s.includes("cardio")) {
-    return {
-      badgeBg: "bg-rose-50/95 border-rose-100/60 text-rose-600",
-      hoverBorder: "hover:border-rose-300 hover:shadow-[0_20px_40px_rgba(244,63,94,0.08)]",
-      iconColor: "text-rose-500",
-      bulletBg: "bg-rose-50",
-      calendarColor: "text-rose-500 bg-rose-50",
-      briefcaseColor: "text-rose-500 bg-rose-50"
-    };
-  }
-  if (s.includes("paediat") || s.includes("pediat") || s.includes("child") || s.includes("baby")) {
-    return {
-      badgeBg: "bg-amber-50/95 border-amber-100/60 text-amber-600",
-      hoverBorder: "hover:border-amber-300 hover:shadow-[0_20px_40px_rgba(245,158,11,0.08)]",
-      iconColor: "text-amber-500",
-      bulletBg: "bg-amber-50",
-      calendarColor: "text-amber-500 bg-amber-50",
-      briefcaseColor: "text-amber-500 bg-amber-50"
-    };
-  }
-  if (s.includes("physician") || s.includes("general") || s.includes("practi")) {
-    return {
-      badgeBg: "bg-emerald-50/95 border-emerald-100/60 text-emerald-600",
-      hoverBorder: "hover:border-emerald-300 hover:shadow-[0_20px_40px_rgba(16,185,129,0.08)]",
-      iconColor: "text-emerald-500",
-      bulletBg: "bg-emerald-50",
-      calendarColor: "text-emerald-500 bg-emerald-50",
-      briefcaseColor: "text-emerald-500 bg-emerald-50"
-    };
-  }
-  return {
-    badgeBg: "bg-blue-50/95 border-blue-100/60 text-[#1A73E8]",
-    hoverBorder: "hover:border-blue-300 hover:shadow-[0_20px_40px_rgba(26,115,232,0.08)]",
-    iconColor: "text-[#1A73E8]",
-    bulletBg: "bg-blue-50",
-    calendarColor: "text-[#1A73E8] bg-blue-50",
-    briefcaseColor: "text-[#1A73E8] bg-blue-50"
-  };
 };
 
 const featureItems = [
@@ -413,7 +355,7 @@ function LandingPage() {
           {/* Accent Ambient Glow behind doctor cards */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle_at_center,_rgba(26,115,232,0.03)_0%,_transparent_70%)] pointer-events-none" />
 
-          <div className="relative mx-auto max-w-7xl rounded-[32px] bg-gradient-to-br from-white via-[#F8FAFC] to-white px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.025)] border border-slate-200/50 sm:px-8 lg:px-12 lg:py-20">
+          <div className="relative mx-auto max-w-7xl rounded-[32px] bg-blue-100 px-6 py-16 shadow-[0_20px_50px_rgba(26,115,232,0.025)] border border-slate-200/50 sm:px-8 lg:px-12 lg:py-20">
             {/* Corner Dotted Design Accents */}
             <div
               className="absolute -top-6 -right-6 w-24 h-24 bg-[radial-gradient(#1A73E8_1.5px,transparent_1.5px)] [background-size:8px_8px] opacity-15 pointer-events-none rounded-2xl hidden md:block"

@@ -37,6 +37,14 @@ if ($queue_id > 0) {
 }
 
 if ($appointment_id > 0) {
+	$app_data = $appointment->get_by_id($appointment_id);
+	if (!$app_data) {
+		respond_json(["success" => false, "error" => "Appointment not found"], 404);
+	}
+	$today = date('Y-m-d');
+	if ($app_data['appointment_date'] !== $today) {
+		respond_json(["success" => false, "error" => "Can only mark today's appointments as no-show"], 400);
+	}
 	$updated = $appointment->mark_no_show($appointment_id) || $updated;
 }
 
