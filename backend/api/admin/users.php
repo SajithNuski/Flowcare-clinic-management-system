@@ -96,9 +96,109 @@ if ($action === 'create') {
 	}
 
 	if ($role === 'doctor') {
+		$photo_url = '';
+		$has_upload = isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE;
+
+		if ($has_upload) {
+			$file = $_FILES['photo'];
+			
+			if ($file['error'] !== UPLOAD_ERR_OK) {
+				mysqli_rollback($conn);
+				respond_json(["success" => false, "error" => "Failed to upload image. Error code: " . $file['error']], 400);
+			}
+			
+			// Max size: 2MB
+			if ($file['size'] > 2 * 1024 * 1024) {
+				mysqli_rollback($conn);
+				respond_json(["success" => false, "error" => "Only PNG or JPG images are allowed. File exceeds 2MB limit."], 400);
+			}
+			
+			// Server-side MIME validation
+			$finfo = finfo_open(FILEINFO_MIME_TYPE);
+			$mime_type = finfo_file($finfo, $file['tmp_name']);
+			finfo_close($finfo);
+			
+			$allowed_types = [
+				'image/png' => 'png',
+				'image/jpeg' => 'jpg',
+				'image/jpg' => 'jpg'
+			];
+			
+			if (!array_key_exists($mime_type, $allowed_types)) {
+				mysqli_rollback($conn);
+				respond_json(["success" => false, "error" => "Only PNG or JPG images are allowed"], 400);
+			}
+			
+			$extension = $allowed_types[$mime_type];
+			
+			$upload_dir = __DIR__ . '/../../../uploads/doctors/';
+			if (!file_exists($upload_dir)) {
+				mkdir($upload_dir, 0755, true);
+			}
+			
+			// Safe unique filename
+			$filename = 'doctor_' . $user_id . '_' . time() . '.' . $extension;
+			$dest_path = $upload_dir . $filename;
+			
+			$resized = false;
+			if (extension_loaded('gd')) {
+				list($orig_width, $orig_height) = getimagesize($file['tmp_name']);
+				$max_dim = 800;
+				if ($orig_width > $max_dim || $orig_height > $max_dim) {
+					$ratio = $orig_width / $orig_height;
+					if ($ratio > 1) {
+						$new_width = $max_dim;
+						$new_height = round($max_dim / $ratio);
+					} else {
+						$new_height = $max_dim;
+						$new_width = round($max_dim * $ratio);
+					}
+					
+					if ($extension === 'png') {
+						$src_img = imagecreatefrompng($file['tmp_name']);
+					} else {
+						$src_img = imagecreatefromjpeg($file['tmp_name']);
+					}
+					
+					if ($src_img) {
+						$dst_img = imagecreatetruecolor($new_width, $new_height);
+						if ($extension === 'png') {
+							imagealphablending($dst_img, false);
+							imagesavealpha($dst_img, true);
+							$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+							imagefilledrectangle($dst_img, 0, 0, $new_width, $new_height, $transparent);
+						}
+						
+						imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $new_width, $new_height, $orig_width, $orig_height);
+						
+						if ($extension === 'png') {
+							$saved = imagepng($dst_img, $dest_path);
+						} else {
+							$saved = imagejpeg($dst_img, $dest_path, 85);
+						}
+						
+						imagedestroy($src_img);
+						imagedestroy($dst_img);
+						
+						if ($saved) {
+							$resized = true;
+						}
+					}
+				}
+			}
+			
+			if (!$resized) {
+				if (!move_uploaded_file($file['tmp_name'], $dest_path)) {
+					mysqli_rollback($conn);
+					respond_json(["success" => false, "error" => "Failed to save uploaded image"], 500);
+				}
+			}
+			
+			$photo_url = '/uploads/doctors/' . $filename;
+		}
+
 		$stmt = mysqli_prepare($conn, "UPDATE doctors SET specialisation = ?, working_days = ?, working_time = ?, address = ?, bio = ?, photo_url = ?, qualification = ?, experience_years = ? WHERE id = ?");
 		$bio = trim($data['bio'] ?? '');
-		$photo_url = trim($data['photo_url'] ?? '');
 		$qualification = trim($data['qualification'] ?? '');
 		$experience_years = isset($data['experience_years']) ? (int)$data['experience_years'] : 0;
 		mysqli_stmt_bind_param($stmt, "sssssssii", $specialisation, $working_days, $working_time, $address, $bio, $photo_url, $qualification, $experience_years, $user_id);

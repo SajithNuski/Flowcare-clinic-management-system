@@ -34,6 +34,33 @@ function ManageUsers() {
   })
   const [startTime, setStartTime] = useState('09:00')
   const [endTime, setEndTime] = useState('17:00')
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [fileError, setFileError] = useState('')
+  const [previewUrl, setPreviewUrl] = useState('')
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    setFileError('')
+
+    // Validate type (PNG or JPG/JPEG)
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
+    if (!allowedTypes.includes(file.type)) {
+      setFileError('Only PNG or JPG images are allowed.')
+      return
+    }
+
+    // Validate size (max 2MB)
+    const maxSize = 2 * 1024 * 1024
+    if (file.size > maxSize) {
+      setFileError('File exceeds 2MB limit.')
+      return
+    }
+
+    setSelectedFile(file)
+    setPreviewUrl(URL.createObjectURL(file))
+  }
 
   // This useEffect fetches staff users once when the component mounts.
   useEffect(() => {
@@ -123,30 +150,36 @@ function ManageUsers() {
       return
     }
 
+    if (fileError) {
+      setError('Please resolve file upload errors first.')
+      return
+    }
+
     try {
-      const payload = {
-        action: 'create',
-        full_name: newUser.full_name,
-        email: newUser.email,
-        password: newUser.password,
-        phone: newUser.phone,
-        nic: newUser.nic,
-        address: newUser.address,
-        role: newUser.role,
-        specialisation: newUser.role === 'doctor' ? newUser.specialisation : '',
-        working_days: newUser.role === 'doctor' ? newUser.working_days.join(',') : '',
-        working_time: newUser.role === 'doctor' ? `${startTime}-${endTime}` : '',
-        qualification: newUser.role === 'doctor' ? newUser.qualification : '',
-        experience_years: newUser.role === 'doctor' ? newUser.experience_years : '',
-        photo_url: newUser.role === 'doctor' ? newUser.photo_url : ''
+      const formData = new FormData()
+      formData.append('action', 'create')
+      formData.append('full_name', newUser.full_name.trim())
+      formData.append('email', newUser.email.trim())
+      formData.append('password', newUser.password)
+      formData.append('phone', newUser.phone.trim())
+      formData.append('nic', newUser.nic.trim())
+      formData.append('address', newUser.address.trim())
+      formData.append('role', newUser.role)
+
+      if (newUser.role === 'doctor') {
+        formData.append('specialisation', newUser.specialisation.trim())
+        formData.append('working_days', newUser.working_days.join(','))
+        formData.append('working_time', `${startTime}-${endTime}`)
+        formData.append('qualification', newUser.qualification.trim())
+        formData.append('experience_years', newUser.experience_years)
+        if (selectedFile) {
+          formData.append('photo', selectedFile)
+        }
       }
 
       const response = await fetch('/api/admin/users.php', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload),
+        body: formData,
         credentials: 'include'
       })
       
@@ -158,6 +191,9 @@ function ManageUsers() {
         setShowNewUserPassword(false)
         setStartTime('09:00')
         setEndTime('17:00')
+        setSelectedFile(null)
+        setFileError('')
+        setPreviewUrl('')
         setNewUser({
           full_name: '',
           email: '',
@@ -248,6 +284,9 @@ function ManageUsers() {
                 onClick={() => {
                   setShowAddForm(!showAddForm)
                   setShowNewUserPassword(false)
+                  setSelectedFile(null)
+                  setFileError('')
+                  setPreviewUrl('')
                 }}
                 className="bg-[#1A73E8] hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm flex items-center font-medium cursor-pointer transition-colors"
               >
@@ -409,14 +448,34 @@ function ManageUsers() {
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Photo URL</label>
-                          <input
-                            type="text"
-                            value={newUser.photo_url}
-                            onChange={(e) => setNewUser({ ...newUser, photo_url: e.target.value })}
-                            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
-                            placeholder="e.g. https://images.unsplash.com/... or /assets/images/doc.png"
-                          />
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Choose Photo</label>
+                          <div className="flex items-center gap-4 border border-gray-200 rounded-lg p-3 bg-gray-50/30">
+                            {previewUrl ? (
+                              <img
+                                src={previewUrl}
+                                alt="Doctor Preview"
+                                className="w-14 h-14 rounded-full object-cover border border-gray-200 bg-white"
+                              />
+                            ) : (
+                              <div className="w-14 h-14 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400 select-none">
+                                <i className="ti ti-user text-2xl" />
+                              </div>
+                            )}
+                            <div className="flex-1 min-w-0">
+                              <input
+                                type="file"
+                                accept="image/png, image/jpeg, image/jpg"
+                                onChange={handleFileChange}
+                                className="block w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                              />
+                              <span className="text-[10px] text-gray-400 mt-1 block">Only PNG or JPG images, max 2MB.</span>
+                            </div>
+                          </div>
+                          {fileError && (
+                            <p className="text-xs font-semibold text-red-500 mt-1.5 flex items-center gap-1">
+                              <i className="ti ti-alert-circle" /> {fileError}
+                            </p>
+                          )}
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
@@ -480,6 +539,9 @@ function ManageUsers() {
                       onClick={() => {
                         setShowAddForm(false)
                         setShowNewUserPassword(false)
+                        setSelectedFile(null)
+                        setFileError('')
+                        setPreviewUrl('')
                       }}
                       className="border border-gray-300 hover:bg-gray-50 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-colors"
                     >
