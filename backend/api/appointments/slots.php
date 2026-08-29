@@ -26,7 +26,7 @@ if (!$date_object || $date_object->format('Y-m-d') !== $date) {
 
 $stmt = mysqli_prepare(
 	$conn,
-	"SELECT working_time FROM doctors WHERE id = ? LIMIT 1"
+	"SELECT working_time, working_days FROM doctors WHERE id = ? LIMIT 1"
 );
 mysqli_stmt_bind_param($stmt, "i", $doctor_id);
 mysqli_stmt_execute($stmt);
@@ -38,6 +38,17 @@ $start_str = '09:00';
 $end_str = '17:00';
 
 $working_time = $row && !empty($row['working_time']) ? trim($row['working_time']) : '09:00-17:00';
+
+// If the doctor has configured working days and this date isn't one of
+// them, there are no bookable slots at all — no point generating a list.
+if ($row && !empty($row['working_days'])) {
+	$working_days = array_map('trim', explode(',', $row['working_days']));
+	$requested_day_name = $date_object->format('D'); // Mon, Tue, Wed...
+	if (!in_array($requested_day_name, $working_days, true)) {
+		respond_json([]);
+	}
+}
+
 
 if (preg_match('/(\d{1,2}:\d{2}\s*(?:AM|PM)?)\s*-\s*(\d{1,2}:\d{2}\s*(?:AM|PM)?)/i', $working_time, $matches)) {
 	$start_raw = trim($matches[1]);

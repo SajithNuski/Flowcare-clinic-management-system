@@ -82,20 +82,41 @@ class Appointment {
 		return $executed;
 	}
 
-	public function check_slot_available($doctor_id, $appointment_date, $appointment_time) {
+	public function check_slot_available($doctor_id, $appointment_date, $appointment_time, $exclude_appointment_id = 0) {
 		$stmt = mysqli_prepare(
 			$this->conn,
-			"SELECT COUNT(*) as count FROM appointments WHERE doctor_id = ? AND appointment_date = ? AND appointment_time = ? AND status IN ('confirmed', 'rescheduled', 'completed')"
+			"SELECT COUNT(*) as count FROM appointments WHERE doctor_id = ? AND appointment_date = ? AND appointment_time = ? AND status IN ('confirmed', 'rescheduled', 'completed') AND id != ?"
 		);
 		if (!$stmt) {
 			return false;
 		}
-		mysqli_stmt_bind_param($stmt, "iss", $doctor_id, $appointment_date, $appointment_time);
+		mysqli_stmt_bind_param($stmt, "issi", $doctor_id, $appointment_date, $appointment_time, $exclude_appointment_id);
 		mysqli_stmt_execute($stmt);
 		$result = mysqli_stmt_get_result($stmt);
 		$row = $result ? mysqli_fetch_assoc($result) : null;
 		mysqli_stmt_close($stmt);
 		return ($row && (int)$row['count'] === 0);
+	}
+
+	// Checks whether $date falls on one of the doctor's configured working
+	// days (e.g. doctors.working_days = "Mon,Wed,Fri"). If a doctor has no
+	// working_days configured, we don't block — consistent with how the rest
+	// of the app treats missing schedule data leniently.
+	public function is_doctor_working_day($doctor_id, $date) {
+		$row = $this->fetchOne(
+			"SELECT working_days FROM doctors WHERE id = ? LIMIT 1",
+			"i",
+			[$doctor_id]
+		);
+
+		if (!$row || empty($row['working_days'])) {
+			return true;
+		}
+
+		$working_days = array_map('trim', explode(',', $row['working_days']));
+		$day_name = (new DateTime($date))->format('D'); // Mon, Tue, Wed...
+
+		return in_array($day_name, $working_days, true);
 	}
 
 	public function get_by_id($id) {
@@ -169,6 +190,17 @@ class Appointment {
 		);
 	}
 
+	// Appointments created (booked) today, regardless of which date the
+	// appointment itself is scheduled for — used to notify receptionists of
+	// fresh incoming bookings as soon as the dashboard loads.
+	public function get_booked_today() {
+		return $this->fetchAll(
+			"SELECT a.id, a.patient_id, a.doctor_id, a.appointment_date, a.appointment_time, a.appointment_time AS time_slot, a.visit_reason, a.notes, a.status, a.created_at, COALESCE(a.patient_name, p.full_name) AS patient_name, p.nic AS patient_nic, p.phone AS patient_phone, d.full_name AS doctor_name, d.specialisation FROM appointments a INNER JOIN patients p ON a.patient_id = p.id INNER JOIN doctors d ON a.doctor_id = d.id WHERE DATE(a.created_at) = CURDATE() ORDER BY a.created_at DESC, a.id DESC",
+			"",
+			[]
+		);
+	}
+
 	public function cancel($id) {
 		return $this->executeQuery(
 			"UPDATE appointments SET status = 'cancelled', cancelled_at = NOW() WHERE id = ?",
@@ -185,6 +217,16 @@ class Appointment {
 		);
 
 		if ($appointment === false) {
+			return false;
+		}
+
+		$doctor_id = $appointment['doctor_id'];
+
+		if (!$this->is_doctor_working_day($doctor_id, $new_date)) {
+			return false;
+		}
+
+		if (!$this->check_slot_available($doctor_id, $new_date, $new_appointment_time, $id)) {
 			return false;
 		}
 
