@@ -95,3 +95,21 @@ export async function markQueueNoShow(queueId) {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Updates a patient's queue number in the database.
+ * @param {number} queueId
+ * @param {number} newQueueNumber
+ */
+export async function updateQueueNumber(queueId, newQueueNumber) {
+  try {
+    const response = await axios.post(`${API_BASE}/queue/update_number.php`, {
+      queue_id: queueId,
+      queue_number: newQueueNumber,
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+

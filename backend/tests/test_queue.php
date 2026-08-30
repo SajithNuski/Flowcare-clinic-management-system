@@ -312,6 +312,38 @@ function test_queue_position_is_correct() {
 	return false;
 }
 
+function test_can_update_queue_number() {
+	global $queue_model, $test_doctor_id, $test_date;
+
+	print_test_header(__FUNCTION__);
+	clear_test_queue_for_day();
+
+	$patient = seed_queue_patient(10);
+	if ($patient === false) {
+		print_fail('Could not create test patient.');
+		return false;
+	}
+
+	$queued = $queue_model->add_to_queue($patient['id'], $test_doctor_id, $test_date);
+	remember_queue_result($queued);
+
+	if ($queued === false) {
+		print_fail('Could not add patient to queue.');
+		return false;
+	}
+
+	$updated = $queue_model->update_queue_number($queued['queue_id'], 99);
+	$row = get_queue_row($queued['queue_id']);
+
+	if ($updated && is_array($row) && (int) $row['queue_number'] === 99) {
+		print_pass();
+		return [$queued['queue_id']];
+	}
+
+	print_fail('Expected queue_number to be updated to 99.');
+	return false;
+}
+
 $cleanup_queue_ids = [];
 
 $result = test_can_add_patient_to_queue();
@@ -337,6 +369,11 @@ if (is_array($result)) {
 }
 
 $result = test_queue_position_is_correct();
+if (is_array($result)) {
+	$cleanup_queue_ids = array_merge($cleanup_queue_ids, array_map('intval', $result));
+}
+
+$result = test_can_update_queue_number();
 if (is_array($result)) {
 	$cleanup_queue_ids = array_merge($cleanup_queue_ids, array_map('intval', $result));
 }

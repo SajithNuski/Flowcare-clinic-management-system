@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Badge from "../components/Badge";
+import Modal from "../components/Modal";
 import { formatTime } from "../utils/helpers";
-import { getLiveQueue, markQueueNoShow } from "../api/queue";
+import { getLiveQueue, markQueueNoShow, updateQueueNumber } from "../api/queue";
 import { getDoctors } from "../api/doctors";
 
 function ManageQueue() {
@@ -14,6 +15,12 @@ function ManageQueue() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [toast, setToast] = useState({ message: "", type: "success" });
+
+  // Edit Queue Number state
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  const [newQueueNumber, setNewQueueNumber] = useState("");
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -76,6 +83,39 @@ function ManageQueue() {
       }
     } catch (err) {
       showToast("An error occurred while skipping the patient.", "error");
+    }
+  };
+
+  const handleOpenEditModal = (entry) => {
+    setEditingItem(entry);
+    setNewQueueNumber(entry.queue_number || "");
+    setEditModalOpen(true);
+  };
+
+  const handleSaveQueueNumber = async (e) => {
+    e.preventDefault();
+    if (!editingItem || !newQueueNumber) return;
+
+    const numVal = parseInt(newQueueNumber, 10);
+    if (isNaN(numVal) || numVal <= 0) {
+      showToast("Please enter a valid positive queue number.", "error");
+      return;
+    }
+
+    setUpdateLoading(true);
+    try {
+      const res = await updateQueueNumber(editingItem.queue_id, numVal);
+      if (res?.success) {
+        showToast(`Updated queue number to #${numVal} for ${editingItem.patient_name}.`, "success");
+        setEditModalOpen(false);
+        fetchData(false);
+      } else {
+        showToast(res?.error || "Failed to update queue number.", "error");
+      }
+    } catch (err) {
+      showToast("An error occurred while updating queue number.", "error");
+    } finally {
+      setUpdateLoading(false);
     }
   };
 
@@ -318,16 +358,23 @@ function ManageQueue() {
                         {/* Actions */}
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleOpenEditModal(entry)}
+                              className="px-2.5 py-1.5 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-md text-xs font-bold transition-all flex items-center gap-1 border border-blue-100 cursor-pointer"
+                              title="Update Queue Number"
+                            >
+                              <i className="ti ti-edit" /> Edit No.
+                            </button>
                             {(entry.status === "waiting" || entry.status === "in_consultation") ? (
                               <button
                                 onClick={() => handleSkipPatient(entry.queue_id, entry.patient_name)}
-                                className="px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-md text-xs font-bold transition-all flex items-center gap-1 border border-red-100"
+                                className="px-2.5 py-1.5 bg-red-50 text-red-700 hover:bg-red-100 rounded-md text-xs font-bold transition-all flex items-center gap-1 border border-red-100 cursor-pointer"
                               >
                                 <i className="ti ti-user-x" /> Skip Patient
                               </button>
                             ) : (
                               <span className="text-xs text-slate-450 italic font-medium">
-                                {entry.status === "completed" ? "Consultation Done" : "No actions"}
+                                {entry.status === "completed" ? "Done" : ""}
                               </span>
                             )}
                           </div>
@@ -348,6 +395,56 @@ function ManageQueue() {
           </div>
         )}
       </main>
+
+      {/* Edit Queue Number Modal */}
+      {editModalOpen && editingItem && (
+        <Modal
+          isOpen={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          title={`Update Queue Number — ${editingItem.patient_name}`}
+        >
+          <form onSubmit={handleSaveQueueNumber} className="space-y-4 pt-2">
+            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs text-slate-600 space-y-1">
+              <div><strong>Patient:</strong> {editingItem.patient_name} ({editingItem.patient_phone || "No phone"})</div>
+              <div><strong>Doctor:</strong> {editingItem.doctor_name || "Doctor"}</div>
+              <div><strong>Current Ticket #:</strong> #{editingItem.queue_number}</div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-1">New Queue Number</label>
+              <input
+                type="number"
+                min="1"
+                value={newQueueNumber}
+                onChange={(e) => setNewQueueNumber(e.target.value)}
+                placeholder="e.g. 1"
+                className="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                required
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                Updating the queue number will immediately re-order the queue position for this patient across all dashboards.
+              </p>
+            </div>
+
+            <div className="pt-4 flex items-center justify-end gap-3 border-t border-slate-200">
+              <button
+                type="button"
+                onClick={() => setEditModalOpen(false)}
+                className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={updateLoading}
+                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-bold shadow-md transition disabled:opacity-50 cursor-pointer"
+              >
+                {updateLoading ? "Saving..." : "Update Queue Number"}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 }

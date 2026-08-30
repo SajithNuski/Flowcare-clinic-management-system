@@ -98,7 +98,7 @@ class Queue {
 	// Step 4: return the new queue ID and queue number
 	public function add_to_queue($patient_id, $doctor_id, $date) {
 		$existing = $this->fetchOne(
-			"SELECT COUNT(*) AS total FROM queue WHERE doctor_id = ? AND date = ?",
+			"SELECT COALESCE(MAX(queue_number), 0) AS max_q FROM queue WHERE doctor_id = ? AND date = ?",
 			"is",
 			[$doctor_id, $date]
 		);
@@ -107,7 +107,7 @@ class Queue {
 			return false;
 		}
 
-		$queue_number = ((int) $existing['total']) + 1;
+		$queue_number = ((int) $existing['max_q']) + 1;
 
 		$stmt = mysqli_prepare(
 			$this->conn,
@@ -185,7 +185,7 @@ class Queue {
 		}
 
 		$ahead = $this->fetchOne(
-			"SELECT COUNT(*) AS total FROM queue WHERE doctor_id = ? AND date = ? AND queue_number < ? AND status = 'waiting'",
+			"SELECT COUNT(*) AS total FROM queue WHERE doctor_id = ? AND date = ? AND queue_number < ? AND status IN ('waiting', 'in_consultation')",
 			"isi",
 			[$queue_row['doctor_id'], $date, $queue_row['queue_number']]
 		);
@@ -196,6 +196,15 @@ class Queue {
 
 		$queue_row['position'] = (int) $ahead['total'];
 		return $queue_row;
+	}
+
+	// This method updates the queue number for a specific queue entry
+	public function update_queue_number($queue_id, $new_queue_number) {
+		return $this->executeQuery(
+			"UPDATE queue SET queue_number = ? WHERE id = ?",
+			"ii",
+			[$new_queue_number, $queue_id]
+		);
 	}
 
 	// This method finds the next waiting patient for a doctor today and moves them into consultation
