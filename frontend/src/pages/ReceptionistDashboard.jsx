@@ -624,12 +624,18 @@ function ReceptionistDashboard() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                   <div className="flex items-center gap-3">
                     <h2 className="text-lg font-semibold text-slate-900">Appointments</h2>
-                    <input
-                      type="date"
-                      value={selectedDate}
-                      onChange={(e) => setSelectedDate(e.target.value)}
-                      className="px-2 py-1 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
+                    <div className="relative flex items-center">
+                      <input
+                        type="date"
+                        value={selectedDate}
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                        className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                      />
+                      <div className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 bg-slate-50 flex items-center gap-2 pointer-events-none">
+                        <span>{formatDate(selectedDate)}</span>
+                        <i className="ti ti-calendar text-slate-400 text-xs" />
+                      </div>
+                    </div>
                   </div>
                   <Link
                     to="/receptionist/appointments"
@@ -706,7 +712,7 @@ function ReceptionistDashboard() {
                               return localDate.toISOString().split('T')[0];
                             })()
                               ? "No appointments scheduled for today." 
-                              : `No appointments scheduled for ${selectedDate}.`}
+                              : `No appointments scheduled for ${formatDate(selectedDate)}.`}
                           </td>
                         </tr>
                       ) : (
@@ -1028,7 +1034,7 @@ function ReceptionistDashboard() {
                 </div>
                 <div>
                   <span className="text-slate-400 font-medium">Date of Birth</span>
-                  <p className="font-semibold text-slate-800 mt-0.5">{registeredPatientResult.date_of_birth || "N/A"}</p>
+                  <p className="font-semibold text-slate-800 mt-0.5">{formatDate(registeredPatientResult.date_of_birth)}</p>
                 </div>
                 <div className="col-span-2">
                   <span className="text-slate-400 font-medium">Gender</span>
@@ -1163,14 +1169,20 @@ function ReceptionistDashboard() {
                 <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
                   Date of Birth *
                 </label>
-                <input
-                  type="date"
-                  required
-                  value={registerForm.dob}
-                  max={todayStr}
-                  onChange={(e) => setRegisterForm(prev => ({ ...prev, dob: e.target.value }))}
-                  className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 text-slate-800"
-                />
+                <div className="relative flex items-center">
+                  <input
+                    type="date"
+                    required
+                    value={registerForm.dob}
+                    max={todayStr}
+                    onChange={(e) => setRegisterForm(prev => ({ ...prev, dob: e.target.value }))}
+                    className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                  />
+                  <div className="h-11 w-full rounded-xl border border-slate-200/80 bg-white px-4 text-sm font-semibold text-slate-800 flex items-center justify-between pointer-events-none">
+                    <span>{registerForm.dob ? formatDate(registerForm.dob) : "Select date of birth"}</span>
+                    <i className="ti ti-calendar text-slate-400 text-base" />
+                  </div>
+                </div>
               </div>
             </div>
 

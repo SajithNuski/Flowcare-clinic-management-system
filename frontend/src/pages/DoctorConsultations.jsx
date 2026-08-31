@@ -195,8 +195,12 @@ export default function DoctorConsultations() {
                   type="date"
                   value={selectedDate}
                   onChange={handleDateChange}
-                  className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
+                  className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
                 />
+                <div className="px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 flex items-center gap-2 pointer-events-none">
+                  <span>{selectedDate ? formatDate(selectedDate) : "Select date"}</span>
+                  <i className="ti ti-calendar text-slate-400 text-base" />
+                </div>
               </div>
               {selectedDate && (
                 <button

@@ -158,12 +158,18 @@ function Payments() {
 
           <div className="flex items-center gap-2">
             <label className="text-xs font-semibold text-slate-500">Go to Date:</label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 bg-slate-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
+            <div className="relative flex items-center">
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+              />
+              <div className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 bg-slate-50 flex items-center gap-2 pointer-events-none">
+                <span>{formatDate(selectedDate)}</span>
+                <i className="ti ti-calendar text-slate-400 text-sm" />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -304,7 +310,7 @@ function Payments() {
                             {formatDate(p.payment_date)}
                           </div>
                           <div className="text-[10px] text-slate-400 font-semibold mt-0.5">
-                            {formatTime(new Date(p.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))}
+                            {formatTime(p.created_at)}
                           </div>
                         </td>
                         <td className="px-5 py-4 text-xs font-medium text-slate-500">

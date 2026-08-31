@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { getDoctors } from "../api/doctors";
 import { createAppointment, getAvailableSlots } from "../api/appointments";
 import { VISIT_REASONS } from "../utils/constants";
-import { formatTime } from "../utils/helpers";
+import { formatTime, formatDate } from "../utils/helpers";
 import clinicImg from "../assets/images/clinic image.png";
 
 // Helper to get specialization-specific icons
@@ -280,7 +280,7 @@ function BookAppointment() {
               <div className="flex justify-between text-sm">
                 <span className="text-slate-500 font-medium">Date &amp; Time:</span>
                 <span className="text-[#1A73E8] font-bold">
-                  {appointmentDate} at {formatTime(selectedSlot)}
+                  {formatDate(appointmentDate)} at {formatTime(selectedSlot)}
                 </span>
               </div>
             </div>
@@ -405,7 +405,7 @@ function BookAppointment() {
                         </div>
                         <div>
                           <div className="text-[10px] uppercase font-bold text-slate-400">Date Chosen</div>
-                          <div className="text-xs font-bold text-slate-700">{appointmentDate}</div>
+                          <div className="text-xs font-bold text-slate-700">{formatDate(appointmentDate)}</div>
                         </div>
                       </div>
                     )}
@@ -593,13 +593,19 @@ function BookAppointment() {
                     {/* Date Input */}
                     <div className="space-y-2.5">
                       <label className="block text-sm font-bold text-slate-600">Choose Consultation Date</label>
-                      <input 
-                        type="date" 
-                        min={todayString} 
-                        value={appointmentDate} 
-                        onChange={(e) => setAppointmentDate(e.target.value)} 
-                        className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-base focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition duration-200" 
-                      />
+                      <div className="relative flex items-center">
+                        <input 
+                          type="date" 
+                          min={todayString} 
+                          value={appointmentDate} 
+                          onChange={(e) => setAppointmentDate(e.target.value)} 
+                          className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10" 
+                        />
+                        <div className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 flex items-center justify-between pointer-events-none">
+                          <span>{appointmentDate ? formatDate(appointmentDate) : "Select date"}</span>
+                          <i className="ti ti-calendar text-slate-400 text-base" />
+                        </div>
+                      </div>
                       {appointmentDate && !isWorkingDay && (
                         <div className="text-xs text-[#D97706] font-semibold bg-amber-50 border border-amber-100/50 p-3 rounded-xl flex items-start gap-1.5 leading-relaxed mt-3">
                           <i className="ti ti-alert-triangle text-base mt-0.5" />

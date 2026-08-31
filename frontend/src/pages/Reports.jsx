@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { getReports } from "../api/admin";
+import { formatDate } from "../utils/helpers";
 import {
   ResponsiveContainer,
   BarChart,
@@ -220,22 +221,34 @@ export default function Reports() {
             >
               <div className="flex items-center gap-2">
                 <label className="font-semibold text-slate-600">From:</label>
-                <input
-                  type="date"
-                  value={dateFrom}
-                  onChange={(e) => setDateFrom(e.target.value)}
-                  className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <div className="relative flex items-center">
+                  <input
+                    type="date"
+                    value={dateFrom}
+                    onChange={(e) => setDateFrom(e.target.value)}
+                    className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                  />
+                  <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-semibold flex items-center gap-2 pointer-events-none">
+                    <span>{dateFrom ? formatDate(dateFrom) : "Select date"}</span>
+                    <i className="ti ti-calendar text-slate-400 text-xs" />
+                  </div>
+                </div>
               </div>
 
               <div className="flex items-center gap-2">
                 <label className="font-semibold text-slate-600">To:</label>
-                <input
-                  type="date"
-                  value={dateTo}
-                  onChange={(e) => setDateTo(e.target.value)}
-                  className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <div className="relative flex items-center">
+                  <input
+                    type="date"
+                    value={dateTo}
+                    onChange={(e) => setDateTo(e.target.value)}
+                    className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                  />
+                  <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-semibold flex items-center gap-2 pointer-events-none">
+                    <span>{dateTo ? formatDate(dateTo) : "Select date"}</span>
+                    <i className="ti ti-calendar text-slate-400 text-xs" />
+                  </div>
+                </div>
               </div>
 
               <button

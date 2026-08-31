@@ -333,7 +333,7 @@ function ManageQueue() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {entry.appointment_time ? (
                             <span className="px-2 py-1 rounded bg-blue-50 text-blue-700 font-bold text-xs">
-                              {entry.appointment_time}
+                              {formatTime(entry.appointment_time)}
                             </span>
                           ) : (
                             <span className="px-2 py-1 rounded bg-slate-100 text-slate-600 font-bold text-xs">

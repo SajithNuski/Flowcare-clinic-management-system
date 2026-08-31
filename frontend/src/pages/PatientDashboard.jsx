@@ -520,7 +520,7 @@ function PatientDashboard() {
                                   <div className="text-[11px] text-slate-500 flex items-center gap-1">
                                     <i className="ti ti-calendar-time"></i>
                                     <span>
-                                      {appt.appointment_date}
+                                      {formatDate(appt.appointment_date)}
                                     </span>
                                   </div>
                                 </div>
@@ -926,18 +926,24 @@ function PatientDashboard() {
                             <label className="block text-xs font-bold text-slate-500">
                               Date of Birth
                             </label>
-                            <input
-                              type="date"
-                              required
-                              value={profileData.date_of_birth}
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  date_of_birth: e.target.value,
-                                })
-                              }
-                              className="w-full rounded-xl border border-slate-250 px-4 py-2.5 text-sm focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] outline-none transition"
-                            />
+                            <div className="relative flex items-center">
+                              <input
+                                type="date"
+                                required
+                                value={profileData.date_of_birth}
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    date_of_birth: e.target.value,
+                                  })
+                                }
+                                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                              />
+                              <div className="w-full rounded-xl border border-slate-250 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 flex items-center justify-between pointer-events-none">
+                                <span>{profileData.date_of_birth ? formatDate(profileData.date_of_birth) : "Select date of birth"}</span>
+                                <i className="ti ti-calendar text-slate-400 text-base" />
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
+import { formatDate } from "../utils/helpers";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -245,13 +246,19 @@ function RegisterPage() {
                   <label className="mb-1 block text-[10px] font-bold text-[#4B5563] uppercase tracking-wider">
                     Date of Birth
                   </label>
-                  <input
-                    type="date"
-                    value={form.dob}
-                    max={todayStr}
-                    onChange={(e) => update("dob", e.target.value)}
-                    className="h-11 w-full rounded-xl border border-slate-200/80 bg-slate-50/50 px-4 text-sm outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10"
-                  />
+                  <div className="relative flex items-center">
+                    <input
+                      type="date"
+                      value={form.dob}
+                      max={todayStr}
+                      onChange={(e) => update("dob", e.target.value)}
+                      className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                    />
+                    <div className="h-11 w-full rounded-xl border border-slate-200/80 bg-white px-4 text-sm font-semibold text-slate-800 flex items-center justify-between pointer-events-none">
+                      <span>{form.dob ? formatDate(form.dob) : "Select DOB"}</span>
+                      <i className="ti ti-calendar text-slate-400 text-base" />
+                    </div>
+                  </div>
                 </div>
               </div>
 

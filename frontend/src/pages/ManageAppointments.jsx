@@ -557,12 +557,18 @@ function ManageAppointments() {
 
           <div className="flex items-center gap-2">
             <label className="text-xs font-semibold text-slate-500">Go to Date:</label>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 bg-slate-50 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
+            <div className="relative flex items-center">
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+              />
+              <div className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 bg-slate-50 flex items-center gap-2 pointer-events-none">
+                <span>{formatDate(selectedDate)}</span>
+                <i className="ti ti-calendar text-slate-400 text-sm" />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -824,14 +830,20 @@ function ManageAppointments() {
 
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Select New Date</label>
-              <input
-                type="date"
-                min={todayStr}
-                value={rescheduleDate}
-                onChange={(e) => setRescheduleDate(e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+              <div className="relative flex items-center">
+                <input
+                  type="date"
+                  min={todayStr}
+                  value={rescheduleDate}
+                  onChange={(e) => setRescheduleDate(e.target.value)}
+                  className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
+                  required
+                />
+                <div className="w-full px-3 py-2 border border-slate-300 rounded-xl text-sm font-semibold text-slate-700 bg-white flex items-center justify-between pointer-events-none">
+                  <span>{rescheduleDate ? formatDate(rescheduleDate) : "Select Date"}</span>
+                  <i className="ti ti-calendar text-slate-400 text-base" />
+                </div>
+              </div>
             </div>
 
             <div>
@@ -1093,15 +1105,21 @@ function ManageAppointments() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[10px] font-bold text-slate-600 uppercase mb-0.5">Consultation Date</label>
-                    <input
-                      type="date"
-                      required
-                      min={todayStr}
-                      value={bookingForm.appointment_date}
-                      onChange={(e) => setBookingForm((prev) => ({ ...prev, appointment_date: e.target.value }))}
-                      disabled={!bookingForm.doctor_id}
-                      className="w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-60"
-                    />
+                    <div className="relative flex items-center">
+                      <input
+                        type="date"
+                        required
+                        min={todayStr}
+                        value={bookingForm.appointment_date}
+                        onChange={(e) => setBookingForm((prev) => ({ ...prev, appointment_date: e.target.value }))}
+                        disabled={!bookingForm.doctor_id}
+                        className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 disabled:pointer-events-none"
+                      />
+                      <div className={`w-full px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs font-semibold text-slate-700 bg-white flex items-center justify-between pointer-events-none ${!bookingForm.doctor_id ? "opacity-60 bg-slate-50" : ""}`}>
+                        <span>{bookingForm.appointment_date ? formatDate(bookingForm.appointment_date) : "Select Date"}</span>
+                        <i className="ti ti-calendar text-slate-400 text-sm" />
+                      </div>
+                    </div>
                     {bookingForm.appointment_date && !isWorkingDay && (
                       <div className="text-[10px] text-amber-600 font-semibold mt-0.5">
                         ⚠️ Typically not a scheduled working day.
