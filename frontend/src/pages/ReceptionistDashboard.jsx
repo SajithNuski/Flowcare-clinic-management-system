@@ -98,7 +98,7 @@ function ReceptionistDashboard() {
     const targetDate = date !== null ? date : selectedDate;
     try {
       const [statsRes, queueRes, appointmentsRes, annRes] = await Promise.all([
-        getReceptionistStats(),
+        getReceptionistStats(targetDate),
         getLiveQueue(),
         getTodayAppointments(targetDate),
         getAnnouncements(),

@@ -17,19 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 	respond_json(["success" => false, "error" => "Method not allowed"], 405);
 }
 
-$today = date('Y-m-d');
-
-// 1. inQueue: waiting or in_consultation
-$stmt = mysqli_prepare($conn, "SELECT COUNT(*) AS total FROM queue WHERE date = ? AND status IN ('waiting', 'in_consultation')");
-mysqli_stmt_bind_param($stmt, "s", $today);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$inQueue = $result ? mysqli_stmt_get_result_row_val($result) : 0;
-mysqli_stmt_close($stmt);
+$date = isset($_GET['date']) && !empty($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 
 // Helper function to get row value since mysqli_fetch_assoc is standard
 function get_count($conn, $sql, $date) {
 	$stmt = mysqli_prepare($conn, $sql);
+	if (!$stmt) {
+		return 0;
+	}
 	mysqli_stmt_bind_param($stmt, "s", $date);
 	mysqli_stmt_execute($stmt);
 	$result = mysqli_stmt_get_result($stmt);
@@ -38,10 +33,10 @@ function get_count($conn, $sql, $date) {
 	return $row ? (int) $row['total'] : 0;
 }
 
-$inQueue = get_count($conn, "SELECT COUNT(*) AS total FROM queue WHERE date = ? AND status IN ('waiting', 'in_consultation')", $today);
-$checkedInToday = get_count($conn, "SELECT COUNT(*) AS total FROM queue WHERE date = ?", $today);
-$pendingArrival = get_count($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = ? AND status IN ('confirmed', 'rescheduled')", $today);
-$noShowsToday = get_count($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = ? AND status = 'no_show'", $today);
+$inQueue = get_count($conn, "SELECT COUNT(*) AS total FROM queue WHERE date = ? AND status IN ('waiting', 'in_consultation')", $date);
+$checkedInToday = get_count($conn, "SELECT COUNT(*) AS total FROM queue WHERE date = ?", $date);
+$pendingArrival = get_count($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = ? AND status IN ('confirmed', 'rescheduled')", $date);
+$noShowsToday = get_count($conn, "SELECT COUNT(*) AS total FROM appointments WHERE appointment_date = ? AND status = 'no_show'", $date);
 
 respond_json([
 	"success" => true,
