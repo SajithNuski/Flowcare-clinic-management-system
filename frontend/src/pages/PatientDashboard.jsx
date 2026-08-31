@@ -10,7 +10,7 @@ import { changePassword } from "../api/auth";
 import { updatePatientProfile } from "../api/patients";
 import axios from "axios";
 import { API_BASE } from "../utils/constants";
-import { formatTime } from "../utils/helpers";
+import { formatTime, formatDate } from "../utils/helpers";
 
 function PatientDashboard() {
   const navigate = useNavigate();
@@ -615,9 +615,7 @@ function PatientDashboard() {
                                   {ann.title}
                                 </h4>
                                 <span className="text-[10px] text-slate-400 shrink-0 font-medium">
-                                  {new Date(
-                                    ann.created_at,
-                                  ).toLocaleDateString()}
+                                  {formatDate(ann.created_at)}
                                 </span>
                               </div>
                               <p className="text-xs text-slate-600 leading-relaxed pt-1 whitespace-pre-wrap">
@@ -708,14 +706,7 @@ function PatientDashboard() {
                                 </p>
                               </div>
                               <span className="bg-blue-50 text-[#1A73E8] border border-blue-100 px-3 py-1 rounded-full text-[10px] font-bold">
-                                {new Date(cons.created_at).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                  },
-                                )}
+                                {formatDate(cons.created_at)}
                               </span>
                             </div>
 

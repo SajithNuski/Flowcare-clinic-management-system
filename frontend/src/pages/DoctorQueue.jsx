@@ -4,6 +4,7 @@ import Modal from "../components/Modal";
 import { useAuth } from "../context/AuthContext";
 import { getLiveQueue, callNextPatient, completeConsultation, markQueueNoShow } from "../api/queue";
 import { getPatientMedicalHistory } from "../api/consultations";
+import { formatDate } from "../utils/helpers";
 
 export default function DoctorQueue() {
   const { user } = useAuth();
@@ -742,7 +743,7 @@ export default function DoctorQueue() {
                   <div key={item.id} className="p-4 bg-white border border-slate-200 rounded-xl space-y-2 text-sm shadow-sm">
                     <div className="flex items-center justify-between text-xs text-slate-500 pb-2 border-b border-slate-100">
                       <span className="font-semibold text-slate-700">Doctor: {item.doctor_name || "Doctor"}</span>
-                      <span>{item.created_at ? new Date(item.created_at).toLocaleDateString() : ""}</span>
+                      <span>{item.created_at ? formatDate(item.created_at) : ""}</span>
                     </div>
                     <div>
                       <div className="text-xs font-semibold text-slate-500 uppercase">Diagnosis</div>

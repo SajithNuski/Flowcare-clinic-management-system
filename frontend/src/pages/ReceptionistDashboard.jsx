@@ -6,7 +6,7 @@ import QueueRow from "../components/QueueRow";
 import Modal from "../components/Modal";
 import Badge from "../components/Badge";
 import PaymentModal from "../components/PaymentModal";
-import { formatTime } from "../utils/helpers";
+import { formatTime, formatDate } from "../utils/helpers";
 
 
 import { getLiveQueue, checkinPatient } from "../api/queue";
@@ -666,7 +666,7 @@ function ReceptionistDashboard() {
                           {" with "}
                           <span className="font-semibold">{booking.doctor_name}</span>
                           {" — for "}
-                          {booking.appointment_date} at {formatTime(booking.time_slot)}
+                          {formatDate(booking.appointment_date)} at {formatTime(booking.time_slot)}
                         </li>
                       ))}
                     </ul>
@@ -796,7 +796,7 @@ function ReceptionistDashboard() {
                           {ann.title}
                         </h3>
                         <span className="text-[10px] text-slate-400 font-semibold shrink-0">
-                          {new Date(ann.created_at).toLocaleDateString()}
+                          {formatDate(ann.created_at)}
                         </span>
                       </div>
                       <p className="text-xs text-slate-650 leading-relaxed mt-2 whitespace-pre-wrap">

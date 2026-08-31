@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { useAuth } from "../context/AuthContext";
-import { getInitials } from "../utils/helpers";
+import { getInitials, formatDate } from "../utils/helpers";
 
 function ManagePatients() {
   const { user: currentUser } = useAuth();
@@ -109,16 +109,7 @@ function ManagePatients() {
     return age;
   };
 
-  // Helper: Format date
-  const formatDate = (dateString) => {
-    if (!dateString) return "—";
-    const date = new Date(dateString);
-    return date.toLocaleDateString([], {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-    });
-  };
+
 
   // Calculate statistics
   const getStats = () => {

@@ -6,6 +6,7 @@ import { getDoctorDashboardData } from "../api/doctors";
 import { callNextPatient, completeConsultation } from "../api/queue";
 import { useAuth } from "../context/AuthContext";
 import { getAnnouncements } from "../api/admin";
+import { formatDate } from "../utils/helpers";
 
 
 function DoctorDashboard() {
@@ -440,7 +441,7 @@ function DoctorDashboard() {
                         {ann.title}
                       </h3>
                       <span className="text-[10px] text-slate-400 font-semibold shrink-0">
-                        {new Date(ann.created_at).toLocaleDateString()}
+                        {formatDate(ann.created_at)}
                       </span>
                     </div>
                     <p className="text-xs text-slate-600 leading-relaxed mt-2 whitespace-pre-wrap">
