@@ -219,14 +219,6 @@ function AdminDashboard() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <label className="hidden min-w-[240px] items-center gap-2 rounded-xl border border-[#E5EAF2] bg-[#F8FAFF] px-3 py-2 text-sm text-[#6B7280] shadow-sm md:flex">
-                <i className="ti ti-search text-[#9CA3AF]" />
-                <input
-                  type="search"
-                  placeholder="Search data, staff, or reports..."
-                  className="w-full bg-transparent outline-none placeholder:text-[#9CA3AF]"
-                />
-              </label>
 
               <button
                 type="button"
