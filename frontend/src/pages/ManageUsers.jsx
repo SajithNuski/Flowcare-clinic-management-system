@@ -738,7 +738,7 @@ function ManageUsers() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by name or email..."
-                  className="border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm w-64 focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
+                  className="border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100"
                 />
               </div>
             </div>
@@ -976,7 +976,7 @@ function ManageUsers() {
               </div>
 
               {/* Day Pills */}
-              <div className="grid grid-cols-7 gap-1.5">
+              <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
                 {WEEKDAYS.map((day) => {
                   const active = scheduleDays.includes(day.short)
                   return (
@@ -991,8 +991,8 @@ function ManageUsers() {
                       }`}
                       title={`${day.full} - Click to ${active ? 'remove' : 'add'}`}
                     >
-                      <span className="text-xs font-bold leading-none">{day.label}</span>
-                      <span className="text-[9px] mt-0.5 opacity-80 leading-none">
+                      <span className="text-[11px] sm:text-xs font-bold leading-none">{day.label}</span>
+                      <span className="text-[8px] sm:text-[9px] mt-0.5 opacity-80 leading-none">
                         {active ? '✓' : '+'}
                       </span>
                     </button>
@@ -1059,7 +1059,7 @@ function ManageUsers() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-semibold text-slate-500 mb-1">
                     Start Consultation Time
@@ -1097,18 +1097,18 @@ function ManageUsers() {
                     <i className="ti ti-calendar-stats text-sm" />
                     <span>Live Booking Capacity Preview</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-center pt-1 border-t border-blue-100/60">
+                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center pt-1 border-t border-blue-100/60">
                     <div className="bg-white/80 rounded-lg p-2 border border-blue-100/40">
                       <span className="block text-[10px] text-slate-400 font-semibold uppercase">Daily Hours</span>
-                      <span className="text-xs font-extrabold text-slate-800">{capacity.hours} hrs/day</span>
+                      <span className="text-[11px] sm:text-xs font-extrabold text-slate-800">{capacity.hours} hrs/day</span>
                     </div>
                     <div className="bg-white/80 rounded-lg p-2 border border-blue-100/40">
                       <span className="block text-[10px] text-slate-400 font-semibold uppercase">Daily Slots</span>
-                      <span className="text-xs font-extrabold text-[#1A73E8]">{capacity.slotsPerDay} slots/day</span>
+                      <span className="text-[11px] sm:text-xs font-extrabold text-[#1A73E8]">{capacity.slotsPerDay} slots/day</span>
                     </div>
                     <div className="bg-white/80 rounded-lg p-2 border border-blue-100/40">
                       <span className="block text-[10px] text-slate-400 font-semibold uppercase">Weekly Total</span>
-                      <span className="text-xs font-extrabold text-green-700">{capacity.totalWeeklySlots} slots/wk</span>
+                      <span className="text-[11px] sm:text-xs font-extrabold text-green-700">{capacity.totalWeeklySlots} slots/wk</span>
                     </div>
                   </div>
                 </div>

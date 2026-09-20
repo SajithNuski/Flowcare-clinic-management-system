@@ -17,7 +17,7 @@ function Modal({ isOpen, onClose, title, children }) {
 
       {/* Modal Card */}
       <div
-        className="relative w-full max-w-lg rounded-[24px] bg-white p-7 sm:p-8 shadow-[0_20px_50px_rgba(15,23,42,0.15)] border border-slate-100/80 transform transition-all duration-300 scale-100 z-10"
+        className="relative w-full max-w-lg my-auto max-h-[90vh] overflow-y-auto rounded-[24px] bg-white p-5 sm:p-7 shadow-[0_20px_50px_rgba(15,23,42,0.15)] border border-slate-100/80 transform transition-all duration-300 scale-100 z-10"
         onClick={(event) => event.stopPropagation()}
       >
         {/* Close Button */}
