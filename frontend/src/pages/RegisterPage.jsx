@@ -252,6 +252,18 @@ function RegisterPage() {
                       value={form.dob}
                       max={todayStr}
                       onChange={(e) => update("dob", e.target.value)}
+                      onClick={(e) => {
+                        try {
+                          e.target.showPicker();
+                        } catch {}
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          try {
+                            e.target.showPicker();
+                          } catch {}
+                        }
+                      }}
                       className="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10"
                     />
                     <div className="h-11 w-full rounded-xl border border-slate-200/80 bg-white px-4 text-sm font-semibold text-slate-800 flex items-center justify-between pointer-events-none">
