@@ -71,7 +71,12 @@ function AdminDashboard() {
     const start = new Date();
     start.setDate(end.getDate() - 6);
 
-    const toYmd = (date) => date.toISOString().slice(0, 10);
+    const toYmd = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
 
     return {
       from: toYmd(start),
@@ -90,7 +95,11 @@ function AdminDashboard() {
         const [staffResult, reportsResult, announcementsResult] =
           await Promise.all([
             getAllStaff(),
-            getReports(reportRange.from, reportRange.to),
+            getReports({
+              preset: "last_7_days",
+              date_from: reportRange.from,
+              date_to: reportRange.to,
+            }),
             getAnnouncements(),
           ]);
 
@@ -101,9 +110,10 @@ function AdminDashboard() {
             ? staffResult.users
             : [],
         );
-        setReports(
-          reportsResult && !reportsResult.error ? reportsResult : null,
-        );
+        const reportData =
+          reportsResult?.reports ||
+          (reportsResult && !reportsResult.error ? reportsResult : null);
+        setReports(reportData);
         setAnnouncements(
           announcementsResult?.success &&
             Array.isArray(announcementsResult.announcements)
@@ -138,14 +148,46 @@ function AdminDashboard() {
     (item) => item.role === "receptionist",
   ).length;
 
-  const chartData = (reports?.daily_trend || []).map((item) => ({
-    ...item,
-    label: formatShortDate(item.date),
-    count: Number(item.count || 0),
-  }));
+  const chartData = useMemo(() => {
+    const rawTrend =
+      reports?.daily_trend ||
+      reports?.appointment_stats?.daily_trend ||
+      [];
+
+    const dataMap = new Map();
+    rawTrend.forEach((item) => {
+      if (item.date) {
+        dataMap.set(item.date, Number(item.count ?? item.completed ?? 0));
+      }
+    });
+
+    const result = [];
+    const current = new Date(`${reportRange.from}T00:00:00`);
+    const end = new Date(`${reportRange.to}T00:00:00`);
+
+    while (current <= end) {
+      const year = current.getFullYear();
+      const month = String(current.getMonth() + 1).padStart(2, "0");
+      const day = String(current.getDate()).padStart(2, "0");
+      const ymd = `${year}-${month}-${day}`;
+
+      result.push({
+        date: ymd,
+        label: formatShortDate(ymd),
+        count: dataMap.get(ymd) ?? 0,
+      });
+
+      current.setDate(current.getDate() + 1);
+    }
+
+    return result;
+  }, [reports, reportRange]);
 
   const doctorSummary = new Map(
-    (reports?.per_doctor || []).map((row) => [row.doctor_name, row]),
+    (reports?.per_doctor || reports?.doctor_performance || []).map((row) => [
+      row.doctor_name,
+      row,
+    ]),
   );
 
   const staffRows = staff.map((member) => ({
@@ -215,7 +257,13 @@ function AdminDashboard() {
             />
             <MetricCard
               label="Completed Consultations"
-              value={loading ? "..." : (reports?.total_consultations ?? 0)}
+              value={
+                loading
+                  ? "..."
+                  : (reports?.total_consultations ??
+                    reports?.appointment_stats?.completed ??
+                    0)
+              }
               detail={`From ${formatDate(reportRange.from)} to ${formatDate(reportRange.to)}`}
               icon="ti-check"
               accentClass="bg-[#EAFAF1] text-[#22A06B]"
@@ -411,7 +459,7 @@ function AdminDashboard() {
                       const statusColor =
                         member.status === "active" ? "green" : "red";
                       const activity = isDoctor
-                        ? `${member.summary?.total_completed ?? 0} completed`
+                        ? `${member.summary?.total_completed ?? member.summary?.completed_count ?? 0} completed`
                         : "Front desk";
 
                       return (
