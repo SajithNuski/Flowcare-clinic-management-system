@@ -34,7 +34,7 @@ function LoginPage() {
       if (res?.success) {
         // Backend may return user object at res.user or res.data
         const user = res.user ?? res.data ?? null;
-        if (user) login(user);
+        if (user) login(user, res.token);
         if (user?.role === "admin") {
           navigate("/admin/dashboard");
         } else if (user?.role === "doctor") {

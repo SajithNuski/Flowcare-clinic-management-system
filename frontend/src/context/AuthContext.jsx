@@ -4,6 +4,7 @@ This AuthContext stores the logged-in user for the whole FlowCare app.
 */
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { AUTH_TOKEN_KEY } from "../utils/constants";
 
 // Step 1: Create the context - this is the "container" for our global state
 const AuthContext = createContext(null);
@@ -24,49 +25,61 @@ export function AuthProvider({ children }) {
     checkSession();
   }, []);
 
-  // checkSession: asks the backend "is anyone logged in?"
+  // checkSession: asks the backend "is anyone logged in on this tab?"
   async function checkSession() {
     try {
-      // fetch /api/auth/me.php
+      const token = typeof window !== "undefined" ? sessionStorage.getItem(AUTH_TOKEN_KEY) : null;
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch("/api/auth/me.php", {
-        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
-        // if fail (401): setUser(null)
+        sessionStorage.removeItem(AUTH_TOKEN_KEY);
         setUser(null);
         return;
       }
 
       const data = await response.json();
-
-      // if success: setUser(data.user)
-      setUser(data.user ?? null);
+      if (data && data.success && data.user) {
+        setUser(data.user);
+      } else {
+        sessionStorage.removeItem(AUTH_TOKEN_KEY);
+        setUser(null);
+      }
     } catch (error) {
-      // if fail (network or server error): setUser(null)
       setUser(null);
     } finally {
-      // always: setLoading(false)
       setLoading(false);
     }
   }
 
   // login: called after successful login form submit
-  // receives user object from backend, saves it to state
-  function login(userData) {
+  // receives user object and optional token, saves token to sessionStorage and user to state
+  function login(userData, token = null) {
+    if (token) {
+      sessionStorage.setItem(AUTH_TOKEN_KEY, token);
+    }
     setUser(userData);
   }
 
   // logout: clears state and calls backend logout endpoint
   async function logout() {
     try {
-      // fetch /api/auth/logout.php
+      const token = typeof window !== "undefined" ? sessionStorage.getItem(AUTH_TOKEN_KEY) : null;
+      sessionStorage.removeItem(AUTH_TOKEN_KEY);
       await fetch("/api/auth/logout.php", {
         method: "POST",
-        credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
     } finally {
-      // setUser(null)
       setUser(null);
     }
   }

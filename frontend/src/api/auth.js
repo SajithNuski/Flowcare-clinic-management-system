@@ -1,7 +1,34 @@
 // This file contains all the functions that talk to the backend for auth.
 
 import axios from "axios";
-import { API_BASE } from "../utils/constants";
+import { API_BASE, AUTH_TOKEN_KEY } from "../utils/constants";
+
+// Automatically attach tab-isolated Bearer token from sessionStorage to all Axios requests
+axios.interceptors.request.use((config) => {
+  const token = typeof window !== "undefined" ? sessionStorage.getItem(AUTH_TOKEN_KEY) : null;
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Automatically attach tab-isolated Bearer token from sessionStorage to all window.fetch requests
+if (typeof window !== "undefined" && window.fetch) {
+  const originalFetch = window.fetch;
+  window.fetch = function (resource, init = {}) {
+    const token = sessionStorage.getItem(AUTH_TOKEN_KEY);
+    if (token) {
+      init = init ? { ...init } : {};
+      const headers = new Headers(init.headers || {});
+      if (!headers.has("Authorization")) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      init.headers = headers;
+    }
+    return originalFetch(resource, init);
+  };
+}
 
 /**
  * Logs a user in with an email or NIC identifier and password.
@@ -18,6 +45,9 @@ export async function loginUser(identifier, password) {
     const response = await axios.post(`${API_BASE}/auth/login.php`, body, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
+    if (response.data?.success && response.data?.token) {
+      sessionStorage.setItem(AUTH_TOKEN_KEY, response.data.token);
+    }
     return response.data;
   } catch (error) {
     // If the server returned a JSON error body, forward it so UI can show detailed messages
@@ -63,6 +93,7 @@ export async function registerUser(formData) {
  */
 export async function logoutUser() {
   try {
+    sessionStorage.removeItem(AUTH_TOKEN_KEY);
     // We use try/catch so network or server errors turn into a clean response for the UI.
     const response = await axios.post(`${API_BASE}/auth/logout.php`);
     return response.data;

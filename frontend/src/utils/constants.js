@@ -1,6 +1,9 @@
 // API base path — the Vite proxy rewrites /api to our XAMPP backend
 export const API_BASE = "/api";
 
+// Key used in sessionStorage to isolate auth tokens per browser tab
+export const AUTH_TOKEN_KEY = "flowcare_auth_token";
+
 // User roles — use these constants instead of typing strings everywhere
 // This way if we rename a role we only change it in one place
 export const ROLES = {
