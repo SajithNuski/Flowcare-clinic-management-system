@@ -91,9 +91,6 @@ function RegisterPage() {
       };
 
       const res = await registerUser(payload);
-      // Debug: log full response for troubleshooting
-      // eslint-disable-next-line no-console
-      console.log("registerUser response:", res);
 
       if (res?.success) {
         navigate("/login", {

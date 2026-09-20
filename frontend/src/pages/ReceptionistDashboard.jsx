@@ -113,7 +113,6 @@ function ReceptionistDashboard() {
       }
 
       if (appointmentsRes?.success) {
-        console.log("TODAY APPOINTMENTS:", appointmentsRes.appointments);
         setTodayAppointments(appointmentsRes.appointments);
         setNewBookingsToday(
           Array.isArray(appointmentsRes.new_bookings_today)

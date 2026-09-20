@@ -26,9 +26,6 @@ import ClinicSettings from "./pages/ClinicSettings";
 import Announcements from "./pages/Announcements";
 import Payments from "./pages/Payments";
 import ManageQueue from "./pages/ManageQueue";
-
-
-
 import DoctorQueue from "./pages/DoctorQueue";
 import DoctorConsultations from "./pages/DoctorConsultations";
 import DoctorProfile from "./pages/DoctorProfile";
