@@ -143,3 +143,26 @@ export async function updateClinicSettings(data) {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Updates a doctor's consultation days (dates) and consultation hours (time).
+ * @param {number} doctorId
+ * @param {string|string[]} workingDays - e.g. "Mon,Tue,Wed,Thu,Fri"
+ * @param {string} workingTime - e.g. "09:00-17:00"
+ */
+export async function updateDoctorSchedule(doctorId, workingDays, workingTime) {
+  try {
+    const response = await axios.post(`${API_BASE}/admin/users.php`, {
+      action: "update_doctor_schedule",
+      doctor_id: doctorId,
+      working_days: Array.isArray(workingDays) ? workingDays.join(",") : workingDays,
+      working_time: workingTime,
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    return { success: false, error: error.message };
+  }
+}

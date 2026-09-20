@@ -1,8 +1,10 @@
 // User management page for FlowCare.
 import { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
+import Modal from '../components/Modal'
 import { useAuth } from '../context/AuthContext'
 import { getInitials } from '../utils/helpers'
+import { updateDoctorSchedule } from '../api/admin'
 
 function ManageUsers() {
   // Retrieve the currently logged in administrator details.
@@ -37,6 +39,142 @@ function ManageUsers() {
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileError, setFileError] = useState('')
   const [previewUrl, setPreviewUrl] = useState('')
+
+  // Consultation Schedule Modal States
+  const [scheduleDoctor, setScheduleDoctor] = useState(null)
+  const [scheduleDays, setScheduleDays] = useState([])
+  const [scheduleStartTime, setScheduleStartTime] = useState('09:00')
+  const [scheduleEndTime, setScheduleEndTime] = useState('17:00')
+  const [scheduleSaving, setScheduleSaving] = useState(false)
+  const [scheduleError, setScheduleError] = useState('')
+
+  const WEEKDAYS = [
+    { short: 'Mon', label: 'Mon', full: 'Monday' },
+    { short: 'Tue', label: 'Tue', full: 'Tuesday' },
+    { short: 'Wed', label: 'Wed', full: 'Wednesday' },
+    { short: 'Thu', label: 'Thu', full: 'Thursday' },
+    { short: 'Fri', label: 'Fri', full: 'Friday' },
+    { short: 'Sat', label: 'Sat', full: 'Saturday' },
+    { short: 'Sun', label: 'Sun', full: 'Sunday' },
+  ]
+
+  const handleOpenScheduleModal = (member) => {
+    if (member.role !== 'doctor') return
+    setScheduleDoctor(member)
+    setScheduleError('')
+
+    // Parse working days from comma-separated string
+    if (member.working_days) {
+      const days = member.working_days
+        .split(',')
+        .map((d) => d.trim())
+        .filter(Boolean)
+      setScheduleDays(days.length > 0 ? days : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
+    } else {
+      setScheduleDays(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
+    }
+
+    // Parse working time (e.g. 09:00-17:00)
+    if (member.working_time && member.working_time.includes('-')) {
+      const [start, end] = member.working_time.split('-').map((t) => t.trim())
+      setScheduleStartTime(start || '09:00')
+      setScheduleEndTime(end || '17:00')
+    } else {
+      setScheduleStartTime('09:00')
+      setScheduleEndTime('17:00')
+    }
+  }
+
+  const handleCloseScheduleModal = () => {
+    setScheduleDoctor(null)
+    setScheduleError('')
+    setScheduleSaving(false)
+  }
+
+  const toggleScheduleDay = (dayShort) => {
+    setScheduleDays((prev) =>
+      prev.includes(dayShort)
+        ? prev.filter((d) => d !== dayShort)
+        : [...prev, dayShort]
+    )
+  }
+
+  const setDaysPreset = (preset) => {
+    if (preset === 'weekdays') {
+      setScheduleDays(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
+    } else if (preset === 'all') {
+      setScheduleDays(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+    } else if (preset === 'weekend') {
+      setScheduleDays(['Sat', 'Sun'])
+    }
+  }
+
+  const calculateScheduleCapacity = () => {
+    if (!scheduleStartTime || !scheduleEndTime || scheduleStartTime >= scheduleEndTime) {
+      return null
+    }
+    const [startH, startM] = scheduleStartTime.split(':').map(Number)
+    const [endH, endM] = scheduleEndTime.split(':').map(Number)
+    const totalMinutes = (endH * 60 + endM) - (startH * 60 + startM)
+    if (totalMinutes <= 0) return null
+    const hours = (totalMinutes / 60).toFixed(1).replace(/\.0$/, '')
+    const slotsPerDay = Math.floor(totalMinutes / 10)
+    const totalDays = scheduleDays.length
+    const totalWeeklySlots = slotsPerDay * totalDays
+    return {
+      hours,
+      slotsPerDay,
+      totalDays,
+      totalWeeklySlots,
+    }
+  }
+
+  const handleSaveSchedule = async (e) => {
+    if (e) e.preventDefault()
+    setScheduleError('')
+
+    if (!scheduleDoctor) return
+
+    if (scheduleDays.length === 0) {
+      setScheduleError('Please select at least one available consultation day.')
+      return
+    }
+
+    if (!scheduleStartTime || !scheduleEndTime) {
+      setScheduleError('Both start time and end time are required.')
+      return
+    }
+
+    if (scheduleStartTime >= scheduleEndTime) {
+      setScheduleError('Consultation end time must be later than start time.')
+      return
+    }
+
+    const workingTime = `${scheduleStartTime}-${scheduleEndTime}`
+    const workingDays = scheduleDays.join(',')
+
+    setScheduleSaving(true)
+    try {
+      const res = await updateDoctorSchedule(scheduleDoctor.id, workingDays, workingTime)
+      if (res?.success) {
+        setStaff((prev) =>
+          prev.map((s) =>
+            s.id === scheduleDoctor.id && s.role === 'doctor'
+              ? { ...s, working_days: workingDays, working_time: workingTime }
+              : s
+          )
+        )
+        setSuccess(`Consultation schedule for ${scheduleDoctor.full_name} updated successfully.`)
+        handleCloseScheduleModal()
+      } else {
+        setScheduleError(res?.error || 'Failed to update consultation schedule.')
+      }
+    } catch (err) {
+      setScheduleError(err?.message || 'Failed to connect to server.')
+    } finally {
+      setScheduleSaving(false)
+    }
+  }
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
@@ -710,10 +848,19 @@ function ManageUsers() {
 
                             {/* Row Action buttons cell */}
                             <td className="px-4 py-3 text-xs text-gray-400 space-x-2">
-                              <button
-                                className="ti ti-edit text-gray-400 hover:text-[#1A73E8] p-1 cursor-pointer transition-colors"
-                                title="Edit inline placeholder"
-                              />
+                              {member.role === 'doctor' ? (
+                                <button
+                                  onClick={() => handleOpenScheduleModal(member)}
+                                  className="ti ti-edit text-gray-400 hover:text-[#1A73E8] p-1 cursor-pointer transition-colors"
+                                  title="Update Consultation Schedule (Days & Time)"
+                                />
+                              ) : (
+                                <button
+                                  className="ti ti-edit text-gray-300 p-1 cursor-not-allowed"
+                                  title="Consultation schedule only applies to doctors"
+                                  disabled
+                                />
+                              )}
                               <span>|</span>
                               {isSelf ? (
                                 <span
@@ -749,6 +896,256 @@ function ManageUsers() {
           </div>
         </main>
       </div>
+
+      {/* Doctor Consultation Schedule Modal */}
+      <Modal
+        isOpen={!!scheduleDoctor}
+        onClose={handleCloseScheduleModal}
+        title="Update Consultation Schedule"
+      >
+        {scheduleDoctor && (
+          <form onSubmit={handleSaveSchedule} className="space-y-6">
+            {/* Doctor Profile Banner */}
+            <div className="flex items-center gap-3.5 rounded-2xl bg-blue-50/60 border border-blue-100/80 p-3.5">
+              <div className="h-11 w-11 shrink-0 rounded-xl bg-[#1A73E8] text-white flex items-center justify-center font-extrabold text-sm shadow-sm">
+                {getInitials(scheduleDoctor.full_name)}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-sm font-bold text-slate-900 truncate">
+                    {scheduleDoctor.full_name}
+                  </h4>
+                  <span className="bg-blue-100 text-[#1A73E8] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    {scheduleDoctor.specialisation || 'Doctor'}
+                  </span>
+                </div>
+                <div className="text-xs text-slate-500 mt-0.5">
+                  Current Schedule: <span className="font-semibold text-slate-700">{scheduleDoctor.working_days || 'Not set'}</span> ({scheduleDoctor.working_time || 'Not set'})
+                </div>
+              </div>
+            </div>
+
+            {/* Error Alert */}
+            {scheduleError && (
+              <div className="rounded-xl bg-red-50 border border-red-200/80 p-3 text-xs font-semibold text-red-700 flex items-center gap-2">
+                <i className="ti ti-alert-circle text-base text-red-500" />
+                <span>{scheduleError}</span>
+              </div>
+            )}
+
+            {/* Section 1: Consultation Days (Date Availability) */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    1. Consultation Days (Available Dates)
+                  </label>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Patients can only select appointment dates matching these working days.
+                  </p>
+                </div>
+                <span className="text-xs font-bold text-[#1A73E8] bg-blue-50 px-2 py-1 rounded-md border border-blue-100/60">
+                  {scheduleDays.length} {scheduleDays.length === 1 ? 'day' : 'days'}
+                </span>
+              </div>
+
+              {/* Quick Presets */}
+              <div className="flex flex-wrap items-center gap-1.5 mb-3">
+                <span className="text-[11px] font-medium text-slate-400 mr-1">Presets:</span>
+                <button
+                  type="button"
+                  onClick={() => setDaysPreset('weekdays')}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                >
+                  Weekdays (Mon–Fri)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDaysPreset('all')}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                >
+                  All 7 Days
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDaysPreset('weekend')}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                >
+                  Weekend Only (Sat–Sun)
+                </button>
+              </div>
+
+              {/* Day Pills */}
+              <div className="grid grid-cols-7 gap-1.5">
+                {WEEKDAYS.map((day) => {
+                  const active = scheduleDays.includes(day.short)
+                  return (
+                    <button
+                      key={day.short}
+                      type="button"
+                      onClick={() => toggleScheduleDay(day.short)}
+                      className={`h-11 rounded-xl flex flex-col items-center justify-center transition-all cursor-pointer border text-center ${
+                        active
+                          ? 'bg-[#1A73E8] text-white border-[#1A73E8] shadow-[0_2px_8px_rgba(26,115,232,0.3)]'
+                          : 'bg-slate-50 text-slate-600 border-slate-200/80 hover:bg-slate-100'
+                      }`}
+                      title={`${day.full} - Click to ${active ? 'remove' : 'add'}`}
+                    >
+                      <span className="text-xs font-bold leading-none">{day.label}</span>
+                      <span className="text-[9px] mt-0.5 opacity-80 leading-none">
+                        {active ? '✓' : '+'}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Section 2: Consultation Time (Hours) */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    2. Daily Consultation Hours (Time)
+                  </label>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Appointment booking generates 10-minute slots between start and end time.
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Time Presets */}
+              <div className="flex flex-wrap items-center gap-1.5 mb-3">
+                <span className="text-[11px] font-medium text-slate-400 mr-1">Presets:</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScheduleStartTime('08:00')
+                    setScheduleEndTime('12:00')
+                  }}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                >
+                  Morning (08:00–12:00)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScheduleStartTime('09:00')
+                    setScheduleEndTime('17:00')
+                  }}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                >
+                  Full Day (09:00–17:00)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScheduleStartTime('13:00')
+                    setScheduleEndTime('17:00')
+                  }}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                >
+                  Afternoon (13:00–17:00)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setScheduleStartTime('17:00')
+                    setScheduleEndTime('21:00')
+                  }}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+                >
+                  Evening (17:00–21:00)
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-500 mb-1">
+                    Start Consultation Time
+                  </label>
+                  <input
+                    type="time"
+                    required
+                    value={scheduleStartTime}
+                    onChange={(e) => setScheduleStartTime(e.target.value)}
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm font-semibold text-slate-800 outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-500 mb-1">
+                    End Consultation Time
+                  </label>
+                  <input
+                    type="time"
+                    required
+                    value={scheduleEndTime}
+                    onChange={(e) => setScheduleEndTime(e.target.value)}
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 text-sm font-semibold text-slate-800 outline-none transition-all focus:border-[#1A73E8] focus:bg-white focus:ring-2 focus:ring-[#1A73E8]/10 cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Live Capacity Preview */}
+            {(() => {
+              const capacity = calculateScheduleCapacity()
+              if (!capacity) return null
+              return (
+                <div className="rounded-xl bg-blue-50/70 border border-blue-100 p-3.5 text-xs text-slate-700">
+                  <div className="flex items-center gap-1.5 font-bold text-[#1A73E8] mb-1.5">
+                    <i className="ti ti-calendar-stats text-sm" />
+                    <span>Live Booking Capacity Preview</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center pt-1 border-t border-blue-100/60">
+                    <div className="bg-white/80 rounded-lg p-2 border border-blue-100/40">
+                      <span className="block text-[10px] text-slate-400 font-semibold uppercase">Daily Hours</span>
+                      <span className="text-xs font-extrabold text-slate-800">{capacity.hours} hrs/day</span>
+                    </div>
+                    <div className="bg-white/80 rounded-lg p-2 border border-blue-100/40">
+                      <span className="block text-[10px] text-slate-400 font-semibold uppercase">Daily Slots</span>
+                      <span className="text-xs font-extrabold text-[#1A73E8]">{capacity.slotsPerDay} slots/day</span>
+                    </div>
+                    <div className="bg-white/80 rounded-lg p-2 border border-blue-100/40">
+                      <span className="block text-[10px] text-slate-400 font-semibold uppercase">Weekly Total</span>
+                      <span className="text-xs font-extrabold text-green-700">{capacity.totalWeeklySlots} slots/wk</span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })()}
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={handleCloseScheduleModal}
+                disabled={scheduleSaving}
+                className="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={scheduleSaving}
+                className="px-6 py-2.5 rounded-xl bg-[#1A73E8] hover:bg-[#1557B0] text-xs font-bold text-white shadow-[0_4px_14px_rgba(26,115,232,0.3)] transition-all cursor-pointer flex items-center gap-1.5 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {scheduleSaving ? (
+                  <>
+                    <i className="ti ti-loader animate-spin text-sm" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <i className="ti ti-check text-sm" />
+                    Save Schedule Changes
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+        )}
+      </Modal>
     </div>
   )
 }
