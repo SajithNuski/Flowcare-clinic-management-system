@@ -118,10 +118,7 @@ export default function Reports() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-slate-50 font-sans text-slate-800">
-      {/* Sidebar hidden during print */}
-      <div className="print:hidden">
-        <Sidebar role="admin" activePage="Report" />
-      </div>
+      <Sidebar role="admin" activePage="Report" />
 
       {/* ========================================================================= */}
       {/* 1. ON-SCREEN INTERACTIVE DASHBOARD (HIDDEN ON PRINT/PDF EXPORT) */}

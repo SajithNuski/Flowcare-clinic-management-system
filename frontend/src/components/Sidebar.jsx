@@ -126,7 +126,7 @@ function Sidebar({ role, activePage }) {
   return (
     <>
       {/* Mobile Top Header */}
-      <div className="flex md:hidden items-center justify-between bg-[#0E1E38] px-4 py-3 border-b border-[#1e2f4d] w-full text-white sticky top-0 z-30 shadow-sm">
+      <div className="flex md:hidden items-center justify-between bg-[#0E1E38] px-4 py-3 border-b border-[#1e2f4d] w-full text-white sticky top-0 z-30 shadow-sm print:hidden">
         <Link to={`/${role}/dashboard`} className="flex items-center gap-2">
           <span className="text-base font-bold tracking-tight">ASHINI Clinic</span>
           <span className="text-[9px] uppercase tracking-wider text-blue-300 bg-blue-500/20 px-1.5 py-0.5 rounded-md font-bold">Portal</span>
@@ -143,7 +143,7 @@ function Sidebar({ role, activePage }) {
       {/* Mobile Sidebar Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm md:hidden transition-opacity duration-300"
+          className="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm md:hidden transition-opacity duration-300 print:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -151,7 +151,7 @@ function Sidebar({ role, activePage }) {
       {/* Mobile Drawer Navigation */}
       <aside
         className={
-          "fixed inset-y-0 left-0 z-50 flex w-56 flex-col border-r border-[#1e2f4d] bg-[#0E1E38] transition-transform duration-300 md:hidden " +
+          "fixed inset-y-0 left-0 z-50 flex w-56 flex-col border-r border-[#1e2f4d] bg-[#0E1E38] transition-transform duration-300 md:hidden print:hidden " +
           (isOpen ? "translate-x-0" : "-translate-x-full")
         }
       >
@@ -233,8 +233,8 @@ function Sidebar({ role, activePage }) {
       </aside>
 
       {/* Desktop Sidebar (Permanent) */}
-      <aside className="hidden md:flex min-h-screen w-48 shrink-0 flex-col border-r border-[#1e2f4d] bg-[#0E1E38]">
-        <div className="border-b border-[#1e2f4d] px-4 py-4">
+      <aside className="hidden md:flex sticky top-0 h-screen w-48 shrink-0 flex-col border-r border-[#1e2f4d] bg-[#0E1E38] z-20 print:hidden">
+        <div className="border-b border-[#1e2f4d] px-4 py-4 shrink-0">
           <Link to={`/${role}/dashboard`} className="block">
             <div className="text-lg font-bold leading-tight text-white">
               ASHINI Clinic
@@ -243,7 +243,7 @@ function Sidebar({ role, activePage }) {
           </Link>
         </div>
 
-        <nav className="flex-1 px-2 py-3">
+        <nav className="flex-1 px-2 py-3 overflow-y-auto">
           <div className="space-y-1">
             {items.map((item) => {
               const active = isActive(item);
@@ -267,7 +267,7 @@ function Sidebar({ role, activePage }) {
           </div>
         </nav>
 
-        <div className="mt-auto border-t border-[#1e2f4d] p-3">
+        <div className="mt-auto border-t border-[#1e2f4d] p-3 shrink-0 bg-[#0B172E]">
           <div className="flex items-center gap-3 rounded-xl px-2 py-2">
             {user?.photo_url ? (
               <img
