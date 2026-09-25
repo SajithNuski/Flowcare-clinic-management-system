@@ -30,6 +30,7 @@ function Sidebar({ role, activePage }) {
         icon: "ti ti-notes",
       },
       { label: "Profile", to: "/patient/profile", icon: "ti ti-user" },
+      
     ],
     receptionist: [
       {

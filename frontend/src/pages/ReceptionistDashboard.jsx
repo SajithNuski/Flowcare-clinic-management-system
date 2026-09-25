@@ -295,6 +295,7 @@ function ReceptionistDashboard() {
     });
   };
 
+  
 
   // Handle General Patient Search (top bar)
   const handleSearchGeneral = async (e) => {
