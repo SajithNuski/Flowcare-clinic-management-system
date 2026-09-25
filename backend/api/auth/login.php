@@ -45,7 +45,16 @@ if ($full_user) {
 	];
 }
 
+$token_payload = [
+	'uid' => (int) $logged_in_user['id'],
+	'role' => $logged_in_user['role'],
+	'full_name' => $logged_in_user['full_name'],
+	'email' => $logged_in_user['email'],
+];
+$token = jwt_encode($token_payload);
+
 respond_json([
 	"success" => true,
+	"token" => $token,
 	"user" => $full_user,
 ]);
