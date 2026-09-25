@@ -264,4 +264,82 @@ if ($action === 'toggle_status') {
 	respond_json(["success" => true, "message" => "User status updated", "status" => $new_status]);
 }
 
+if ($action === 'update_doctor_schedule') {
+	$doctor_id = isset($data['doctor_id']) ? (int) $data['doctor_id'] : (isset($data['user_id']) ? (int) $data['user_id'] : 0);
+	$working_time = trim($data['working_time'] ?? '');
+	$working_days_input = $data['working_days'] ?? '';
+
+	if ($doctor_id <= 0) {
+		respond_json(["success" => false, "error" => "doctor_id is required"], 400);
+	}
+
+	// Verify doctor exists in doctors table
+	$check_stmt = mysqli_prepare($conn, "SELECT id, full_name, specialisation, working_days, working_time FROM doctors WHERE id = ? LIMIT 1");
+	mysqli_stmt_bind_param($check_stmt, "i", $doctor_id);
+	mysqli_stmt_execute($check_stmt);
+	$res = mysqli_stmt_get_result($check_stmt);
+	$doctor = $res ? mysqli_fetch_assoc($res) : null;
+	mysqli_stmt_close($check_stmt);
+
+	if (!$doctor) {
+		respond_json(["success" => false, "error" => "Doctor not found"], 404);
+	}
+
+	// Format working days (accepts array or comma-separated string)
+	$valid_weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+	if (is_array($working_days_input)) {
+		$days_array = array_values(array_intersect($valid_weekdays, array_map('trim', $working_days_input)));
+	} else {
+		$raw_days = explode(',', (string) $working_days_input);
+		$days_array = array_values(array_intersect($valid_weekdays, array_map('trim', $raw_days)));
+	}
+
+	if (empty($days_array)) {
+		respond_json(["success" => false, "error" => "At least one valid consultation day must be selected (Mon-Sun)"], 400);
+	}
+	$working_days = implode(',', $days_array);
+
+	// Validate working time (e.g. 09:00-17:00)
+	if (!preg_match('/^(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})$/', $working_time, $matches)) {
+		respond_json(["success" => false, "error" => "Working time must be formatted as HH:MM-HH:MM (e.g. 09:00-17:00)"], 400);
+	}
+
+	$start_str = $matches[1];
+	$end_str = $matches[2];
+
+	$start_dt = DateTime::createFromFormat('H:i', $start_str);
+	$end_dt = DateTime::createFromFormat('H:i', $end_str);
+
+	if (!$start_dt || !$end_dt) {
+		respond_json(["success" => false, "error" => "Invalid time values provided"], 400);
+	}
+
+	if ($start_dt >= $end_dt) {
+		respond_json(["success" => false, "error" => "Consultation end time must be after start time"], 400);
+	}
+
+	// Normalised formatted working time (e.g. 09:00-17:00)
+	$working_time = $start_dt->format('H:i') . '-' . $end_dt->format('H:i');
+
+	$update_stmt = mysqli_prepare($conn, "UPDATE doctors SET working_days = ?, working_time = ? WHERE id = ?");
+	mysqli_stmt_bind_param($update_stmt, "ssi", $working_days, $working_time, $doctor_id);
+
+	if (!mysqli_stmt_execute($update_stmt)) {
+		$err = mysqli_stmt_error($update_stmt);
+		mysqli_stmt_close($update_stmt);
+		respond_json(["success" => false, "error" => "Failed to update doctor consultation schedule: " . $err], 500);
+	}
+	mysqli_stmt_close($update_stmt);
+
+	log_activity($conn, (int) $_SESSION['user_id'], 'admin_update_doctor_schedule', "Updated consultation schedule for Dr. {$doctor['full_name']} (Days: {$working_days}, Time: {$working_time})");
+
+	respond_json([
+		"success" => true,
+		"message" => "Doctor consultation schedule updated successfully",
+		"doctor_id" => $doctor_id,
+		"working_days" => $working_days,
+		"working_time" => $working_time,
+	]);
+}
+
 respond_json(["success" => false, "error" => "Invalid action"], 400);
