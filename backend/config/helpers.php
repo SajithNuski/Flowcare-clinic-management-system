@@ -1,7 +1,74 @@
 <?php
+require_once __DIR__ . '/jwt.php';
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
 	session_start(); // Start PHP session — must be called before any session use
 }
+
+/**
+ * Resolves the authenticated user from either:
+ * 1. HTTP Authorization Bearer token (tab-scoped, enables simultaneous multi-user logins)
+ * 2. PHP Session $_SESSION (legacy/cookie fallback)
+ */
+function resolve_auth_context() {
+	$auth_header = '';
+
+	// Inspect Apache, Nginx, or standard PHP environment headers
+	if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+		$auth_header = $_SERVER['HTTP_AUTHORIZATION'];
+	} elseif (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+		$auth_header = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+	} elseif (function_exists('apache_request_headers')) {
+		$headers = apache_request_headers();
+		if (isset($headers['Authorization'])) {
+			$auth_header = $headers['Authorization'];
+		} elseif (isset($headers['authorization'])) {
+			$auth_header = $headers['authorization'];
+		}
+	}
+
+	if (!empty($auth_header)) {
+		if (preg_match('/Bearer\s+(\S+)/i', $auth_header, $matches)) {
+			$token = $matches[1];
+			$payload = jwt_decode($token);
+			if ($payload && isset($payload['uid'], $payload['role'])) {
+				// Populate $_SESSION for this request lifecycle so all models continue to work
+				$_SESSION['user_id'] = (int) $payload['uid'];
+				$_SESSION['role'] = $payload['role'];
+				$_SESSION['name'] = $payload['full_name'] ?? '';
+				$_SESSION['full_name'] = $payload['full_name'] ?? '';
+				$_SESSION['email'] = $payload['email'] ?? '';
+				$_SESSION['is_token_auth'] = true;
+
+				return [
+					'id' => (int) $payload['uid'],
+					'role' => $payload['role'],
+					'full_name' => $payload['full_name'] ?? '',
+					'email' => $payload['email'] ?? '',
+				];
+			}
+		}
+
+		// Client provided an explicit Authorization header that is invalid or expired
+		$_SESSION = [];
+		return null;
+	}
+
+	// Fallback to active PHP cookie session (legacy compatibility)
+	if (isset($_SESSION['user_id'], $_SESSION['role'])) {
+		return [
+			'id' => (int) $_SESSION['user_id'],
+			'role' => $_SESSION['role'],
+			'full_name' => $_SESSION['full_name'] ?? ($_SESSION['name'] ?? ''),
+			'email' => $_SESSION['email'] ?? '',
+		];
+	}
+
+	return null;
+}
+
+// Automatically resolve authenticated user for this request thread
+resolve_auth_context();
 
 // ============================================================
 // respond_json()
@@ -48,23 +115,23 @@ function get_request_body() {
 // Example: require_role('doctor') — only doctors can access
 // ============================================================
 function require_role($required_role) {
-	// Check if a session exists (user is logged in)
-	if (!isset($_SESSION['user_id'])) {
+	$user = resolve_auth_context();
+	if (!$user) {
 		respond_json(["error" => "You must be logged in."], 401);
 	}
 	// Check if the user has the correct role
-	if ($_SESSION['role'] !== $required_role) {
+	if ($user['role'] !== $required_role) {
 		respond_json(["error" => "Access denied. You do not have permission."], 403);
 	}
-	// If we reach here, the user is logged in and has the correct role
 }
 
 // Allow multiple roles — e.g. require_any_role(['doctor', 'admin'])
 function require_any_role($roles_array) {
-	if (!isset($_SESSION['user_id'])) {
+	$user = resolve_auth_context();
+	if (!$user) {
 		respond_json(["error" => "You must be logged in."], 401);
 	}
-	if (!in_array($_SESSION['role'], $roles_array)) {
+	if (!in_array($user['role'], $roles_array)) {
 		respond_json(["error" => "Access denied."], 403);
 	}
 }
