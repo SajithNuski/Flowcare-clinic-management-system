@@ -16,7 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 
 // 1. Parse filter parameters
-$preset = trim($_GET['preset'] ?? 'this_month');
+$preset = trim($_GET['preset'] ?? '');
+if ($preset === '' && isset($_GET['date_from'], $_GET['date_to'])) {
+	$preset = 'custom';
+}
+if ($preset === '') {
+	$preset = 'this_month';
+}
 $doctor_id = isset($_GET['doctor_id']) ? (int)$_GET['doctor_id'] : 0;
 
 $today = date('Y-m-d');
@@ -32,6 +38,10 @@ switch ($preset) {
 		// Monday of this week to today/Sunday
 		$date_from = date('Y-m-d', strtotime('monday this week'));
 		$date_to = date('Y-m-d', strtotime('sunday this week'));
+		break;
+	case 'last_7_days':
+		$date_from = date('Y-m-d', strtotime('-6 days'));
+		$date_to = $today;
 		break;
 	case 'this_month':
 		$date_from = date('Y-m-01');
@@ -121,33 +131,68 @@ foreach ($appt_trend_rows as $r) {
 	$trend_map[$r['date']] = $r;
 }
 
+// Completed consultations per day from consultations table
+$res_c_trend = mysqli_query($conn, "SELECT DATE(created_at) AS date, COUNT(*) AS count FROM consultations WHERE DATE(created_at) BETWEEN '$date_from' AND '$date_to' GROUP BY DATE(created_at)");
+$c_trend_map = [];
+if ($res_c_trend) {
+	while ($row = mysqli_fetch_assoc($res_c_trend)) {
+		$c_trend_map[$row['date']] = (int)$row['count'];
+	}
+}
+
+// Completed queue per day
+$res_q_trend = mysqli_query($conn, "SELECT date, COUNT(*) AS count FROM queue WHERE status = 'completed' AND date BETWEEN '$date_from' AND '$date_to' GROUP BY date");
+$q_trend_map = [];
+if ($res_q_trend) {
+	while ($row = mysqli_fetch_assoc($res_q_trend)) {
+		$q_trend_map[$row['date']] = (int)$row['count'];
+	}
+}
+
 $appointment_trends = [];
 foreach ($period as $day) {
 	$d_str = $day->format('Y-m-d');
-	if (isset($trend_map[$d_str])) {
-		$appointment_trends[] = [
-			'date' => $d_str,
-			'booked' => (int)$trend_map[$d_str]['booked'],
-			'completed' => (int)$trend_map[$d_str]['completed'],
-			'cancelled' => (int)$trend_map[$d_str]['cancelled'],
-			'no_show' => (int)$trend_map[$d_str]['no_show'],
-			'total' => (int)$trend_map[$d_str]['total'],
-		];
-	} else {
-		$appointment_trends[] = [
-			'date' => $d_str,
-			'booked' => 0,
-			'completed' => 0,
-			'cancelled' => 0,
-			'no_show' => 0,
-			'total' => 0,
-		];
-	}
+	$booked_count = (int)($trend_map[$d_str]['booked'] ?? 0);
+	$appt_completed = (int)($trend_map[$d_str]['completed'] ?? 0);
+	$cancelled_count = (int)($trend_map[$d_str]['cancelled'] ?? 0);
+	$noshow_count = (int)($trend_map[$d_str]['no_show'] ?? 0);
+	$appt_total = (int)($trend_map[$d_str]['total'] ?? 0);
+
+	$consult_count = $c_trend_map[$d_str] ?? ($q_trend_map[$d_str] ?? $appt_completed);
+	$total_completed = max($consult_count, $appt_completed);
+
+	$appointment_trends[] = [
+		'date' => $d_str,
+		'booked' => $booked_count,
+		'completed' => $total_completed,
+		'cancelled' => $cancelled_count,
+		'no_show' => $noshow_count,
+		'total' => $appt_total > 0 ? $appt_total : $total_completed,
+		'count' => $total_completed,
+	];
 }
 
 $tot_appts = (int)$appt_summary['total_appointments'];
 $comp_appts = (int)$appt_summary['count_completed'];
 $canc_appts = (int)$appt_summary['count_cancelled'];
+
+// Total consultations and walkins in period
+$tot_c_res = mysqli_query($conn, "SELECT COUNT(*) AS total FROM consultations WHERE DATE(created_at) BETWEEN '$date_from' AND '$date_to'");
+$total_consultations = $tot_c_res ? (int)mysqli_fetch_assoc($tot_c_res)['total'] : 0;
+if ($total_consultations === 0) {
+	$tot_q_res = mysqli_query($conn, "SELECT COUNT(*) AS total FROM queue WHERE status = 'completed' AND date BETWEEN '$date_from' AND '$date_to'");
+	$total_consultations = $tot_q_res ? (int)mysqli_fetch_assoc($tot_q_res)['total'] : 0;
+}
+if ($total_consultations === 0) {
+	$total_consultations = $comp_appts;
+}
+
+$walkin_res = mysqli_query($conn, "SELECT COUNT(*) AS total FROM queue q LEFT JOIN payments p ON q.id = p.queue_id WHERE (p.appointment_id IS NULL OR p.appointment_id = 0) AND q.date BETWEEN '$date_from' AND '$date_to'");
+$total_walkins = $walkin_res ? (int)mysqli_fetch_assoc($walkin_res)['total'] : 0;
+
+$response['total_consultations'] = $total_consultations;
+$response['total_walkins'] = $total_walkins;
+$response['daily_trend'] = $appointment_trends;
 
 $response['appointment_stats'] = [
 	'total' => $tot_appts,
@@ -280,6 +325,7 @@ $response['doctor_performance'] = array_map(function($row) {
 		'doctor_name' => $row['doctor_name'],
 		'specialisation' => $row['specialisation'],
 		'completed_count' => (int)$row['completed_count'],
+		'total_completed' => (int)$row['completed_count'],
 		'no_show_count' => (int)$row['no_show_count'],
 		'waiting_count' => (int)$row['waiting_count'],
 		'in_consultation_count' => (int)$row['in_consultation_count'],
@@ -287,6 +333,8 @@ $response['doctor_performance'] = array_map(function($row) {
 		'avg_duration_mins' => $row['avg_duration_mins'] !== null ? (float)$row['avg_duration_mins'] : 0,
 	];
 }, $doctor_performance);
+
+$response['per_doctor'] = $response['doctor_performance'];
 
 // -----------------------------------------------------------------------------
 // SECTION 4: PATIENT DEMOGRAPHICS
