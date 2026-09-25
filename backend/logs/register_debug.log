@@ -2283,3 +2283,128 @@ RAW_BODY:'full_name=mohamed+ayash&nic=200333013200&date_of_birth=1991-12-11&gend
 JSON_ERROR:'Syntax error'
 DECODED:NULL
 
+2026-09-21T13:10:49+05:30
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '148',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="153", "Not_A Brand";v="8", "Chromium";v="153"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=5dbj5it9hadb70il74ka9idpti',
+)
+CONTENT_LENGTH:148
+RAW_BODY:'full_name=sajith+nuski&nic=200333013260&date_of_birth=2003-11-25&gender=male&phone=0771084960&email=sajithnuski111%40gmail.com&password=Sajith%40111'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-09-21T13:12:22+05:30
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '148',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="153", "Not_A Brand";v="8", "Chromium";v="153"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=5dbj5it9hadb70il74ka9idpti',
+)
+CONTENT_LENGTH:148
+RAW_BODY:'full_name=sajith+nuski&nic=200333013261&date_of_birth=2005-10-11&gender=male&phone=0771084960&email=sajithnuski555%40gmail.com&password=Sajith%40555'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-09-21T13:14:21+05:30
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '136',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="153", "Not_A Brand";v="8", "Chromium";v="153"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=5dbj5it9hadb70il74ka9idpti',
+)
+CONTENT_LENGTH:136
+RAW_BODY:'full_name=Doncy&nic=200333013268&date_of_birth=2005-10-11&gender=female&phone=0771084960&email=Doncy888%40gmail.com&password=Doncy%40888'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-09-21T15:16:39+05:30
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '141',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Microsoft Edge";v="153", "Not_A Brand";v="8", "Chromium";v="153"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9',
+  'cookie' => 'PHPSESSID=5dbj5it9hadb70il74ka9idpti',
+)
+CONTENT_LENGTH:141
+RAW_BODY:'full_name=Doncybaa&nic=200333013258&date_of_birth=2005-10-11&gender=female&phone=0771084960&email=doncy8899%40gmail.com&password=Doncy%408899'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
+2026-09-21T15:34:34+05:30
+HEADERS:array (
+  'host' => '127.0.0.1',
+  'connection' => 'close',
+  'content-length' => '136',
+  'sec-ch-ua-platform' => '"Windows"',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+  'accept' => 'application/json, text/plain, */*',
+  'sec-ch-ua' => '"Google Chrome";v="143", "Chromium";v="143", "Not A(Brand";v="24"',
+  'content-type' => 'application/x-www-form-urlencoded',
+  'sec-ch-ua-mobile' => '?0',
+  'origin' => 'http://localhost:5173',
+  'sec-fetch-site' => 'same-origin',
+  'sec-fetch-mode' => 'cors',
+  'sec-fetch-dest' => 'empty',
+  'referer' => 'http://localhost:5173/register',
+  'accept-encoding' => 'gzip, deflate, br, zstd',
+  'accept-language' => 'en-US,en;q=0.9,ta;q=0.8',
+  'cookie' => 'PHPSESSID=uc1f85ig2hnma827690dnadmpp',
+)
+CONTENT_LENGTH:136
+RAW_BODY:'full_name=sajith&nic=200233013260&date_of_birth=2002-06-21&gender=male&phone=0771084960&email=sajith%40flowcare.lk&password=Sajith%40260'
+JSON_ERROR:'Syntax error'
+DECODED:NULL
+
