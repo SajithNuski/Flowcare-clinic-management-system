@@ -44,6 +44,11 @@ function Sidebar({ role, activePage }) {
         icon: "ti ti-calendar-event",
       },
       { label: "Queue", to: "/receptionist/queue", icon: "ti ti-list-numbers" },
+      {
+        label: "Search Patient",
+        to: "/receptionist/search",
+        icon: "ti ti-search",
+      },
       { label: "Payments", to: "/receptionist/payments", icon: "ti ti-cash" },
     ],
     doctor: [
@@ -87,6 +92,7 @@ function Sidebar({ role, activePage }) {
         icon: "ti ti-calendar-event",
       },
       { label: "Report", to: "/admin/reports", icon: "ti ti-chart-bar" },
+      { label: "Activity Log", to: "/admin/logs", icon: "ti ti-history" },
       { label: "Announcements", to: "/admin/announcements", icon: "ti ti-bell" },
       { label: "Settings", to: "/admin/settings", icon: "ti ti-settings" },
     ],

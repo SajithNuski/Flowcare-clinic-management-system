@@ -166,3 +166,19 @@ export async function updateDoctorSchedule(doctorId, workingDays, workingTime) {
     return { success: false, error: error.message };
   }
 }
+
+/**
+ * Returns paginated system activity and audit logs.
+ * @param {object} params - { page, limit, action, search, date }
+ */
+export async function getActivityLogs(params = {}) {
+  try {
+    const response = await axios.get(`${API_BASE}/admin/activity_log.php`, { params });
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return error.response.data;
+    }
+    return { success: false, error: error.message };
+  }
+}
