@@ -30,15 +30,10 @@ import DoctorQueue from "./pages/DoctorQueue";
 import DoctorConsultations from "./pages/DoctorConsultations";
 import DoctorProfile from "./pages/DoctorProfile";
 import Reports from "./pages/Reports";
-
-function PageStub({ title }) {
-  return (
-    <div className="min-h-screen bg-white px-7 py-16 text-gray-900">
-      <h1 className="text-3xl font-bold">{title}</h1>
-      <p className="mt-3 text-gray-600">This page is being prepared.</p>
-    </div>
-  );
-}
+import SearchPatient from "./pages/SearchPatient";
+import MyConsultations from "./pages/MyConsultations";
+import MyProfile from "./pages/MyProfile";
+import AdminActivityLog from "./pages/AdminActivityLog";
 
 function App() {
   return (
@@ -74,7 +69,7 @@ function App() {
             path="/patient/consultations"
             element={
               <ProtectedRoute allowedRole="patient">
-                <PatientDashboard />
+                <MyConsultations />
               </ProtectedRoute>
             }
           />
@@ -82,7 +77,7 @@ function App() {
             path="/patient/profile"
             element={
               <ProtectedRoute allowedRole="patient">
-                <PatientDashboard />
+                <MyProfile />
               </ProtectedRoute>
             }
           />
@@ -116,7 +111,7 @@ function App() {
             path="/receptionist/search"
             element={
               <ProtectedRoute allowedRole="receptionist">
-                <PageStub title="Search Patient" />
+                <SearchPatient />
               </ProtectedRoute>
             }
           />
@@ -217,6 +212,14 @@ function App() {
             element={
               <ProtectedRoute allowedRole="admin">
                 <Reports />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/logs"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <AdminActivityLog />
               </ProtectedRoute>
             }
           />
