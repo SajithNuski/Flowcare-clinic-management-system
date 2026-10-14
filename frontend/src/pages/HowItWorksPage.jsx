@@ -1,1 +1,1 @@
-// How it works page for FlowCare.
+export { default } from "./HowItWorks";
