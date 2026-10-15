@@ -8,10 +8,25 @@
 // already-passed booking slots, restricting check-in to the appointment date).
 date_default_timezone_set('Asia/Colombo');
 
-$host = "127.0.0.1";       // MySQL runs on localhost in XAMPP
-$user = "root";            // Default XAMPP MySQL username
-$password = "";            // Default XAMPP MySQL password is empty
-$database = "flowcare";    // The database name we created
+// Detect environment: Check if running on InfinityFree production or local development
+$http_host = $_SERVER['HTTP_HOST'] ?? '';
+$is_production = (strpos($http_host, 'great-site.net') !== false) 
+    || (strpos($http_host, 'infinityfree') !== false)
+    || (getenv('FLOWCARE_ENV') === 'production');
+
+if ($is_production) {
+    // InfinityFree Cloud Hosting MySQL Configuration
+    $host = getenv('DB_HOST') ?: "sql205.infinityfree.com";
+    $user = getenv('DB_USER') ?: "if0_43183686";
+    $password = getenv('DB_PASS') ?: "xbVVMKYgwc";
+    $database = getenv('DB_NAME') ?: "if0_43183686_flowcare";
+} else {
+    // Local Development (XAMPP default)
+    $host = getenv('DB_HOST') ?: "127.0.0.1";
+    $user = getenv('DB_USER') ?: "root";
+    $password = getenv('DB_PASS') ?: "";
+    $database = getenv('DB_NAME') ?: "flowcare";
+}
 
 // mysqli_connect() tries to open a connection to MySQL
 $conn = mysqli_connect($host, $user, $password, $database);
