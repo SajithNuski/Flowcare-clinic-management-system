@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import heroImage from "../assets/images/clinic image.png";
+import heroImage from "../assets/images/clinic-image.png";
 
 function ContactPage() {
   const navigate = useNavigate();

@@ -6,7 +6,7 @@ import { getDoctors } from "../api/doctors";
 import { createAppointment, getAvailableSlots } from "../api/appointments";
 import { VISIT_REASONS } from "../utils/constants";
 import { formatTime, formatDate } from "../utils/helpers";
-import clinicImg from "../assets/images/clinic image.png";
+import clinicImg from "../assets/images/clinic-image.png";
 
 // Helper to get specialization-specific icons
 const getSpecIcon = (spec) => {

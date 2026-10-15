@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import clinicHero from "../assets/images/clinic image.png";
+import clinicHero from "../assets/images/clinic-image.png";
 import bookImg from "../assets/images/book.png";
 
 const steps = [

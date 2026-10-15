@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Badge from "./Badge";
-import ashiniLogo from "../assets/images/Ashini logo.png";
+import ashiniLogo from "../assets/images/ashini-logo.png";
 
 function Navbar() {
   const location = useLocation();

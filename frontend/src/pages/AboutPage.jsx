@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import clinicHeroImage from "../assets/images/clinic image.png";
+import clinicHeroImage from "../assets/images/clinic-image.png";
 
 const valueItems = [
   {

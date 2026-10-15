@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import ashiniLogo from "../assets/images/Ashini logo.png";
+import ashiniLogo from "../assets/images/ashini-logo.png";
 
 function Footer() {
   return (
