@@ -1,18 +1,16 @@
 // This file contains all the functions that talk to the backend for doctors.
 
-import axios from "axios";
-import { API_BASE } from "../utils/constants";
+import { apiClient, ENDPOINTS, handleApiError } from "./config";
 
 /**
  * Returns the list of active doctors for the landing page and booking form.
  */
 export async function getDoctors() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/doctors/list.php`);
+    const response = await apiClient.get(ENDPOINTS.DOCTORS.LIST);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -21,25 +19,26 @@ export async function getDoctors() {
  */
 export async function getDoctorDashboardData() {
   try {
-    const response = await axios.get(`${API_BASE}/doctors/dashboard.php`);
+    const response = await apiClient.get(ENDPOINTS.DOCTORS.DASHBOARD);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
+
 /**
  * Updates the profile of the logged-in doctor.
  * @param {FormData} formData
  */
 export async function updateDoctorProfile(formData) {
   try {
-    const response = await axios.post(`${API_BASE}/doctor/profile/update.php`, formData, {
+    const response = await apiClient.post(ENDPOINTS.DOCTORS.PROFILE_UPDATE, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }

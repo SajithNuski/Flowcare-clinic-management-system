@@ -4,7 +4,7 @@ This AuthContext stores the logged-in user for the whole FlowCare app.
 */
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { AUTH_TOKEN_KEY } from "../utils/constants";
+import { API_BASE, AUTH_TOKEN_KEY } from "../utils/constants";
 
 // Step 1: Create the context - this is the "container" for our global state
 const AuthContext = createContext(null);
@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
         return;
       }
 
-      const response = await fetch("/api/auth/me.php", {
+      const response = await fetch(`${API_BASE}/auth/me.php`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +75,7 @@ export function AuthProvider({ children }) {
     try {
       const token = typeof window !== "undefined" ? sessionStorage.getItem(AUTH_TOKEN_KEY) : null;
       sessionStorage.removeItem(AUTH_TOKEN_KEY);
-      await fetch("/api/auth/logout.php", {
+      await fetch(`${API_BASE}/auth/logout.php`, {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });

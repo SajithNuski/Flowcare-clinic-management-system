@@ -1,7 +1,6 @@
 // This file contains all the functions that talk to the backend for appointments.
 
-import axios from "axios";
-import { API_BASE } from "../utils/constants";
+import { apiClient, ENDPOINTS, handleApiError } from "./config";
 
 /**
  * Creates a new appointment.
@@ -9,14 +8,10 @@ import { API_BASE } from "../utils/constants";
  */
 export async function createAppointment(data) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(
-      `${API_BASE}/appointments/create.php`,
-      data,
-    );
+    const response = await apiClient.post(ENDPOINTS.APPOINTMENTS.CREATE, data);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -25,25 +20,25 @@ export async function createAppointment(data) {
  */
 export async function getMyAppointments() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/appointments/list.php`);
+    const response = await apiClient.get(ENDPOINTS.APPOINTMENTS.LIST);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
 /**
  * Returns today's appointments for receptionist or admin views.
+ * @param {string} date
  */
 export async function getTodayAppointments(date = "") {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const url = date ? `${API_BASE}/appointments/list.php?date=${date}` : `${API_BASE}/appointments/list.php`;
-    const response = await axios.get(url);
+    const response = await apiClient.get(ENDPOINTS.APPOINTMENTS.LIST, {
+      params: date ? { date } : {},
+    });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -54,13 +49,12 @@ export async function getTodayAppointments(date = "") {
  */
 export async function getAvailableSlots(doctorId, date) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/appointments/slots.php`, {
+    const response = await apiClient.get(ENDPOINTS.APPOINTMENTS.SLOTS, {
       params: { doctor_id: doctorId, date },
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -70,14 +64,13 @@ export async function getAvailableSlots(doctorId, date) {
  */
 export async function cancelAppointment(appointmentId) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/appointments/update.php`, {
+    const response = await apiClient.post(ENDPOINTS.APPOINTMENTS.UPDATE, {
       appointment_id: appointmentId,
       action: "cancel",
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -87,14 +80,9 @@ export async function cancelAppointment(appointmentId) {
  * @param {string} newDate
  * @param {string} newTimeSlot
  */
-export async function rescheduleAppointment(
-  appointmentId,
-  newDate,
-  newTimeSlot,
-) {
+export async function rescheduleAppointment(appointmentId, newDate, newTimeSlot) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/appointments/update.php`, {
+    const response = await apiClient.post(ENDPOINTS.APPOINTMENTS.UPDATE, {
       appointment_id: appointmentId,
       action: "reschedule",
       new_date: newDate,
@@ -102,7 +90,7 @@ export async function rescheduleAppointment(
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -112,13 +100,12 @@ export async function rescheduleAppointment(
  */
 export async function markNoShow(appointmentId) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/appointments/update.php`, {
+    const response = await apiClient.post(ENDPOINTS.APPOINTMENTS.UPDATE, {
       appointment_id: appointmentId,
       action: "no_show",
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }

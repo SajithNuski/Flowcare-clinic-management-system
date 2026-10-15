@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { useAuth } from "../context/AuthContext";
 import { getInitials, formatDate } from "../utils/helpers";
+import { API_BASE } from "../utils/constants";
 
 function AdminAppointments() {
   const { user: currentUser } = useAuth();
@@ -30,7 +31,7 @@ function AdminAppointments() {
   const fetchAppointments = async () => {
     try {
       setError("");
-      const res = await fetch("/api/admin/appointments.php", {
+      const res = await fetch(`${API_BASE}/admin/appointments.php`, {
         credentials: "include",
       });
       const data = await res.json();

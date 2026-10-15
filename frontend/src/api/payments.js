@@ -1,5 +1,4 @@
-import axios from "axios";
-import { API_BASE } from "../utils/constants";
+import { apiClient, ENDPOINTS, handleApiError } from "./config";
 
 /**
  * Retrieves payment history records for receptionist or admin.
@@ -7,10 +6,11 @@ import { API_BASE } from "../utils/constants";
  */
 export async function getPaymentsHistory(date = "") {
   try {
-    const url = date ? `${API_BASE}/payments/list.php?date=${date}` : `${API_BASE}/payments/list.php`;
-    const response = await axios.get(url);
+    const response = await apiClient.get(ENDPOINTS.PAYMENTS.LIST, {
+      params: date ? { date } : {},
+    });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }

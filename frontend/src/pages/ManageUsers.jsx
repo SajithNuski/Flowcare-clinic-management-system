@@ -5,6 +5,7 @@ import Modal from '../components/Modal'
 import { useAuth } from '../context/AuthContext'
 import { getInitials } from '../utils/helpers'
 import { updateDoctorSchedule } from '../api/admin'
+import { API_BASE } from '../utils/constants'
 
 function ManageUsers() {
   // Retrieve the currently logged in administrator details.
@@ -217,7 +218,7 @@ function ManageUsers() {
   const fetchStaff = async () => {
     try {
       setError('')
-      const res = await fetch('/api/admin/users.php', {
+      const res = await fetch(`${API_BASE}/admin/users.php`, {
         credentials: 'include'
       })
       const data = await res.json()
@@ -319,7 +320,7 @@ function ManageUsers() {
         }
       }
 
-      const response = await fetch('/api/admin/users.php', {
+      const response = await fetch(`${API_BASE}/admin/users.php`, {
         method: 'POST',
         body: formData,
         credentials: 'include'
@@ -369,7 +370,7 @@ function ManageUsers() {
     if (!window.confirm(message)) return
 
     try {
-      const response = await fetch('/api/admin/users.php', {
+      const response = await fetch(`${API_BASE}/admin/users.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -1,18 +1,16 @@
 // This file contains all the functions that talk to the backend for queue.
 
-import axios from "axios";
-import { API_BASE } from "../utils/constants";
+import { apiClient, ENDPOINTS, handleApiError } from "./config";
 
 /**
  * Gets the logged-in patient's queue status for today.
  */
 export async function getQueueStatus() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/queue/status.php`);
+    const response = await apiClient.get(ENDPOINTS.QUEUE.STATUS);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -21,13 +19,12 @@ export async function getQueueStatus() {
  */
 export async function getLiveQueue(all = false) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/queue/status.php`, {
-      params: all ? { all: "true" } : {}
+    const response = await apiClient.get(ENDPOINTS.QUEUE.STATUS, {
+      params: all ? { all: "true" } : {},
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -39,8 +36,7 @@ export async function getLiveQueue(all = false) {
  */
 export async function checkinPatient(patientId, doctorId, appointmentId, amount = 0, paymentMethod = "") {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/queue/checkin.php`, {
+    const response = await apiClient.post(ENDPOINTS.QUEUE.CHECKIN, {
       patient_id: patientId,
       doctor_id: doctorId,
       appointment_id: appointmentId,
@@ -49,7 +45,7 @@ export async function checkinPatient(patientId, doctorId, appointmentId, amount 
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -58,11 +54,10 @@ export async function checkinPatient(patientId, doctorId, appointmentId, amount 
  */
 export async function callNextPatient() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/queue/call_next.php`);
+    const response = await apiClient.post(ENDPOINTS.QUEUE.CALL_NEXT);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -72,11 +67,10 @@ export async function callNextPatient() {
  */
 export async function completeConsultation(data) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/queue/complete.php`, data);
+    const response = await apiClient.post(ENDPOINTS.QUEUE.COMPLETE, data);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -86,13 +80,12 @@ export async function completeConsultation(data) {
  */
 export async function markQueueNoShow(queueId) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/queue/no_show.php`, {
+    const response = await apiClient.post(ENDPOINTS.QUEUE.NO_SHOW, {
       queue_id: queueId,
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -103,13 +96,12 @@ export async function markQueueNoShow(queueId) {
  */
 export async function updateQueueNumber(queueId, newQueueNumber) {
   try {
-    const response = await axios.post(`${API_BASE}/queue/update_number.php`, {
+    const response = await apiClient.post(ENDPOINTS.QUEUE.UPDATE_NUMBER, {
       queue_id: queueId,
       queue_number: newQueueNumber,
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
-

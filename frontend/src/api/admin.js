@@ -1,18 +1,16 @@
 // This file contains all the functions that talk to the backend for admin.
 
-import axios from "axios";
-import { API_BASE } from "../utils/constants";
+import { apiClient, ENDPOINTS, handleApiError } from "./config";
 
 /**
  * Returns all staff users for the admin panel.
  */
 export async function getAllStaff() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/admin/users.php`);
+    const response = await apiClient.get(ENDPOINTS.ADMIN.USERS);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -22,14 +20,13 @@ export async function getAllStaff() {
  */
 export async function createStaffUser(data) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/admin/users.php`, {
+    const response = await apiClient.post(ENDPOINTS.ADMIN.USERS, {
       action: "create",
       ...data,
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -39,14 +36,13 @@ export async function createStaffUser(data) {
  */
 export async function toggleUserStatus(userId) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/admin/users.php`, {
+    const response = await apiClient.post(ENDPOINTS.ADMIN.USERS, {
       action: "toggle_status",
       user_id: userId,
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -63,10 +59,10 @@ export async function getReports(paramsObj, dateTo) {
     } else {
       params = { date_from: paramsObj, date_to: dateTo };
     }
-    const response = await axios.get(`${API_BASE}/admin/reports.php`, { params });
+    const response = await apiClient.get(ENDPOINTS.ADMIN.REPORTS, { params });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -75,11 +71,10 @@ export async function getReports(paramsObj, dateTo) {
  */
 export async function getAnnouncements() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/admin/announcements.php`);
+    const response = await apiClient.get(ENDPOINTS.ADMIN.ANNOUNCEMENTS);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -89,14 +84,13 @@ export async function getAnnouncements() {
  */
 export async function createAnnouncement(data) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/admin/announcements.php`, {
+    const response = await apiClient.post(ENDPOINTS.ADMIN.ANNOUNCEMENTS, {
       action: "create",
       ...data,
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -106,14 +100,13 @@ export async function createAnnouncement(data) {
  */
 export async function deleteAnnouncement(id) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/admin/announcements.php`, {
+    const response = await apiClient.post(ENDPOINTS.ADMIN.ANNOUNCEMENTS, {
       action: "delete",
       id,
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -122,11 +115,10 @@ export async function deleteAnnouncement(id) {
  */
 export async function getClinicSettings() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/admin/settings.php`);
+    const response = await apiClient.get(ENDPOINTS.ADMIN.SETTINGS);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -136,11 +128,10 @@ export async function getClinicSettings() {
  */
 export async function updateClinicSettings(data) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.post(`${API_BASE}/admin/settings.php`, data);
+    const response = await apiClient.post(ENDPOINTS.ADMIN.SETTINGS, data);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -152,7 +143,7 @@ export async function updateClinicSettings(data) {
  */
 export async function updateDoctorSchedule(doctorId, workingDays, workingTime) {
   try {
-    const response = await axios.post(`${API_BASE}/admin/users.php`, {
+    const response = await apiClient.post(ENDPOINTS.ADMIN.USERS, {
       action: "update_doctor_schedule",
       doctor_id: doctorId,
       working_days: Array.isArray(workingDays) ? workingDays.join(",") : workingDays,
@@ -160,10 +151,7 @@ export async function updateDoctorSchedule(doctorId, workingDays, workingTime) {
     });
     return response.data;
   } catch (error) {
-    if (error.response && error.response.data) {
-      return error.response.data;
-    }
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -173,12 +161,9 @@ export async function updateDoctorSchedule(doctorId, workingDays, workingTime) {
  */
 export async function getActivityLogs(params = {}) {
   try {
-    const response = await axios.get(`${API_BASE}/admin/activity_log.php`, { params });
+    const response = await apiClient.get(ENDPOINTS.ADMIN.ACTIVITY_LOG, { params });
     return response.data;
   } catch (error) {
-    if (error.response && error.response.data) {
-      return error.response.data;
-    }
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }

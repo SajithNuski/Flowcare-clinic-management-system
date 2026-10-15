@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
 import { useAuth } from "../context/AuthContext";
 import { getInitials, formatDate } from "../utils/helpers";
+import { API_BASE } from "../utils/constants";
 
 function ManagePatients() {
   const { user: currentUser } = useAuth();
@@ -38,7 +39,7 @@ function ManagePatients() {
   const fetchPatients = async () => {
     try {
       setError("");
-      const res = await fetch("/api/admin/patients.php", {
+      const res = await fetch(`${API_BASE}/admin/patients.php`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -65,7 +66,7 @@ function ManagePatients() {
     }
 
     try {
-      const res = await fetch("/api/admin/patients.php", {
+      const res = await fetch(`${API_BASE}/admin/patients.php`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

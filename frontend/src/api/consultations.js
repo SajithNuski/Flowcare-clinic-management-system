@@ -1,18 +1,16 @@
 // This file contains all the functions that talk to the backend for consultations.
 
-import axios from "axios";
-import { API_BASE } from "../utils/constants";
+import { apiClient, ENDPOINTS, handleApiError } from "./config";
 
 /**
  * Returns all consultations for the current patient.
  */
 export async function getMyConsultations() {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/consultations/list.php`);
+    const response = await apiClient.get(ENDPOINTS.CONSULTATIONS.LIST);
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -22,13 +20,12 @@ export async function getMyConsultations() {
  */
 export async function getDoctorConsultations(date) {
   try {
-    // We use try/catch so network or server errors turn into a clean response for the UI.
-    const response = await axios.get(`${API_BASE}/consultations/list.php`, {
+    const response = await apiClient.get(ENDPOINTS.CONSULTATIONS.LIST, {
       params: date ? { date } : {},
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }
 
@@ -38,11 +35,11 @@ export async function getDoctorConsultations(date) {
  */
 export async function getPatientMedicalHistory(patientId) {
   try {
-    const response = await axios.get(`${API_BASE}/consultations/list.php`, {
+    const response = await apiClient.get(ENDPOINTS.CONSULTATIONS.LIST, {
       params: { patient_id: patientId },
     });
     return response.data;
   } catch (error) {
-    return { success: false, error: error.message };
+    return handleApiError(error);
   }
 }

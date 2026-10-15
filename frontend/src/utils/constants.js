@@ -1,5 +1,5 @@
-// API base path — the Vite proxy rewrites /api to our XAMPP backend
-export const API_BASE = "/api";
+// Central API configuration re-exports
+export { PRODUCTION_DOMAIN, API_BASE } from "../api/config";
 
 // Key used in sessionStorage to isolate auth tokens per browser tab
 export const AUTH_TOKEN_KEY = "flowcare_auth_token";

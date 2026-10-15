@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Forward API requests to the PHP backend
+  RewriteRule ^api/(.*)$ backend/api/$1 [L,QSA]
+
+  # 2. Allow direct access to uploaded media files
+  RewriteRule ^uploads/(.*)$ uploads/$1 [L]
+
+  # 3. If the requested file or directory exists physically, serve it directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 4. For all other React Router routes, serve the single-page app index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Security & Performance: Gzip compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/json application/javascript
+</IfModule>
+
+# Prevent directory browsing
+Options -Indexes
