@@ -11,8 +11,8 @@ import { getDoctors } from "../api/doctors";
 import bookImg from "../assets/images/book.png";
 import walkingImg from "../assets/images/walking.png";
 import consultImg from "../assets/images/cunsult.png";
-import ashiniLogo from "../assets/images/Ashini logo.png";
-import clinicImage from "../assets/images/clinic image.png";
+import ashiniLogo from "../assets/images/ashini-logo.png";
+import clinicImage from "../assets/images/clinic-image.png";
 
 const CountUp = ({ end, duration = 1500, suffix = "" }) => {
   const [count, setCount] = useState(0);
@@ -445,7 +445,15 @@ function LandingPage() {
                       const id = doc.id || doc.doctor_id;
                       const name = doc.name || doc.full_name;
                       const specialty = doc.specialty || doc.specialisation || "General Practitioner";
-                      const photoUrl = doc.photo_url || "";
+                      let photoUrl = doc.photo_url || "";
+                      if (!photoUrl) {
+                        const lower = (name || "").toLowerCase();
+                        if (lower.includes("perera") || doc.gender === "female") {
+                          photoUrl = "/uploads/doctors/doctor_22_1789977612.png";
+                        } else if (lower.includes("ranasinghe") || doc.gender === "male") {
+                          photoUrl = "/uploads/doctors/doctor_21_1789977525.png";
+                        }
+                      }
 
                       // Process qualification and experience
                       let qualification = doc.qualification || "";
